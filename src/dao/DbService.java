@@ -30,8 +30,8 @@ public abstract class DbService<T> {
     private final String DRIVER_DB = "com.mysql.jdbc.Driver";
 
     /**
-     * Création d'un objet de la base de donnée.
-     * @param objet Objet de creation a rajouter dans la base de donnée.
+     * Ajout d'un objet dans la base de donnée.
+     * @param objet Objet a rajouter dans la base de donnée.
      * @throws SQLException Erreur lors de l'execution de la requete.
      * @throws ClassNotFoundException Erreur lors du chargement du driver de connexion à la bdd.
      */
