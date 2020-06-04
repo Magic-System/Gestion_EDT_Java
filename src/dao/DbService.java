@@ -1,20 +1,8 @@
 package dao;
 
-import modele.Utilisateur;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,55 +29,13 @@ public abstract class DbService<T> {
      */
     private final String DRIVER_DB = "com.mysql.jdbc.Driver";
 
-    protected Session session;
-    private static final String PERSISTENCE_UNIT_NAME = "PERSISTENCE";
-    private static EntityManagerFactory factory;
-    private Class<T> type;
-
-    public DbService(Class<T> className) {
-        this.session = getSession();
-        this.type = className;
-    }
-
-    public CriteriaBuilder getBuilder() {
-        return this.session.getCriteriaBuilder();
-    }
-
-    /**
-     *
-     * https://www.boraji.com/hibernate-5-jpa-2-configuration-example
-     * @return
-     */
-    private static EntityManagerFactory getEntityManagerFactory() {
-        if (factory == null) {
-            factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        }
-        return factory;
-    }
-
-    private static Session getSession() {
-        final EntityManagerFactory factory = getEntityManagerFactory();
-        SessionFactory sFactory = factory.unwrap(SessionFactory.class);
-        return sFactory.openSession();
-    }
-
-    public static void shutdown() {
-        if (factory != null) {
-            factory.close();
-        }
-    }
-
     /**
      * Ajout d'un objet dans la base de donnée.
      * @param objet Objet a rajouter dans la base de donnée.
      * @throws SQLException Erreur lors de l'execution de la requete.
      * @throws ClassNotFoundException Erreur lors du chargement du driver de connexion à la bdd.
      */
-    public void ajouter(T objet) {
-        Transaction transaction = session.beginTransaction();
-        session.saveOrUpdate(objet);
-        transaction.commit();
-    }
+    public abstract void ajouter(T objet) throws SQLException, ClassNotFoundException;
 
     /**
      * Mise a jour d'un objet dans la base de donnée.
@@ -113,13 +59,7 @@ public abstract class DbService<T> {
      * @throws SQLException Erreur lors de l'execution de la requete.
      * @throws ClassNotFoundException Erreur lors du chargement du driver de connexion à la bdd.
      */
-    public ArrayList<T> getAll() {
-        CriteriaQuery<T> query = getBuilder().createQuery(type);
-        Root<T> root = query.from(type);
-        query.select(root);
-        Query<T> q=session.createQuery(query);
-        return new ArrayList<T>(q.getResultList());
-    }
+    public abstract List<T> getAll() throws SQLException, ClassNotFoundException;
 
     /**
      * Recupere l'objet de la bdd correspondant a l'id recu en parametre.
@@ -128,16 +68,7 @@ public abstract class DbService<T> {
      * @throws SQLException Erreur lors de l'execution de la requete.
      * @throws ClassNotFoundException Erreur lors du chargement du driver de connexion à la bdd.
      */
-    public T getById(int id) {
-        CriteriaQuery<T> query = getBuilder().createQuery(type);
-        Root<T> root = query.from(type);
-        query.select(root).where(getBuilder().equal(root.get("id"),id));
-        Query<T> q=session.createQuery(query);
-        List<T> user=q.getResultList();
-
-        return user.get(0);
-    }
-
+    public abstract T getById(int id) throws SQLException, ClassNotFoundException;
 
     /**
      * Recupere la connexion a la bdd.
