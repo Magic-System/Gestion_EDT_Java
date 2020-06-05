@@ -321,4 +321,39 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
         return liste;
     }
 
+    /**
+     * Retourne la liste de seance en fonction du nom de la salle et de la semaine.
+     * @param semaine Numero de la semaine.
+     * @param salle Nom de la salle.
+     * @return ArrayList de Seance.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public ArrayList<Seance> getSeanceBySemaineAndSalle(int semaine, String salle) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement getCoursById = co.prepareStatement("SELECT seance.* FROM seance, seance_salles, salle WHERE seance.ID = seance_salles.ID_Seance AND seance_salles.ID_Salle = salle.ID AND seance.Semaine = ? AND salle.Nom = ? AND seance.Etat = 1");
+        getCoursById.setInt(1, semaine);
+        getCoursById.setString(2, salle);
+        ResultSet res = getCoursById.executeQuery();
+
+        ArrayList<Seance> liste = new ArrayList<Seance>();
+
+        while (res.next()) {
+            Seance seance = new Seance();
+            seance.setId(res.getInt("ID"));
+            seance.setSemaine(res.getInt("Semaine"));
+            seance.setJour(res.getDate("Date").toLocalDate());
+            seance.setHeure_debut(res.getTime("Heure_Debut").toLocalTime());
+            seance.setHeure_fin(res.getTime("Heure_Fin").toLocalTime());
+            seance.setEtat(res.getInt("Etat"));
+            CoursDaoServiceImpl cours = new CoursDaoServiceImpl();
+            seance.setCours(cours.getById(res.getInt("ID_Cours")));
+            Type_CoursDaoServiceImpl type = new Type_CoursDaoServiceImpl();
+            seance.setType(type.getById(res.getInt("ID_Type")));
+            liste.add(seance);
+        }
+
+        return liste;
+    }
+
 }

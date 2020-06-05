@@ -1,16 +1,11 @@
 package controler;
 
 import dao.service.*;
-import modele.Enseignant;
-import modele.Etudiant;
-import modele.Seance;
-import modele.Utilisateur;
-import vue.Connection;
+import modele.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.NoSuchElementException;
 
 /**
  * @author Daniel
@@ -138,6 +133,27 @@ public class RechercheDonnees {
     }
 
     /**
+     * Pour une salle donnée (recherche possible avec son nom ou parmi une liste d’enseignants) et pour une semaine donnée, consulter tous les cours.
+     * @param semaine Numero de la semaine.
+     * @param salle Nom de la salle.
+     * @return ArrayList de Seance.
+     */
+    public ArrayList<Seance> getSeanceSemaineSalle(int semaine, String salle) {
+        ArrayList<Seance> maSemaine = null;
+        SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
+
+        try {
+            maSemaine = new ArrayList<>(seanceDao.getSeanceBySemaineAndSalle(semaine, salle));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return maSemaine;
+    }
+
+    /**
      * Recupere une liste contenant nom et prenom de tout les etudiants.
      * @return Liste de nom prenom de tout les etudiants.
      */
@@ -166,7 +182,7 @@ public class RechercheDonnees {
      */
     public ArrayList<String> getListeEnseignant() {
         EnseignantDaoServiceImpl userDao = new EnseignantDaoServiceImpl();
-        ArrayList<String> liste = new ArrayList<String>();
+        ArrayList<String> liste = new ArrayList<>();
         try {
             ArrayList<Enseignant> users = userDao.getAll();
             for (Enseignant e : users) {
@@ -182,6 +198,29 @@ public class RechercheDonnees {
 
         return liste;
     }
+
+    /**
+     * Recupere une liste contenant le nom de toutes les salles.
+     * @return Liste de String de nom de salle.
+     */
+    public ArrayList<String> getListeSalles() {
+        SalleDaoServiceImpl salleDao = new SalleDaoServiceImpl();
+        ArrayList<String> liste = new ArrayList<>();
+
+        try {
+            ArrayList<Salle> salles = salleDao.getAll();
+            for (Salle s : salles) {
+                liste.add(s.getNom());
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return liste;
+    }
+
 
 
     public static void main(String[] args){
