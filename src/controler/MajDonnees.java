@@ -4,6 +4,8 @@ import dao.service.*;
 import modele.*;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class MajDonnees {
 
@@ -64,8 +66,21 @@ public class MajDonnees {
     /**
      * Déplacer une séance de cours vers un autre créneau, sauf le samedi et dimanche et aux horaires d’ouverture de
      * l’école, dans une salle libre durant ce créneau et de capacité suffisante pour le(s) groupe(s), en fonction de la
-     * disponibilité de l’enseignant et du (des) groupe(s) sur ce créneau
+     * disponibilité de l’enseignant et du (des) groupe(s) sur ce créneau.
+     * @param seance Seance a modifier.
+     * @param heure_debut Nouvelles heure de début de la seance.
+     * @param heure_fin Nouvelle heure de fin de la séance.
+     * @param jour Nouvelle date de la seance.
+     * @throws SQLException Erreur de requete.
+     * @throws ClassNotFoundException Erreur de driver.
      */
+    public void changeCreneau(Seance seance, LocalTime heure_debut, LocalTime heure_fin, LocalDate jour) throws SQLException, ClassNotFoundException {
+        seance.setHeure_debut(heure_debut);
+        seance.setHeure_fin(heure_fin);
+        seance.setJour(jour);
+        seanceDao.modifier(seance);
+    }
+
 
     /**
      * Ajouter une séance de cours en lui affectant, si possible, toutes les informations nécessaires : la date (sauf samedi et

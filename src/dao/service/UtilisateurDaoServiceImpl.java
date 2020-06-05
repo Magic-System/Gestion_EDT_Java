@@ -66,12 +66,35 @@ public class UtilisateurDaoServiceImpl extends DbService<Utilisateur> {
         getCoursById.setInt(1, id);
         ResultSet res = getCoursById.executeQuery();
 
-        Utilisateur user = new Utilisateur();
+        Utilisateur user = null;
 
         while (res.next()) {
+            user = new Utilisateur();
             user.setId(res.getInt("id"));
             user.setEmail(res.getString("email"));
             user.setPassword(res.getString("password"));
+            user.setNom(res.getString("nom"));
+            user.setPrenom(res.getString("prenom"));
+            user.setDroit(res.getInt("droit"));
+        }
+
+        return user;
+    }
+
+    public Utilisateur getByLogin(String email, String password) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement getCoursByLogin = co.prepareStatement("SELECT `ID`, `Nom`, `Prenom`, `Droit` FROM `utilisateur` WHERE  `Email` = ? AND `Password` = ?");
+        getCoursByLogin.setString(1, email);
+        getCoursByLogin.setString(2, password);
+        ResultSet res = getCoursByLogin.executeQuery();
+
+        Utilisateur user = null;
+
+        while (res.next()) {
+            user = new Utilisateur();
+            user.setId(res.getInt("id"));
+            user.setEmail(email);
+            user.setPassword(password);
             user.setNom(res.getString("nom"));
             user.setPrenom(res.getString("prenom"));
             user.setDroit(res.getInt("droit"));
