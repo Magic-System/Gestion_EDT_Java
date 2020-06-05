@@ -2,7 +2,6 @@ package dao.service;
 
 import dao.DbService;
 import modele.Promotion;
-import modele.Utilisateur;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,18 +10,33 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Daniel
+ */
 public class PromotionDaoServiceImpl extends DbService<Promotion> {
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a rajouter dans la base de donnée.
+     */
     @Override
     public void ajouter(Promotion objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a mettre a jour dans la bdd.
+     */
     @Override
     public void modifier(Promotion objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a supprimer dans la bdd.
+     */
     @Override
     public void supprimer(Promotion objet) throws SQLException, ClassNotFoundException {
 
@@ -30,7 +44,6 @@ public class PromotionDaoServiceImpl extends DbService<Promotion> {
 
     /**
      * Retourne l'ensemble du contenu d'une table de la bdd.
-     *
      * @return List<Promotion> Retourne la liste des Promotion contenu dans la table.
      * @throws SQLException           Erreur lors de l'execution de la requete.
      * @throws ClassNotFoundException Erreur lors du chargement du driver de connexion à la bdd.
@@ -52,7 +65,6 @@ public class PromotionDaoServiceImpl extends DbService<Promotion> {
 
     /**
      * Recupere la Promotion de la bdd correspondant a l'id recu en parametre.
-     *
      * @param id Identifiant de la Promotion a recuperer.
      * @return Retourne la Promotion de la bdd.
      * @throws SQLException           Erreur lors de l'execution de la requete.

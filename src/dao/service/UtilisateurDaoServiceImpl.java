@@ -9,24 +9,42 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * @author Daniel
+ */
 public class UtilisateurDaoServiceImpl extends DbService<Utilisateur> {
 
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a rajouter dans la base de donnée.
+     */
     @Override
     public void ajouter(Utilisateur objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a mettre a jour dans la bdd.
+     */
     @Override
     public void modifier(Utilisateur objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a supprimer dans la bdd.
+     */
     @Override
     public void supprimer(Utilisateur objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     */
     @Override
     public List<Utilisateur> getAll() throws SQLException, ClassNotFoundException {
         return null;

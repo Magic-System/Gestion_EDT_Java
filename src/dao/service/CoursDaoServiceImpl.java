@@ -11,23 +11,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * @author Daniel
  */
 public class CoursDaoServiceImpl extends DbService<Cours>{
 
-    public CoursDaoServiceImpl() {
-    }
-
+    /**
+     * Pas utilisé.
+     * @param objet Objet a rajouter dans la base de donnée.
+     */
     @Override
     public void ajouter(Cours objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a mettre a jour dans la bdd.
+     */
     @Override
     public void modifier(Cours objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a supprimer dans la bdd.
+     */
     @Override
     public void supprimer(Cours objet) throws SQLException, ClassNotFoundException {
 

@@ -2,8 +2,6 @@ package dao.service;
 
 import dao.DbService;
 import modele.Site;
-import modele.Type_Cours;
-import modele.Utilisateur;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,18 +10,33 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Daniel
+ */
 public class SiteDaoServiceImpl extends DbService<Site> {
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a rajouter dans la base de donnée.
+     */
     @Override
     public void ajouter(Site objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a mettre a jour dans la bdd.
+     */
     @Override
     public void modifier(Site objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a supprimer dans la bdd.
+     */
     @Override
     public void supprimer(Site objet) throws SQLException, ClassNotFoundException {
 

@@ -1,11 +1,7 @@
 package dao.service;
 
 import dao.DbService;
-import modele.Salle;
 import modele.Seance_Enseignants;
-import modele.Seance_Groupes;
-import modele.Type_Cours;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,8 +9,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Daniel
+ */
 public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignants> {
 
+    /**
+     * Ajoute la seance enseignant recu en parametre dans la bdd.
+     * @param objet Objet a rajouter dans la base de donnée.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public void ajouter(Seance_Enseignants objet) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -25,6 +30,12 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
         addSe.executeUpdate();
     }
 
+    /**
+     * Modifie la seance enseignant recu en parametre dans la bdd en fonction de son id seance.
+     * @param objet Objet a mettre a jour dans la bdd.
+     * @throws SQLException Probleme requete.
+     * @throws ClassNotFoundException Probleme driver.
+     */
     @Override
     public void modifier(Seance_Enseignants objet) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -35,6 +46,12 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
         majSe.executeUpdate();
     }
 
+    /**
+     * Supprime la seance enseignant recu en parametre de la bdd.
+     * @param objet Objet a supprimer dans la bdd.
+     * @throws SQLException Erreur de requete.
+     * @throws ClassNotFoundException Erreur de driver.
+     */
     @Override
     public void supprimer(Seance_Enseignants objet) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -45,6 +62,12 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
         delSe.executeUpdate();
     }
 
+    /**
+     * Recupere la table seance enseignant de la bdd.
+     * @return ArrayList de seance enseignant.
+     * @throws SQLException Erreur de requete.
+     * @throws ClassNotFoundException Erreur de driver.
+     */
     @Override
     public List<Seance_Enseignants> getAll() throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -63,6 +86,13 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
         return liste;
     }
 
+    /**
+     * Recupere une seance enseignant de la bdd en fonction de son id seance.
+     * @param id Identifiant de l'objet a recuperer.
+     * @return Seance enseignant ayant l'id seance recu en parametre.
+     * @throws SQLException Erreur de requete.
+     * @throws ClassNotFoundException Erreur de driver.
+     */
     @Override
     public Seance_Enseignants getById(int id) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();

@@ -3,7 +3,6 @@ package dao.service;
 import dao.DbService;
 import modele.Cours;
 import modele.Enseignant;
-import modele.Type_Cours;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,24 +11,45 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+/**
+ * @author Daniel
+ */
 public class EnseignantDaoServiceImpl extends DbService<Enseignant> {
+
+    /**
+     * Pas utilisé.
+     * @param objet Objet a rajouter dans la base de donnée.
+     */
     @Override
     public void ajouter(Enseignant objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a mettre a jour dans la bdd.
+     */
     @Override
     public void modifier(Enseignant objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a supprimer dans la bdd.
+     */
     @Override
     public void supprimer(Enseignant objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Retourne une liste de tout les enseignants de la bdd.
+     * @return ArrayList d'enseignants.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public List<Enseignant> getAll() throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -50,6 +70,13 @@ public class EnseignantDaoServiceImpl extends DbService<Enseignant> {
         return liste;
     }
 
+    /**
+     * Cherche un Enseignant dans la bdd en fonction de son ID utilisateur.
+     * @param id Identifiant de l'objet a recuperer.
+     * @return Enseignant ayant l'id recu en parametre.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public Enseignant getById(int id) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();

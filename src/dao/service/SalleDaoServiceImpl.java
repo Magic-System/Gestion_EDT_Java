@@ -2,8 +2,6 @@ package dao.service;
 
 import dao.DbService;
 import modele.Salle;
-import modele.Site;
-import modele.Type_Cours;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,23 +10,44 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Daniel
+ */
 public class SalleDaoServiceImpl extends DbService<Salle> {
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a rajouter dans la base de donnée.
+     */
     @Override
     public void ajouter(Salle objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a mettre a jour dans la bdd.
+     */
     @Override
     public void modifier(Salle objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a supprimer dans la bdd.
+     */
     @Override
     public void supprimer(Salle objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Recupere la table Salle depuis la bdd.
+     * @return ArrayList de Salle.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public List<Salle> getAll() throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -45,6 +64,13 @@ public class SalleDaoServiceImpl extends DbService<Salle> {
         return liste;
     }
 
+    /**
+     * Recupere une salle de la bdd en fonction de son id.
+     * @param id Identifiant de l'objet a recuperer.
+     * @return Salle ayant l'id recu en parametre.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public Salle getById(int id) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();

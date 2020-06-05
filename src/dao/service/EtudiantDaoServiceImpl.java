@@ -13,22 +13,43 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Daniel
+ */
 public class EtudiantDaoServiceImpl extends DbService<Etudiant> {
+    /**
+     * Pas utilisé.
+     * @param objet Objet a rajouter dans la base de donnée.
+     */
     @Override
     public void ajouter(Etudiant objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a mettre a jour dans la bdd.
+     */
     @Override
     public void modifier(Etudiant objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Pas utilisé.
+     * @param objet Objet a supprimer dans la bdd.
+     */
     @Override
     public void supprimer(Etudiant objet) throws SQLException, ClassNotFoundException {
 
     }
 
+    /**
+     * Recupere la table Etudiant de la bdd.
+     * @return ArrayList d'etudiants.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public List<Etudiant> getAll() throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -46,6 +67,13 @@ public class EtudiantDaoServiceImpl extends DbService<Etudiant> {
         return liste;
     }
 
+    /**
+     * Recupere un etudiant de la bdd en fonction de l'id recu en parametre.
+     * @param id Identifiant de l'objet a recuperer.
+     * @return Etudiant ayant l'id recu en parametre.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public Etudiant getById(int id) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();

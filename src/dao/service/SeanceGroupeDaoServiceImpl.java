@@ -1,10 +1,7 @@
 package dao.service;
 
 import dao.DbService;
-import modele.Salle;
-import modele.Seance_Enseignants;
 import modele.Seance_Groupes;
-import modele.Type_Cours;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +10,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Daniel
+ */
 public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
 
+    /**
+     * Ajoute la seance groupe recu en parametre dans la bdd.
+     * @param objet Objet a rajouter dans la base de donnée.
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public void ajouter(Seance_Groupes objet) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -25,6 +31,12 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
         addSg.executeUpdate();
     }
 
+    /**
+     * Modifie la seance groupe recu en parametre dans la bdd en fonction de son id seance.
+     * @param objet Objet a mettre a jour dans la bdd.
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public void modifier(Seance_Groupes objet) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -35,6 +47,12 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
         majSg.executeUpdate();
     }
 
+    /**
+     * Supprime la seance groupe recu en parametre de la bdd.
+     * @param objet Objet a supprimer dans la bdd.
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public void supprimer(Seance_Groupes objet) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -45,6 +63,12 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
         delSg.executeUpdate();
     }
 
+    /**
+     * Recupere la table seance groupe de la bdd.
+     * @return ArrayList de seance groupe.
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public List<Seance_Groupes> getAll() throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -62,6 +86,7 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
 
         return liste;
     }
+
 
     @Override
     public Seance_Groupes getById(int id) throws SQLException, ClassNotFoundException {

@@ -14,6 +14,7 @@ import java.time.LocalTime;
  *                        la liste des enseignant,
  *                        la liste des salles
  *                        et la liste des groupes.
+ * Etat : 0 = annulé, 1 = validé, 2 = en cours de validation.
  * @author Daniel
  */
 public class Seance {
