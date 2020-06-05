@@ -117,7 +117,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
     @Override
     public Seance getById(int id) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
-        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance` WHERE ID = ?");
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance` WHERE ID = ? AND Etat = 1");
         getCoursById.setInt(1, id);
         ResultSet res = getCoursById.executeQuery();
 
@@ -167,7 +167,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
      */
     public Seance getByIdAndSemaine (int id, int semaine) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
-        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance` WHERE ID = ? AND Semaine = ?");
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance` WHERE ID = ? AND Semaine = ? AND Etat = 1");
         getCoursById.setInt(1, id);
         getCoursById.setInt(2, semaine);
         ResultSet res = getCoursById.executeQuery();
@@ -208,4 +208,41 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
 
         return liste;
     }
+
+    /**
+     * Retourne un arrayList de Seance en fonction de la semaine et de la promo recu en parametre.
+     * @param semaine Numero de la semaine.
+     * @param promo Id de la promotion.
+     * @return ArrayList de Seance.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public ArrayList<Seance> getByPromoAndSemaine(int semaine, int promo) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement getCoursById = co.prepareStatement("SELECT seance.* FROM seance, seance_groupes, groupe WHERE seance_groupes.ID_Seance = seance.ID AND seance_groupes.ID_Groupe = groupe.ID AND semaine = ? AND groupe.ID_Promotion = ? AND seance.Etat = 1");
+        getCoursById.setInt(1, semaine);
+        getCoursById.setInt(2, promo);
+        ResultSet res = getCoursById.executeQuery();
+
+        ArrayList<Seance> liste = new ArrayList<Seance>();
+
+        while (res.next()) {
+            Seance seance = new Seance();
+            seance.setId(res.getInt("ID"));
+            seance.setSemaine(res.getInt("Semaine"));
+            seance.setJour(res.getDate("Date").toLocalDate());
+            seance.setHeure_debut(res.getTime("Heure_Debut").toLocalTime());
+            seance.setHeure_fin(res.getTime("Heure_Fin").toLocalTime());
+            seance.setEtat(res.getInt("Etat"));
+            CoursDaoServiceImpl cours = new CoursDaoServiceImpl();
+            seance.setCours(cours.getById(res.getInt("ID_Cours")));
+            Type_CoursDaoServiceImpl type = new Type_CoursDaoServiceImpl();
+            seance.setType(type.getById(res.getInt("ID_Type")));
+            liste.add(seance);
+        }
+
+        return liste;
+    }
+
+
 }
