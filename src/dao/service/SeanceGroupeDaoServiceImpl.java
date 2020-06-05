@@ -1,6 +1,7 @@
 package dao.service;
 
 import dao.DbService;
+import modele.Seance;
 import modele.Seance_Groupes;
 
 import java.sql.Connection;
@@ -8,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -87,11 +89,18 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
         return liste;
     }
 
-
+    /**
+     * Pas utilisé.
+     * @param id Identifiant de l'objet a recuperer.
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public Seance_Groupes getById(int id) throws SQLException, ClassNotFoundException {
+        /*
         Connection co = this.connexion();
-        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance_groupes` WHERE ID = ?");
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance_groupes` WHERE ID_Seance = ?");
         getCoursById.setInt(1, id);
         ResultSet res = getCoursById.executeQuery();
 
@@ -105,5 +114,29 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
         }
 
         return sg;
+        */
+        return null;
+    }
+
+    /**
+     * Recupere la liste des id de seance ayant le groupe d'id recu en parametre.
+     * @param id_groupe Id du groupe.
+     * @return liste des id seance.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public HashSet<Integer> getSeanceIdByGroupe(int id_groupe) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance_groupes` WHERE ID_Groupe = ?");
+        getCoursById.setInt(1, id_groupe);
+        ResultSet res = getCoursById.executeQuery();
+
+        HashSet<Integer> idsSeance = new HashSet<Integer>();
+
+        while (res.next()) {
+            idsSeance.add(res.getInt("ID_Seance"));
+        }
+
+        return idsSeance;
     }
 }

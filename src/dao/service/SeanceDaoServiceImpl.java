@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -120,9 +121,10 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
         getCoursById.setInt(1, id);
         ResultSet res = getCoursById.executeQuery();
 
-        Seance seance = new Seance();
+        Seance seance = null;
 
         while (res.next()) {
+            seance = new Seance();
             seance.setId(res.getInt("ID"));
             seance.setSemaine(res.getInt("Semaine"));
             seance.setJour(res.getDate("Date").toLocalDate());
@@ -136,5 +138,74 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
         }
 
         return seance;
+    }
+
+    /**
+     * Recupere des seance de la bdd a partir d'une liste d'id seance.
+     * @param ids Liste des ids des seances a récuperer.
+     * @return ArrayList de seance.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public ArrayList<Seance> getByIdList(HashSet<Integer> ids) throws SQLException, ClassNotFoundException {
+        ArrayList<Seance> liste = new ArrayList<Seance>();
+
+        for (int id : ids) {
+            liste.add(this.getById(id));
+        }
+
+        return liste;
+    }
+
+    /**
+     * Recupere un cours en fonction de son id et de sa semaine.
+     * @param id Id du cours a chercher.
+     * @param semaine Semaine du cours a chercher.
+     * @return Seance ayant l'id et la semaine recu en parametre.
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public Seance getByIdAndSemaine (int id, int semaine) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance` WHERE ID = ? AND Semaine = ?");
+        getCoursById.setInt(1, id);
+        getCoursById.setInt(2, semaine);
+        ResultSet res = getCoursById.executeQuery();
+
+        Seance seance = null;
+
+        while (res.next()) {
+            seance = new Seance();
+            seance.setId(res.getInt("ID"));
+            seance.setSemaine(res.getInt("Semaine"));
+            seance.setJour(res.getDate("Date").toLocalDate());
+            seance.setHeure_debut(res.getTime("Heure_Debut").toLocalTime());
+            seance.setHeure_fin(res.getTime("Heure_Fin").toLocalTime());
+            seance.setEtat(res.getInt("Etat"));
+            CoursDaoServiceImpl cours = new CoursDaoServiceImpl();
+            seance.setCours(cours.getById(res.getInt("ID_Cours")));
+            Type_CoursDaoServiceImpl type = new Type_CoursDaoServiceImpl();
+            seance.setType(type.getById(res.getInt("ID_Type")));
+        }
+
+        return seance;
+    }
+
+    /**
+     * Recupere liste des cours de la semaine ayant un id de la liste recu.
+     * @param ids Liste d'id de cours a chercher.
+     * @param semaine Numero de la semaine a regarder.
+     * @return Liste des cours de la semaine.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public ArrayList<Seance> getSeanceSemaineParGroupe(HashSet<Integer> ids, int semaine) throws SQLException, ClassNotFoundException {
+        ArrayList<Seance> liste = new ArrayList<Seance>();
+
+        for (int id : ids) {
+            liste.add(this.getByIdAndSemaine(id, semaine));
+        }
+
+        return liste;
     }
 }
