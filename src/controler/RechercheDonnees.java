@@ -10,6 +10,7 @@ import vue.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 
 /**
  * @author Daniel
@@ -87,6 +88,30 @@ public class RechercheDonnees {
         return maSemaine;
     }
 
+    public ArrayList<Seance> getSeanceSemaineEtudiant(int semaine, String etudiant) {
+        ArrayList<Seance> maSemaine = null;
+        SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
+
+        try {
+            int index = etudiant.lastIndexOf(" ");
+            String nom = etudiant.substring(0, index);
+            String prenom = etudiant.substring(index+1);
+            maSemaine = new ArrayList<Seance>(seanceDao.getSeanceBySemaineAndEtudiant(semaine, nom, prenom));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return maSemaine;
+    }
+
+    public ArrayList<Seance> getSeanceSemaineEnseignant(int semaine, String enseignant) {
+        ArrayList<Seance> maSemaine = null;
+
+        return maSemaine;
+    }
+
     /**
      * Recupere une liste contenant nom et prenom de tout les etudiants.
      * @return Liste de nom prenom de tout les etudiants.
@@ -136,9 +161,10 @@ public class RechercheDonnees {
 
     public static void main(String[] args){
         RechercheDonnees rd = new RechercheDonnees();
-        ArrayList<String> test = rd.getListeEtudiant();
+        ArrayList<Seance> test = rd.getSeanceSemaineEtudiant(23 ,"DIAS DA SILVA Daniel");
+        //rd.getSeanceSemaineEtudiant(23, "DIAS DA SILVA Daniel");
 
-        for (String s : test)
+        for (Seance s : test)
             System.out.println(s.toString());
     }
 }
