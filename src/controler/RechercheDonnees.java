@@ -24,17 +24,15 @@ public class RechercheDonnees {
     public Utilisateur login(String email, String password) {
         UtilisateurDaoServiceImpl userDao = new UtilisateurDaoServiceImpl();
 
-        Utilisateur user = null;
+        Utilisateur user;
 
         try {
             System.out.println(email);
             System.out.println(password);
             user = userDao.getByLogin(email, password);
             return user;
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -53,10 +51,8 @@ public class RechercheDonnees {
         try {
             HashSet<Integer> seancesGroupe = sgDao.getSeanceIdByGroupe(groupe);
             maSemaine = new ArrayList<>(seanceDao.getSeanceSemaineParGroupe(seancesGroupe, semaine));
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         return maSemaine;
@@ -73,11 +69,9 @@ public class RechercheDonnees {
         ArrayList<Seance> maSemaine = null;
 
         try {
-            maSemaine = new ArrayList<Seance>(seanceDao.getByPromoAndSemaine(semaine, promo));
-        } catch (SQLException throwables) {
+            maSemaine = new ArrayList<>(seanceDao.getByPromoAndSemaine(semaine, promo));
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         return maSemaine;
@@ -98,11 +92,9 @@ public class RechercheDonnees {
             int index = etudiant.lastIndexOf(" ");
             String nom = etudiant.substring(0, index);
             String prenom = etudiant.substring(index+1);
-            maSemaine = new ArrayList<Seance>(seanceDao.getSeanceBySemaineAndEtudiant(semaine, nom, prenom));
-        } catch (SQLException throwables) {
+            maSemaine = new ArrayList<>(seanceDao.getSeanceBySemaineAndEtudiant(semaine, nom, prenom));
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         return maSemaine;
@@ -116,18 +108,16 @@ public class RechercheDonnees {
      * @return ArrayList de Seance.
      */
     public ArrayList<Seance> getSeanceSemaineEnseignant(int semaine, String enseignant) {
-        ArrayList<Seance> maSemaine = null;
+        ArrayList<Seance> maSemaine = new ArrayList<>();
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
 
         try {
             int index = enseignant.lastIndexOf(" ");
             String nom = enseignant.substring(0, index);
             String prenom = enseignant.substring(index+1);
-            maSemaine = new ArrayList<Seance>(seanceDao.getSeanceBySemaineAndEtudiant(semaine, nom, prenom));
-        } catch (SQLException throwables) {
+            maSemaine = new ArrayList<>(seanceDao.getSeanceBySemaineAndEtudiant(semaine, nom, prenom));
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         return maSemaine;
     }
@@ -139,15 +129,13 @@ public class RechercheDonnees {
      * @return ArrayList de Seance.
      */
     public ArrayList<Seance> getSeanceSemaineSalle(int semaine, String salle) {
-        ArrayList<Seance> maSemaine = null;
+        ArrayList<Seance> maSemaine = new ArrayList<>();
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
 
         try {
             maSemaine = new ArrayList<>(seanceDao.getSeanceBySemaineAndSalle(semaine, salle));
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         return maSemaine;
@@ -159,7 +147,7 @@ public class RechercheDonnees {
      */
     public ArrayList<String> getListeEtudiant() {
         EtudiantDaoServiceImpl userDao = new EtudiantDaoServiceImpl();
-        ArrayList<String> liste = new ArrayList<String>();
+        ArrayList<String> liste = new ArrayList<>();
         try {
             ArrayList<Etudiant> users = userDao.getAll();
             for (Etudiant e : users) {
@@ -167,10 +155,8 @@ public class RechercheDonnees {
                 temp = e.getUtilisateur().getNom().toUpperCase() + " " + e.getUtilisateur().getPrenom();
                 liste.add(temp);
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         return liste;
@@ -190,10 +176,8 @@ public class RechercheDonnees {
                 temp = e.getUtilisateur().getNom().toUpperCase() + " " + e.getUtilisateur().getPrenom();
                 liste.add(temp);
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         return liste;
@@ -212,10 +196,8 @@ public class RechercheDonnees {
             for (Salle s : salles) {
                 liste.add(s.getNom());
             }
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
 
         return liste;
