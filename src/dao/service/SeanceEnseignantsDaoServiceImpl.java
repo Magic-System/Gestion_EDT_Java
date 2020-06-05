@@ -17,17 +17,32 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
 
     @Override
     public void ajouter(Seance_Enseignants objet) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement addSe = co.prepareStatement("INSERT INTO `seance_enseignants`(`ID_Seance`, `ID_Enseignant`) VALUES (?, ?)");
+        addSe.setInt(1, objet.getSeance().getId());
+        addSe.setInt(2, objet.getProf().getUtilisateur().getId());
 
+        addSe.executeUpdate();
     }
 
     @Override
     public void modifier(Seance_Enseignants objet) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement majSe = co.prepareStatement("UPDATE `seance_enseignants` SET `ID_Enseignant`= ? WHERE `ID_Seance`= ?");
+        majSe.setInt(1, objet.getProf().getUtilisateur().getId());
+        majSe.setInt(2, objet.getSeance().getId());
 
+        majSe.executeUpdate();
     }
 
     @Override
     public void supprimer(Seance_Enseignants objet) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement delSe = co.prepareStatement("DELETE FROM `seance_enseignants` WHERE `ID_Seance`= ? AND `ID_Enseignant`= ?");
+        delSe.setInt(1, objet.getSeance().getId());
+        delSe.setInt(2, objet.getProf().getUtilisateur().getId());
 
+        delSe.executeUpdate();
     }
 
     @Override
