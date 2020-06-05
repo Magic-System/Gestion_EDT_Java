@@ -2,8 +2,6 @@ package modele;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Objet Seance contenant l'id de la seance,
@@ -28,9 +26,6 @@ public class Seance {
     private int etat;
     private Cours cours;
     private Type_Cours type;
-    private List<Enseignant> enseignants;
-    private List<Salle> salles;
-    private List<Groupe> groupes;
 
     /**
      * Constructeur par défaut.
@@ -44,9 +39,6 @@ public class Seance {
         this.etat = 0;
         this.cours = new Cours();
         this.type = new Type_Cours();
-        this.enseignants = new ArrayList<Enseignant>();
-        this.salles = new ArrayList<Salle>();
-        this.groupes = new ArrayList<Groupe>();
     }
 
     /**
@@ -59,11 +51,8 @@ public class Seance {
      * @param etat Etat de la seance.
      * @param cours Cours enseigné.
      * @param type Type du cours.
-     * @param enseignants Liste des enseignants.
-     * @param salles Liste des salles.
-     * @param groupes Liste des groupes.
      */
-    public Seance(int id, int semaine, LocalDate jour, LocalTime heure_debut, LocalTime heure_fin, int etat, Cours cours, Type_Cours type, List<Enseignant> enseignants, List<Salle> salles, List<Groupe> groupes) {
+    public Seance(int id, int semaine, LocalDate jour, LocalTime heure_debut, LocalTime heure_fin, int etat, Cours cours, Type_Cours type) {
         this.id = id;
         this.semaine = semaine;
         this.jour = jour;
@@ -72,9 +61,6 @@ public class Seance {
         this.etat = etat;
         this.cours = cours;
         this.type = type;
-        this.enseignants = new ArrayList<Enseignant>(enseignants);
-        this.salles = new ArrayList<Salle>(salles);
-        this.groupes = new ArrayList<Groupe>(groupes);
     }
 
     /**
@@ -205,58 +191,6 @@ public class Seance {
         this.type = type;
     }
 
-    /**
-     * Getter de la liste des enseignants de la seance.
-     * @return List des enseigants.
-     */
-    public List<Enseignant> getEnseignants() {
-        return enseignants;
-    }
-
-    /**
-     * Setter de la liste des enseignants de la seance.
-     * @param enseignants List des nouveaux Enseignants
-     */
-    public void setEnseignants(List<Enseignant> enseignants) {
-        this.enseignants = new ArrayList<Enseignant>(enseignants);
-    }
-
-    /**
-     * Getter de la liste des salles de la seance.
-     * @return List des salles.
-     */
-    public List<Salle> getSalles() {
-        return salles;
-    }
-
-    /**
-     * Setter de la liste des salles de la seance.
-     * @param salles List des nouvelles Salles.
-     */
-    public void setSalles(List<Salle> salles) {
-        this.salles = new ArrayList<Salle>(salles);
-    }
-
-    /**
-     * Getter de la liste des groupes de la seance.
-     * @return List des groupes.
-     */
-    public List<Groupe> getGroupes() {
-        return groupes;
-    }
-
-    /**
-     * Setter des la liste des groupes de la seance.
-     * @param groupes List des nouveaux groupes.
-     */
-    public void setGroupes(List<Groupe> groupes) {
-        this.groupes = new ArrayList<Groupe>(groupes);
-    }
-
-    /**
-     * Convertit les informations de la seance sous forme d'un String.
-     * @return String contenant les attributs de la seance.
-     */
     @Override
     public String toString() {
         return "Seance{" +
@@ -268,9 +202,6 @@ public class Seance {
                 ", etat=" + etat +
                 ", cours=" + cours +
                 ", type=" + type +
-                ", enseignants=" + enseignants +
-                ", salles=" + salles +
-                ", groupes=" + groupes +
                 '}';
     }
 }

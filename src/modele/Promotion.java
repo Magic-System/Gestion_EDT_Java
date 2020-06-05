@@ -28,7 +28,7 @@ public class Promotion {
      * @param nom Nom de la promotion.
      * @param id Identifiant de la promotion.
      */
-    public Promotion(String nom, int id) {
+    public Promotion(int id, String nom) {
         this.nom = nom;
         this.id = id;
     }

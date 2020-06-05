@@ -2,60 +2,30 @@ package dao.service;
 
 import dao.DbService;
 import modele.Promotion;
+import modele.Utilisateur;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PromotionDaoServiceImpl extends DbService<Promotion> {
 
-    /**
-     * Ajout d'une Promotion dans la base de donnée.
-     *
-     * @param objet Promotion a rajouter dans la base de donnée.
-     * @throws SQLException           Erreur lors de l'execution de la requete.
-     * @throws ClassNotFoundException Erreur lors du chargement du driver de connexion à la bdd.
-     */
     @Override
     public void ajouter(Promotion objet) throws SQLException, ClassNotFoundException {
-        Connection co = this.connexion();
-        PreparedStatement ajoutCours = co.prepareStatement("INSERT INTO `promotion`(`Nom`) VALUES (?)");
-        ajoutCours.setString(1, objet.getNom());
-        ajoutCours.executeUpdate();
 
     }
 
-    /**
-     * Mise a jour d'un Promotion dans la base de donnée.
-     *
-     * @param objet Promotion a mettre a jour dans la bdd.
-     * @throws SQLException           Erreur lors de l'execution de la requete.
-     * @throws ClassNotFoundException Erreur lors du chargement du driver de connexion à la bdd.
-     */
     @Override
     public void modifier(Promotion objet) throws SQLException, ClassNotFoundException {
-        Connection co = this.connexion();
-        PreparedStatement updateCours = co.prepareStatement("UPDATE `promotion` SET `Nom`= ? WHERE ID = ?");
-        updateCours.setString(1, objet.getNom());
-        updateCours.setInt(2, objet.getId());
-        updateCours.executeUpdate();
 
     }
 
-    /**
-     * Suppression d'un Promotion dans la base de donnée.
-     *
-     * @param objet Promotion a supprimer dans la bdd.
-     * @throws SQLException           Erreur lors de l'execution de la requete.
-     * @throws ClassNotFoundException Erreur lors du chargement du driver de connexion à la bdd.
-     */
     @Override
     public void supprimer(Promotion objet) throws SQLException, ClassNotFoundException {
-        Connection co = this.connexion();
-        PreparedStatement supprCours = co.prepareStatement("DELETE FROM `promotion` WHERE ?");
-        supprCours.setInt(1, objet.getId());
-        supprCours.executeUpdate();
+
     }
 
     /**
@@ -69,9 +39,15 @@ public class PromotionDaoServiceImpl extends DbService<Promotion> {
     public List<Promotion> getAll() throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
         PreparedStatement getAll = co.prepareStatement("SELECT * FROM `promotion` WHERE 1");
-        getAll.executeQuery();
+        ResultSet res = getAll.executeQuery();
 
-        return null;
+        ArrayList<Promotion> liste = new ArrayList<Promotion>();
+
+        while (res.next()) {
+            liste.add(new Promotion(res.getInt("id"), res.getString("nom")));
+        }
+
+        return liste;
     }
 
     /**
@@ -85,10 +61,17 @@ public class PromotionDaoServiceImpl extends DbService<Promotion> {
     @Override
     public Promotion getById(int id) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
-        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `promotion` WHERE ?");
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `promotion` WHERE id = ?");
         getCoursById.setInt(1, id);
-        getCoursById.executeQuery();
-        
-        return null;
+        ResultSet res = getCoursById.executeQuery();
+
+        Promotion promo = new Promotion();
+
+        while (res.next()) {
+            promo.setId(res.getInt("id"));
+            promo.setNom(res.getString("nom"));
+        }
+
+        return promo;
     }
 }

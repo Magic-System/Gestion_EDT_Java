@@ -5,7 +5,9 @@ import modele.Cours;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,47 +18,19 @@ public class CoursDaoServiceImpl extends DbService<Cours>{
     public CoursDaoServiceImpl() {
     }
 
-    /**
-     * Ajout d'un Cours dans la base de donnée.
-     * @param objet Cours a rajouter dans la base de donnée.
-     * @throws SQLException           Erreur lors de l'execution de la requete.
-     * @throws ClassNotFoundException Erreur lors du chargement du driver de connexion à la bdd.
-     */
     @Override
     public void ajouter(Cours objet) throws SQLException, ClassNotFoundException {
-        Connection co = this.connexion();
-        PreparedStatement ajoutCours = co.prepareStatement("INSERT INTO `cours`(`Nom`) VALUES (?)");
-        ajoutCours.setString(1, objet.getNom());
-        ajoutCours.executeUpdate();
+
     }
 
-    /**
-     * Mise a jour d'un Cours dans la base de donnée.
-     * @param objet Cours a mettre a jour dans la bdd.
-     * @throws SQLException           Erreur lors de l'execution de la requete.
-     * @throws ClassNotFoundException Erreur lors du chargement du driver de connexion à la bdd.
-     */
     @Override
     public void modifier(Cours objet) throws SQLException, ClassNotFoundException {
-        Connection co = this.connexion();
-        PreparedStatement updateCours = co.prepareStatement("UPDATE `cours` SET `Nom`= ? WHERE ID = ?");
-        updateCours.setString(1, objet.getNom());
-        updateCours.setInt(2, objet.getId());
-        updateCours.executeUpdate();
+
     }
 
-    /**
-     * Suppression d'un Cours dans la base de donnée.
-     * @param objet Cours a supprimer dans la bdd.
-     * @throws SQLException           Erreur lors de l'execution de la requete.
-     * @throws ClassNotFoundException Erreur lors du chargement du driver de connexion à la bdd.
-     */
     @Override
     public void supprimer(Cours objet) throws SQLException, ClassNotFoundException {
-        Connection co = this.connexion();
-        PreparedStatement supprCours = co.prepareStatement("DELETE FROM `cours` WHERE ?");
-        supprCours.setInt(1, objet.getId());
-        supprCours.executeUpdate();
+
     }
 
     /**
@@ -69,9 +43,15 @@ public class CoursDaoServiceImpl extends DbService<Cours>{
     public List<Cours> getAll() throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
         PreparedStatement getAll = co.prepareStatement("SELECT * FROM `cours` WHERE 1");
-        getAll.executeQuery();
+        ResultSet res = getAll.executeQuery();
 
-        return null;
+        ArrayList<Cours> liste = new ArrayList<Cours>();
+
+        while (res.next()) {
+            liste.add(new Cours(res.getInt("ID"), res.getString("Nom")));
+        }
+
+        return liste;
     }
 
     /**
@@ -84,10 +64,17 @@ public class CoursDaoServiceImpl extends DbService<Cours>{
     @Override
     public Cours getById(int id) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
-        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `cours` WHERE ?");
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `cours` WHERE ID = ?");
         getCoursById.setInt(1, id);
-        getCoursById.executeQuery();
+        ResultSet res = getCoursById.executeQuery();
 
-        return null;
+        Cours c = new Cours();
+
+        while (res.next()) {
+            c.setId(res.getInt("ID"));
+            c.setNom(res.getString("Nom"));
+        }
+
+        return c;
     }
 }

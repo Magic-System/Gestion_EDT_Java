@@ -45,6 +45,12 @@ public class Etudiant {
         this.groupe = new Groupe(groupe);
     }
 
+    public Etudiant(Utilisateur utilisateur, int numero, Groupe groupe) {
+        this.utilisateur = utilisateur;
+        this.numero = numero;
+        this.groupe = groupe;
+    }
+
     /**
      * Constructeur par copie.
      * @param etudiant Etudiant a copier.
@@ -100,7 +106,7 @@ public class Etudiant {
      * @param utilisateur Nouveau groupe de l'étudiant
      */
     public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
+        this.utilisateur = new Utilisateur(utilisateur);
     }
 
     /**
