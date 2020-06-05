@@ -88,6 +88,13 @@ public class RechercheDonnees {
         return maSemaine;
     }
 
+    /**
+     * Pour un etudiant donné (recherche possible avec son nom ou parmi une liste d’enseignants) et pour une semaine
+     * donnée, consulter tous les cours.
+     * @param semaine Numero de la semaine.
+     * @param etudiant String contenant nom + prenom de l'etudiant.
+     * @return ArrayList de Seance.
+     */
     public ArrayList<Seance> getSeanceSemaineEtudiant(int semaine, String etudiant) {
         ArrayList<Seance> maSemaine = null;
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
@@ -106,9 +113,27 @@ public class RechercheDonnees {
         return maSemaine;
     }
 
+    /**
+     * Pour un enseignant donné (recherche possible avec son nom ou parmi une liste d’enseignants) et pour une semaine
+     * donnée, consulter tous les cours.
+     * @param semaine Numero de la semaine.
+     * @param enseignant String contenant nom + prenom de l'enseignant.
+     * @return ArrayList de Seance.
+     */
     public ArrayList<Seance> getSeanceSemaineEnseignant(int semaine, String enseignant) {
         ArrayList<Seance> maSemaine = null;
+        SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
 
+        try {
+            int index = enseignant.lastIndexOf(" ");
+            String nom = enseignant.substring(0, index);
+            String prenom = enseignant.substring(index+1);
+            maSemaine = new ArrayList<Seance>(seanceDao.getSeanceBySemaineAndEtudiant(semaine, nom, prenom));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return maSemaine;
     }
 

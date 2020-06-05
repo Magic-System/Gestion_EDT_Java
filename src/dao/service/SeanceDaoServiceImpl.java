@@ -283,4 +283,42 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
         return liste;
     }
 
+    /**
+     * Retourne la liste de seance en fonction du nom et prenom de l'enseignant concerné et de la semaine.
+     * @param semaine Numero de la semaine.
+     * @param nom Nom de l'enseignant.
+     * @param prenom Prenom de l'enseignant.
+     * @return ArrayList de Seance.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public ArrayList<Seance> getSeanceBySemaineAndEnseignant(int semaine, String nom, String prenom) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement getCoursById = co.prepareStatement("SELECT seance.* FROM seance, seance_enseignants, utilisateur WHERE seance_enseignants.ID_Seance = seance.ID AND seance_enseignants.ID_Enseignant = utilisateur.ID " +
+                "AND semaine = ? AND utilisateur.Prenom = ? AND utilisateur.Nom = ? AND seance.Etat = 1");
+        getCoursById.setInt(1, semaine);
+        getCoursById.setString(2, prenom);
+        getCoursById.setString(3, nom);
+        ResultSet res = getCoursById.executeQuery();
+
+        ArrayList<Seance> liste = new ArrayList<Seance>();
+
+        while (res.next()) {
+            Seance seance = new Seance();
+            seance.setId(res.getInt("ID"));
+            seance.setSemaine(res.getInt("Semaine"));
+            seance.setJour(res.getDate("Date").toLocalDate());
+            seance.setHeure_debut(res.getTime("Heure_Debut").toLocalTime());
+            seance.setHeure_fin(res.getTime("Heure_Fin").toLocalTime());
+            seance.setEtat(res.getInt("Etat"));
+            CoursDaoServiceImpl cours = new CoursDaoServiceImpl();
+            seance.setCours(cours.getById(res.getInt("ID_Cours")));
+            Type_CoursDaoServiceImpl type = new Type_CoursDaoServiceImpl();
+            seance.setType(type.getById(res.getInt("ID_Type")));
+            liste.add(seance);
+        }
+
+        return liste;
+    }
+
 }
