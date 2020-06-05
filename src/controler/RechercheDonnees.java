@@ -1,8 +1,8 @@
 package controler;
 
-import dao.service.SeanceDaoServiceImpl;
-import dao.service.SeanceGroupeDaoServiceImpl;
-import dao.service.UtilisateurDaoServiceImpl;
+import dao.service.*;
+import modele.Enseignant;
+import modele.Etudiant;
 import modele.Seance;
 import modele.Utilisateur;
 import vue.Connection;
@@ -87,11 +87,58 @@ public class RechercheDonnees {
         return maSemaine;
     }
 
+    /**
+     * Recupere une liste contenant nom et prenom de tout les etudiants.
+     * @return Liste de nom prenom de tout les etudiants.
+     */
+    public ArrayList<String> getListeEtudiant() {
+        EtudiantDaoServiceImpl userDao = new EtudiantDaoServiceImpl();
+        ArrayList<String> liste = new ArrayList<String>();
+        try {
+            ArrayList<Etudiant> users = userDao.getAll();
+            for (Etudiant e : users) {
+                String temp;
+                temp = e.getUtilisateur().getNom().toUpperCase() + " " + e.getUtilisateur().getPrenom();
+                liste.add(temp);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return liste;
+    }
+
+    /**
+     * Recupere une liste contenant nom et prenom de tout les enseignants.
+     * @return Liste de nom prenom de tout les enseignants.
+     */
+    public ArrayList<String> getListeEnseignant() {
+        EnseignantDaoServiceImpl userDao = new EnseignantDaoServiceImpl();
+        ArrayList<String> liste = new ArrayList<String>();
+        try {
+            ArrayList<Enseignant> users = userDao.getAll();
+            for (Enseignant e : users) {
+                String temp;
+                temp = e.getUtilisateur().getNom().toUpperCase() + " " + e.getUtilisateur().getPrenom();
+                liste.add(temp);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return liste;
+    }
+
+
     public static void main(String[] args){
         RechercheDonnees rd = new RechercheDonnees();
-        ArrayList<Seance> test = rd.getSeanceSemainePromotion(23, 3);
+        ArrayList<String> test = rd.getListeEtudiant();
 
-        for (Seance s : test)
+        for (String s : test)
             System.out.println(s.toString());
     }
 }

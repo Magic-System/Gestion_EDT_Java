@@ -51,7 +51,7 @@ public class EnseignantDaoServiceImpl extends DbService<Enseignant> {
      * @throws ClassNotFoundException Probleme de driver.
      */
     @Override
-    public List<Enseignant> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Enseignant> getAll() throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
         PreparedStatement getAll = co.prepareStatement("SELECT * FROM `enseignant` WHERE 1");
         ResultSet res = getAll.executeQuery();
