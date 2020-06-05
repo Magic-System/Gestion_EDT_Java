@@ -18,7 +18,7 @@ public class Seance_Salles {
     }
 
     public void setSalle(Salle salle) {
-        this.salle = salle;
+        this.salle = new Salle(salle);
     }
 
     public Seance getSeance() {
@@ -26,7 +26,7 @@ public class Seance_Salles {
     }
 
     public void setSeance(Seance seance) {
-        this.seance = seance;
+        this.seance = new Seance(seance);
     }
 
     @Override

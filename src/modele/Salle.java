@@ -47,6 +47,13 @@ public class Salle {
         this.site = site;
     }
 
+    public Salle(Salle salle) {
+        this.id = salle.id;
+        this.nom = salle.nom;
+        this.capacite = salle.capacite;
+        this.site = new Site(salle.site);
+    }
+
     /**
      * Getter de l'identifiant de la salle.
      * @return Identifiant sous forme d'un int.

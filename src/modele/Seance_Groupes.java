@@ -19,7 +19,7 @@ public class Seance_Groupes {
     }
 
     public void setSeance(Seance seance) {
-        this.seance = seance;
+        this.seance = new Seance(seance);
     }
 
     public Groupe getGroupe() {
@@ -27,7 +27,7 @@ public class Seance_Groupes {
     }
 
     public void setGroupe(Groupe grp) {
-        this.grp = grp;
+        this.grp = new Groupe(grp);
     }
 
     @Override

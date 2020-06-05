@@ -18,7 +18,7 @@ public class Seance_Enseignants {
     }
 
     public void setProf(Enseignant prof) {
-        this.prof = prof;
+        this.prof = new Enseignant(prof);
     }
 
     public Seance getSeance() {
@@ -26,7 +26,7 @@ public class Seance_Enseignants {
     }
 
     public void setSeance(Seance seance) {
-        this.seance = seance;
+        this.seance = new Seance(seance);
     }
 
     @Override

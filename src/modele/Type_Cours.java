@@ -33,6 +33,11 @@ public class Type_Cours {
         this.nom = nom;
     }
 
+    public Type_Cours(Type_Cours type) {
+        this.id = type.id;
+        this.nom = type.nom;
+    }
+
     /**
      * Getter de l'identifiant du type de cours.
      * @return Identifiant sous forme d'un int.

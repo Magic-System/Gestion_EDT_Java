@@ -63,6 +63,17 @@ public class Seance {
         this.type = type;
     }
 
+    public Seance(Seance seance) {
+        this.id = seance.id;
+        this.semaine = seance.semaine;
+        this.jour = seance.jour;
+        this.heure_debut = seance.heure_debut;
+        this.heure_fin = seance.heure_fin;
+        this.etat = seance.etat;
+        this.cours = new Cours(seance.cours);
+        this.type = new Type_Cours(seance.type);
+    }
+
     /**
      * Getter de l'id de la seance.
      * @return Id de la seance sous forme d'un int.
