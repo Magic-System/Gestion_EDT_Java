@@ -249,6 +249,9 @@ public class RechercheDonnees {
     }
 
 
+    /**
+     * Main de test !!
+     */
     public static void main(String[] args){
         int choix = 1;
 

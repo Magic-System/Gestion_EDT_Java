@@ -9,8 +9,8 @@ public class Seance_Enseignants {
     }
 
     public Seance_Enseignants(Seance seance, Enseignant prof) {
-        this.prof = prof;
-        this.seance = seance;
+        this.prof = new Enseignant(prof);
+        this.seance = new Seance(seance);
     }
 
     public Enseignant getProf() {
