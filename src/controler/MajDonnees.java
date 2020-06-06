@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * @author Daniel
+ */
 public class MajDonnees {
 
     private SeanceDaoServiceImpl seanceDao;
@@ -15,6 +18,9 @@ public class MajDonnees {
     private SeanceSalleDaoServiceImpl ssDao;
 
 
+    /**
+     * Crée les dao necessaire aux mises a jour des séances.
+     */
     public MajDonnees() {
         this.seanceDao = new SeanceDaoServiceImpl();
         this.seDao = new SeanceEnseignantsDaoServiceImpl();
@@ -25,8 +31,10 @@ public class MajDonnees {
     /**
      * Affecter un enseignant dans une séance de cours à condition que l’enseignant soit disponible sur le créneau de la
      * séance. Par exemple, pour une séance sans enseignant ou en remplacement d’un autre enseignant.
+     * @param prof Enseignant a ajouter a la séance.
+     * @param seance Seance a modifier.
      */
-    public void addEnseignantToSeance(final Enseignant prof, Seance seance) {
+    public void addEnseignantToSeance(Seance seance, final Enseignant prof) {
 
         /** TEST A FAIRE **/
 
@@ -35,6 +43,7 @@ public class MajDonnees {
         se.setSeance(seance);
         try {
             seDao.ajouter(se);
+            System.out.println(prof.toString() + " ajouté a la séance " + seance.toString());
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
@@ -45,8 +54,10 @@ public class MajDonnees {
      * que la (les) salle(s) soient de capacité suffisante. Par exemple, pour une séance sans groupe ou en remplacement
      * d’un autre groupe. Remarque : l’effectif de chaque groupe peut se comptabiliser à partir des étudiants affectés au
      * groupe.
+     * @param grp Groupe a ajouter a la séance.
+     * @param seance Séance a modifier.
      */
-    public void addGroupeToSeance(final Groupe grp, Seance seance) {
+    public void addGroupeToSeance(Seance seance, final Groupe grp) {
 
         /** TEST A FAIRE **/
 
@@ -55,6 +66,7 @@ public class MajDonnees {
         sg.setGroupe(grp);
         try {
             sgDao.ajouter(sg);
+            System.out.println(grp.toString() + " ajouté a la séance " + seance.toString());
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
@@ -63,8 +75,8 @@ public class MajDonnees {
     /**
      * Affecter une salle à une séance de cours à condition qu’elle soit disponible sur le créneau de la séance et que sa
      * capacité soit suffisante pour le(s) groupe(s).
-     * @param seance Seance a modifier.
      * @param salle Salle a rajouter a la seance.
+     * @param seance Seance a modifier.
      */
     public void addSalleToSeance(Seance seance, final Salle salle) {
 
@@ -75,6 +87,7 @@ public class MajDonnees {
         ss.setSalle(salle);
         try {
             ssDao.ajouter(ss);
+            System.out.println(salle.toString() + " ajoutée a la séance " + seance.toString());
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
@@ -85,13 +98,16 @@ public class MajDonnees {
      * @param seance Objet Seance a modifier.
      * @param cours Nouveau cours de la Seance.
      * @param type Nouveau Type de la Seance.
-     * @throws SQLException Probleme requete.
-     * @throws ClassNotFoundException Probleme driver.
      */
-    public void editSeance(Seance seance,final Cours cours,final Type_Cours type) throws SQLException, ClassNotFoundException {
+    public void editSeance(Seance seance,final Cours cours,final Type_Cours type) {
         seance.setCours(cours);
         seance.setType(type);
-        seanceDao.modifier(seance);
+        try {
+            seanceDao.modifier(seance);
+            System.out.println("Seance bien modifier.Nouveau cours : " + cours + " Nouveau type de cours : " + type);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     /**
