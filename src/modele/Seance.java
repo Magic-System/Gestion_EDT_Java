@@ -32,7 +32,7 @@ public class Seance {
      * Constructeur par défaut.
      */
     public Seance() {
-        this.id = 0;
+        this.id = -1;
         this.semaine = 0;
         this.jour = LocalDate.MIN;
         this.heure_debut = LocalTime.MIN;
@@ -44,7 +44,6 @@ public class Seance {
 
     /**
      * Constructeur avec tout les parametres.
-     * @param id Identifiant de la seance.
      * @param semaine Numéro de la semaine.
      * @param jour Jour de la semaine.
      * @param heure_debut Heure de début.
@@ -53,8 +52,8 @@ public class Seance {
      * @param cours Cours enseigné.
      * @param type Type du cours.
      */
-    public Seance(int id, int semaine, LocalDate jour, LocalTime heure_debut, LocalTime heure_fin, int etat, Cours cours, Type_Cours type) {
-        this.id = id;
+    public Seance(int semaine, LocalDate jour, LocalTime heure_debut, LocalTime heure_fin, int etat, Cours cours, Type_Cours type) {
+        this.id = -1;
         this.semaine = semaine;
         this.jour = jour;
         this.heure_debut = heure_debut;

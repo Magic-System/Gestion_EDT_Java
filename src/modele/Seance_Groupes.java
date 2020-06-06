@@ -10,8 +10,8 @@ public class Seance_Groupes {
 
     public Seance_Groupes(Seance seance, Groupe grp) {
 
-        this.seance = seance;
-        this.grp = grp;
+        this.seance = new Seance(seance);
+        this.grp = new Groupe(grp);
     }
 
     public Seance getSeance() {

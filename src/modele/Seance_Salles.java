@@ -9,8 +9,8 @@ public class Seance_Salles {
     }
 
     public Seance_Salles(Seance seance, Salle salle) {
-        this.salle = salle;
-        this.seance = seance;
+        this.salle = new Salle(salle);
+        this.seance = new Seance(seance);
     }
 
     public Salle getSalle() {
