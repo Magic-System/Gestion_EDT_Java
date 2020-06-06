@@ -4,6 +4,7 @@ import dao.service.*;
 import modele.*;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -44,7 +45,7 @@ public class RechercheDonnees {
      * @param groupe Id du groupe des cours a recuperer.
      * @return ArrayList de Seance.
      */
-    public ArrayList<Seance> getSeanceSemaineGroupe(int semaine, int groupe) {
+    public ArrayList<Seance> getSeanceSemaineGroupe(final int semaine,final  int groupe) {
         SeanceGroupeDaoServiceImpl sgDao = new SeanceGroupeDaoServiceImpl();
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
         ArrayList<Seance> maSemaine = null;
@@ -64,7 +65,7 @@ public class RechercheDonnees {
      * @param promo Id de la promo des cours a recuperer.
      * @return ArrayList de Seance.
      */
-    public ArrayList<Seance> getSeanceSemainePromotion(int semaine, int promo) {
+    public ArrayList<Seance> getSeanceSemainePromotion(final int semaine,final  int promo) {
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
         ArrayList<Seance> maSemaine = null;
 
@@ -84,7 +85,7 @@ public class RechercheDonnees {
      * @param etudiant String contenant nom + prenom de l'etudiant.
      * @return ArrayList de Seance.
      */
-    public ArrayList<Seance> getSeanceSemaineEtudiant(int semaine, String etudiant) {
+    public ArrayList<Seance> getSeanceSemaineEtudiant(final int semaine,final  String etudiant) {
         ArrayList<Seance> maSemaine = null;
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
 
@@ -107,7 +108,7 @@ public class RechercheDonnees {
      * @param enseignant String contenant nom + prenom de l'enseignant.
      * @return ArrayList de Seance.
      */
-    public ArrayList<Seance> getSeanceSemaineEnseignant(int semaine, String enseignant) {
+    public ArrayList<Seance> getSeanceSemaineEnseignant(final int semaine,final  String enseignant) {
         ArrayList<Seance> maSemaine = new ArrayList<>();
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
 
@@ -128,7 +129,7 @@ public class RechercheDonnees {
      * @param salle Nom de la salle.
      * @return ArrayList de Seance.
      */
-    public ArrayList<Seance> getSeanceSemaineSalle(int semaine, String salle) {
+    public ArrayList<Seance> getSeanceSemaineSalle(final int semaine,final  String salle) {
         ArrayList<Seance> maSemaine = new ArrayList<>();
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
 
@@ -203,14 +204,63 @@ public class RechercheDonnees {
         return liste;
     }
 
+    /**
+     * Récapitulatif des cours d’un enseignant sur une période donnée (date de début et de fin) : consulter ses cours par
+     * groupe(s) (rappel : une séance de cours peut concerner plusieurs groupes), en précisant la date et le créneau horaire de la
+     * première et dernière séance sur cette période. Puis pour chaque cours et groupe(s), calculer le nombre total d’heures et
+     * de séances par cours et groupe(s) sur la période.
+     * @return Liste de string au format suivant : "Matiere-Public    Premiere séance    Derniere séance    Durée    Nb.".
+     * @param debut Date de début de la période a consulter.
+     * @param fin Date de fin de la période a consulter.
+     */
+    public ArrayList<String> recapitulatifCours(LocalDate debut, LocalDate fin, int idEnseignant) {
+        ArrayList<String> liste = new ArrayList<>();
+        ArrayList<String> recap = new ArrayList<>();
+        SeanceDaoServiceImpl sDao = new SeanceDaoServiceImpl();
+        recap.add("Cours | Promo Groupe | Premier Cours | Dernier Cours | Nb d'heures");
+
+        try {
+            liste = sDao.getComboCoursAndGroupeByEnseignant(idEnseignant);
+            for (String s : liste) {
+                //System.out.println(s);
+                int x1 = s.lastIndexOf(" | ");
+                String cours = s.substring(0, x1);
+                int x2 = s.lastIndexOf("/");
+                String promo = s.substring(x1+3, x2);
+                String groupe = s.substring(x2+1);
+
+                String stats = sDao.getStatsByCoursGroupeAndEnseignants(idEnseignant, cours, groupe, promo);
+                int x3 = stats.lastIndexOf(" ");
+                int nb = Integer.parseInt(stats.substring(x3+1));
+                stats = stats.substring(0, x3);
+                int min = (nb*90)%60;
+                int heure = (nb*90)/60;
+
+                String recapCours = cours + " | " + promo + " " + groupe + " | " ;
+                recap.add(recapCours + stats + " | " + heure + "h" + min);
+            }
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return recap;
+    }
 
 
     public static void main(String[] args){
         RechercheDonnees rd = new RechercheDonnees();
+        /*
         ArrayList<Seance> test = rd.getSeanceSemaineEtudiant(23 ,"DIAS DA SILVA Daniel");
         //rd.getSeanceSemaineEtudiant(23, "DIAS DA SILVA Daniel");
 
         for (Seance s : test)
             System.out.println(s.toString());
+
+         */
+
+        ArrayList<String> test = rd.recapitulatifCours(LocalDate.MIN, LocalDate.MAX, 7);
+
+        for (String s : test)
+            System.out.println(s);
     }
 }

@@ -356,4 +356,59 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
         return liste;
     }
 
+    /**
+     * Recupere une liste de String contenant cours, groupe et promo sur chaque ligne correspondant a tout les cours enseignés par un enseignant.
+     * @param idEnseignant Id de l'enseignant.
+     * @return String des info cours, groupe et promo.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public ArrayList<String> getComboCoursAndGroupeByEnseignant(int idEnseignant) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement getCoursById = co.prepareStatement("SELECT cours.Nom AS cNom, groupe.Nom AS gNom, seance_enseignants.ID_Enseignant, promotion.Nom AS pNom " +
+                "FROM seance, cours, seance_groupes, groupe, seance_enseignants, promotion " +
+                "WHERE seance.ID = seance_groupes.ID_Seance AND cours.ID = seance.ID_Cours AND seance_groupes.ID_Groupe = groupe.ID AND seance_enseignants.ID_Seance = seance.ID AND promotion.ID = groupe.ID_Promotion " +
+                "AND seance_enseignants.ID_Enseignant = ? GROUP BY cours.Nom, groupe.Nom ");
+        getCoursById.setInt(1, idEnseignant);
+        ResultSet res = getCoursById.executeQuery();
+
+        ArrayList<String> liste = new ArrayList<>();
+
+        while (res.next()) {
+            liste.add(res.getString("cNom") + " | " + res.getString("pNom") + "/" + res.getString("gNom"));
+        }
+
+        return liste;
+    }
+
+    /**
+     * Recupere les stats d'un cours. Premiere séance, derniere séance et nombre de séances.
+     * @param idEnseignant Id de l'enseignant.
+     * @param cours Nom du cours.
+     * @param groupe Nom du groupe.
+     * @param promo Nom de la promo.
+     * @return String des stats de cours.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public String getStatsByCoursGroupeAndEnseignants(int idEnseignant, String cours, String groupe, String promo) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement getCoursById = co.prepareStatement("SELECT COUNT(seance.ID) AS Nb, MIN(TIMESTAMP(seance.Date, seance.Heure_Debut)) AS Premier, MAX(TIMESTAMP(seance.Date, seance.Heure_Debut)) AS dernier " +
+                "FROM seance, seance_groupes, seance_enseignants, groupe, promotion, cours " +
+                "WHERE seance_groupes.ID_Seance = seance.ID AND seance_enseignants.ID_Seance = seance.ID AND seance_groupes.ID_Groupe = groupe.ID AND groupe.ID_Promotion = promotion.ID AND seance.ID_Cours = cours.ID " +
+                "AND groupe.Nom = ? AND promotion.Nom = ? AND cours.Nom = ? AND seance_enseignants.ID_Enseignant = ?");
+        getCoursById.setString(1, groupe);
+        getCoursById.setString(2, promo);
+        getCoursById.setString(3, cours);
+        getCoursById.setInt(4, idEnseignant);
+        ResultSet res = getCoursById.executeQuery();
+
+        String stats = null;
+
+        while (res.next()) {
+            stats = res.getString("Premier") + " | " + res.getString("dernier") + " | " + res.getInt("Nb");
+        }
+
+        return stats;
+    }
 }
