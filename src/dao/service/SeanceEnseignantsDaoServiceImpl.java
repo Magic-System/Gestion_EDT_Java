@@ -2,10 +2,8 @@ package dao.service;
 
 import dao.DbService;
 import modele.Seance_Enseignants;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,5 +108,36 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
         }
 
         return se;
+    }
+
+    /**
+     * Regarde si le couple enseignants/seance recu en parametre est possible en terme de créneau.
+     * @param se Couple enseignant/seance a tester.
+     * @return True si l'enseignant est libre sur le créneau de la séance, False si non.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public boolean isFree(Seance_Enseignants se) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement sql = co.prepareStatement("SELECT COUNT(seance_enseignants.ID_Seance) AS Libre " +
+                "FROM seance, seance_enseignants " +
+                "WHERE seance_enseignants.ID_Seance = seance.ID " +
+                "AND seance.Date = ? AND seance.Heure_Debut = ? AND seance.Heure_Fin = ? AND seance_enseignants.ID_Enseignant = ?");
+        sql.setDate(1, Date.valueOf(se.getSeance().getJour()));
+        sql.setTime(2, Time.valueOf(se.getSeance().getHeure_debut()));
+        sql.setTime(3, Time.valueOf(se.getSeance().getHeure_fin()));
+        sql.setInt(4, se.getProf().getUtilisateur().getId());
+        ResultSet res = sql.executeQuery();
+
+        while (res.next()) {
+            if (res.getInt("Libre") == 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        return false;
     }
 }

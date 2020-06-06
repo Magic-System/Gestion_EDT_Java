@@ -35,15 +35,18 @@ public class MajDonnees {
      * @param seance Seance a modifier.
      */
     public void addEnseignantToSeance(Seance seance, final Enseignant prof) {
-
-        /** TEST A FAIRE **/
-
         Seance_Enseignants se = new Seance_Enseignants();
         se.setProf(prof);
         se.setSeance(seance);
+
         try {
-            seDao.ajouter(se);
-            System.out.println(prof.toString() + " ajouté a la séance " + seance.toString());
+            if (seDao.isFree(se)) {
+                seDao.ajouter(se);
+                System.out.println(prof.toString() + " ajouté a la séance " + seance.toString());
+            } else {
+                System.out.println(prof.toString() + " n'est pas disponible sur le créneau de " + seance.toString());
+            }
+
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
@@ -231,6 +234,25 @@ public class MajDonnees {
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    /**
+     * Main de test !!!
+     */
+    public static void main(String[] args){
+        SeanceEnseignantsDaoServiceImpl test = new SeanceEnseignantsDaoServiceImpl();
+        SeanceDaoServiceImpl sDao = new SeanceDaoServiceImpl();
+        EnseignantDaoServiceImpl esDao = new EnseignantDaoServiceImpl();
+
+        try {
+            Enseignant e = esDao.getById(7);
+            Seance s = sDao.getById(5);
+
+            System.out.println(test.isFree(new Seance_Enseignants(s, e)));
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
     }
 
 }
