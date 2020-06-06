@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Scanner;
 
 /**
  * @author Daniel
@@ -124,7 +125,8 @@ public class RechercheDonnees {
     }
 
     /**
-     * Pour une salle donnée (recherche possible avec son nom ou parmi une liste d’enseignants) et pour une semaine donnée, consulter tous les cours.
+     * Pour une salle donnée (recherche possible avec son nom ou parmi une liste d’enseignants) et pour une semaine
+     * donnée, consulter tous les cours.
      * @param semaine Numero de la semaine.
      * @param salle Nom de la salle.
      * @return ArrayList de Seance.
@@ -205,11 +207,11 @@ public class RechercheDonnees {
     }
 
     /**
-     * Récapitulatif des cours d’un enseignant sur une période donnée (date de début et de fin) : consulter ses cours par
-     * groupe(s) (rappel : une séance de cours peut concerner plusieurs groupes), en précisant la date et le créneau horaire de la
-     * première et dernière séance sur cette période. Puis pour chaque cours et groupe(s), calculer le nombre total d’heures et
-     * de séances par cours et groupe(s) sur la période.
-     * @return Liste de string au format suivant : "Matiere-Public    Premiere séance    Derniere séance    Durée    Nb.".
+     * Récapitulatif des cours d’un enseignant sur une période donnée (date de début et de fin) : consulter ses cours
+     * par groupe(s) (rappel : une séance de cours peut concerner plusieurs groupes), en précisant la date et le créneau
+     * horaire de la première et dernière séance sur cette période. Puis pour chaque cours et groupe(s), calculer le
+     * nombre total d’heures et de séances par cours et groupe(s) sur la période.
+     * @return Liste de string au format suivant : "Matiere-Public   Premiere séance   Derniere séance   Durée   Nb.".
      * @param debut Date de début de la période a consulter.
      * @param fin Date de fin de la période a consulter.
      */
@@ -237,7 +239,7 @@ public class RechercheDonnees {
                 int heure = (nb*90)/60;
 
                 String recapCours = cours + " | " + promo + " " + groupe + " | " ;
-                recap.add(recapCours + stats + " | " + heure + "h" + min);
+                recap.add(recapCours + stats + " " + heure + "h" + min);
             }
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
@@ -248,19 +250,128 @@ public class RechercheDonnees {
 
 
     public static void main(String[] args){
-        RechercheDonnees rd = new RechercheDonnees();
-        /*
-        ArrayList<Seance> test = rd.getSeanceSemaineEtudiant(23 ,"DIAS DA SILVA Daniel");
-        //rd.getSeanceSemaineEtudiant(23, "DIAS DA SILVA Daniel");
+        int choix = 1;
 
-        for (Seance s : test)
-            System.out.println(s.toString());
+        while (choix != 0) {
+            Scanner in = new Scanner(System.in);
+            do {
+                System.out.println("1) test Semaine groupe");
+                System.out.println("2) test Semaine promo");
+                System.out.println("3) test Semaine etudiant");
+                System.out.println("4) test Semaine enseignant");
+                System.out.println("5) test Semaine salle");
+                System.out.println("6) test liste etudiant");
+                System.out.println("7) test liste enseignant");
+                System.out.println("8) test liste salle");
+                System.out.println("9) test recap cours enseignant (pas fini manque la periode de temps)");
+                System.out.println("0) quitter");
 
-         */
+                choix = in.nextInt();
+            }while (choix < 0 || choix > 9);
 
-        ArrayList<String> test = rd.recapitulatifCours(LocalDate.MIN, LocalDate.MAX, 7);
+            RechercheDonnees rech = new RechercheDonnees();
 
-        for (String s : test)
-            System.out.println(s);
+            switch (choix) {
+                case 1: {
+                    System.out.println("1) test Semaine groupe");
+                    int semaine, groupe;
+                    System.out.println("Semaine :");
+                    semaine = in.nextInt();
+                    System.out.println("Groupe :");
+                    groupe = in.nextInt();
+                    ArrayList<Seance> coursSemaine = rech.getSeanceSemaineGroupe(semaine, groupe);
+                    for (Seance s : coursSemaine) {
+                        System.out.println(s.toString());
+                    }
+                    break;
+                }
+                case 2: {
+                    System.out.println("2) test Semaine promo");
+                    int semaine, promo;
+                    System.out.println("Semaine :");
+                    semaine = in.nextInt();
+                    System.out.println("Promo :");
+                    promo = in.nextInt();
+                    ArrayList<Seance> coursSemaine = rech.getSeanceSemainePromotion(semaine, promo);
+                    for (Seance s : coursSemaine) {
+                        System.out.println(s.toString());
+                    }
+                    break;
+                }
+                case 3: {
+                    System.out.println("3) test Semaine etudiant");
+                    int semaine;
+                    String etudiant;
+                    System.out.println("Semaine :");
+                    semaine = in.nextInt();
+                    System.out.println("Etudiant :");
+                    etudiant = in.next();
+                    ArrayList<Seance> coursSemaine = rech.getSeanceSemaineEtudiant(semaine, etudiant);
+                    for (Seance s : coursSemaine) {
+                        System.out.println(s.toString());
+                    }
+                    break;
+                }
+                case 4: {
+                    System.out.println("4) test Semaine enseignant");
+                    int semaine;
+                    String enseignant;
+                    System.out.println("Semaine :");
+                    semaine = in.nextInt();
+                    System.out.println("Enseignant :");
+                    enseignant = in.next();
+                    ArrayList<Seance> coursSemaine = rech.getSeanceSemaineEnseignant(semaine, enseignant);
+                    for (Seance s : coursSemaine) {
+                        System.out.println(s.toString());
+                    }
+                    break;
+                }
+                case 5: {
+                    System.out.println("5) test Semaine salle");
+                    int semaine;
+                    String salle;
+                    System.out.println("Semaine :");
+                    semaine = in.nextInt();
+                    System.out.println("Salle :");
+                    salle = in.next();
+                    ArrayList<Seance> coursSemaine = rech.getSeanceSemaineSalle(semaine, salle);
+                    for (Seance s : coursSemaine) {
+                        System.out.println(s.toString());
+                    }
+                    break;
+                }
+                case 6: {
+                    System.out.println("6) test liste etudiant");
+                    for (String s : rech.getListeEtudiant()) {
+                        System.out.println(s);
+                    }
+                    break;
+                }
+                case 7: {
+                    System.out.println("7) test liste enseignant");
+                    for (String s : rech.getListeEnseignant()) {
+                        System.out.println(s);
+                    }
+                    break;
+                }
+                case 8: {
+                    System.out.println("8) test liste salle");
+                    for (String s : rech.getListeSalles()) {
+                        System.out.println(s);
+                    }
+                    break;
+                }
+                case 9: {
+                    System.out.println("9) test recap cours enseignant (pas fini manque la periode de temps)");
+                    int enseignant;
+                    enseignant = in.nextInt();
+
+                    for (String s : rech.recapitulatifCours(LocalDate.MIN, LocalDate.MAX, enseignant)){
+                        System.out.println(s);
+                    }
+                    break;
+                }
+            }
+        }
     }
 }
