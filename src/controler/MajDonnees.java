@@ -83,15 +83,16 @@ public class MajDonnees {
      * @param seance Seance a modifier.
      */
     public void addSalleToSeance(Seance seance, final Salle salle) {
-
-        /** TEST A FAIRE **/
-
         Seance_Salles ss = new Seance_Salles();
         ss.setSeance(seance);
         ss.setSalle(salle);
         try {
-            ssDao.ajouter(ss);
-            System.out.println(salle.toString() + " ajoutée a la séance " + seance.toString());
+            if (ssDao.isFree(ss)) {
+                ssDao.ajouter(ss);
+                System.out.println(salle.toString() + " ajoutée a la séance " + seance.toString());
+            } else {
+                System.out.println(salle.toString() + " n'est pas disponible sur le créneau de " + seance.toString());
+            }
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
