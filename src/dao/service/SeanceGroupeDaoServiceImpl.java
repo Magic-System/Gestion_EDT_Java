@@ -4,10 +4,7 @@ import dao.DbService;
 import modele.Seance;
 import modele.Seance_Groupes;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -138,5 +135,35 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
         }
 
         return idsSeance;
+    }
+
+    /**
+     * Regarde si le couple groupe/seance recu en parametre est possible en terme de créneau.
+     * @param sg Couple groupe/séance a tester.
+     * @return True si l'groupe est libre sur le créneau de la séance, False si non.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public boolean isFree(Seance_Groupes sg) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement sql = co.prepareStatement("SELECT COUNT(seance_groupes.ID_Seance) AS Libre " +
+                "FROM seance, seance_groupes " +
+                "WHERE seance_groupes.ID_Seance = seance.ID " +
+                "AND seance.Date = ? AND seance.Heure_Debut = ? AND seance.Heure_Fin = ? AND seance_groupes.ID_Groupe = ?");
+        sql.setDate(1, Date.valueOf(sg.getSeance().getJour()));
+        sql.setTime(2, Time.valueOf(sg.getSeance().getHeure_debut()));
+        sql.setTime(3, Time.valueOf(sg.getSeance().getHeure_fin()));
+        sql.setInt(4, sg.getGroupe().getId());
+        ResultSet res = sql.executeQuery();
+
+        while (res.next()) {
+            if (res.getInt("Libre") == 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        return false;
     }
 }

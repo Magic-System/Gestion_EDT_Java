@@ -61,15 +61,16 @@ public class MajDonnees {
      * @param seance Séance a modifier.
      */
     public void addGroupeToSeance(Seance seance, final Groupe grp) {
-
-        /** TEST A FAIRE **/
-
         Seance_Groupes sg = new Seance_Groupes();
         sg.setSeance(seance);
         sg.setGroupe(grp);
         try {
-            sgDao.ajouter(sg);
-            System.out.println(grp.toString() + " ajouté a la séance " + seance.toString());
+            if (sgDao.isFree(sg)) {
+                sgDao.ajouter(sg);
+                System.out.println(grp.toString() + " ajouté a la séance " + seance.toString());
+            } else {
+                System.out.println(grp.toString() + " n'est pas disponible sur le créneau de " + seance.toString());
+            }
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
