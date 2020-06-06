@@ -3,10 +3,7 @@ package dao.service;
 import dao.DbService;
 import modele.Seance;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -138,6 +135,36 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
         }
 
         return seance;
+    }
+
+    /**
+     * Recupere l'id d'une seance a partir de ses autres parametres.
+     * @param seance Seance dont on veux recuperer l'id.
+     * @return Id de la séance.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public int getId(Seance seance) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement sql = co.prepareStatement("SELECT `ID` FROM `seance` WHERE `Semaine` = ? " +
+                "AND `Date` = ? AND `Heure_Debut` = ? AND `Heure_Fin` = ? AND `Etat` = ? AND `ID_Cours` = ? " +
+                "AND `ID_Type` = ?");
+        sql.setInt(1, seance.getSemaine());
+        sql.setDate(2, Date.valueOf(seance.getJour()));
+        sql.setTime(3, Time.valueOf(seance.getHeure_debut()));
+        sql.setTime(4, Time.valueOf(seance.getHeure_fin()));
+        sql.setInt(5, seance.getEtat());
+        sql.setInt(6, seance.getCours().getId());
+        sql.setInt(7, seance.getType().getId());
+        ResultSet res = sql.executeQuery();
+
+        int id = -1;
+
+        while (res.next()) {
+            id = res.getInt("ID");
+        }
+
+        return id;
     }
 
     /**

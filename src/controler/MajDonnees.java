@@ -1,11 +1,14 @@
 package controler;
 
+import com.mysql.jdbc.NotUpdatable;
 import dao.service.*;
 import modele.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * @author Daniel
@@ -138,15 +141,46 @@ public class MajDonnees {
         }
     }
 
-
     /**
      * Ajouter une séance de cours en lui affectant, si possible, toutes les informations nécessaires : la date (sauf samedi et
      * dimanche), l’heure de début et de fin (en respect des créneaux horaires d’ouverture de l’école), le(s) groupe(s) et
      * le(s) enseignant(s) disponible(s) à ce créneau horaire, la (les) salle(s) disponible(s) dont la capacité est suffisante,
      * l’état (« en cours de validation » ou « validé »), le cours et le type de cours. Remarque : pour la même séance, il ne
      * peut pas y avoir de doublon de groupe, d’enseignant et de salle.
+     * @param semaine Semaine de la nouvelle seance.
+     * @param jour Date de la nouvelle seance.
+     * @param heure_debut Heure de debut de la nouvelle seance.
+     * @param heure_fin Heure de fin de la nouvelle seance.
+     * @param etat Etat de la nouvelle seance.
+     * @param cours Cours de la nouvelle seance.
+     * @param type Type de cours de la nouvelle seance.
+     * @param profs Liste des enseignant(s) de la nouvelle seance.
+     * @param groupes Liste des groupe(s) de la nouvelle seance.
+     * @param salles Liste des salle(s) de la nouvelle seance.
      */
-    public void creerNouvelleSeance() {
+    public void creerNouvelleSeance(int semaine, LocalDate jour, LocalTime heure_debut, LocalTime heure_fin,
+                                    int etat, Cours cours, Type_Cours type, HashSet<Enseignant> profs,
+                                    HashSet<Groupe> groupes, HashSet<Salle> salles) {
+
+        /** TEST A FAIRE **/
+        Seance nouvelleSeance = new Seance(semaine, jour, heure_debut, heure_fin, etat, cours, type);
+
+        try {
+            seanceDao.ajouter(nouvelleSeance);
+            nouvelleSeance.setId(seanceDao.getId(nouvelleSeance));
+
+            for (Enseignant enseignant : profs) {
+                seDao.ajouter(new Seance_Enseignants(nouvelleSeance, enseignant));
+            }
+            for (Groupe grp : groupes){
+                sgDao.ajouter(new Seance_Groupes(nouvelleSeance, grp));
+            }
+            for (Salle s : salles) {
+                ssDao.ajouter(new Seance_Salles(nouvelleSeance, s));
+            }
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
 
     }
 
