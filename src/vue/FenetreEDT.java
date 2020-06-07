@@ -42,6 +42,9 @@ public class FenetreEDT extends JFrame implements ActionListener{
      */
     public FenetreEDT(Utilisateur utilisateurCo)
     {
+        //Initialisation user
+        user = new Utilisateur(utilisateurCo);
+        
         //Initialisation fenetre
         this.setTitle("Projet EDT Java - Mon emploi du temps - " + user.getNom() + " " + user.getPrenom());
         this.setSize(1100,700);
@@ -53,9 +56,6 @@ public class FenetreEDT extends JFrame implements ActionListener{
         menuBar = new Menu();   
         initMenuListener();
         this.setJMenuBar((Menu) menuBar);
-        
-        //Initialisation user
-        user = new Utilisateur(utilisateurCo);
         
         //Initialisation du layout et du conteneur
         layoutPages = new CardLayout();
