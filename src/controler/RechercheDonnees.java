@@ -481,15 +481,15 @@ public class RechercheDonnees {
                 }
                 case 7: {
                     System.out.println("7) test liste enseignant");
-                    for (String s : rech.getListeEnseignant()) {
-                        System.out.println(s);
+                    for (Enseignant e : rech.getListeEnseignant()) {
+                        System.out.println(e.getUtilisateur().getNom().toUpperCase() + " " + e.getUtilisateur().getPrenom());
                     }
                     break;
                 }
                 case 8: {
                     System.out.println("8) test liste salle");
-                    for (String s : rech.getListeSalles()) {
-                        System.out.println(s);
+                    for (Salle s : rech.getListeSalles()) {
+                        System.out.println(s.getNom() + " (" + s.getCapacite() + ")" + "-" + s.getSite().getNom());
                     }
                     break;
                 }
