@@ -595,7 +595,7 @@ class PageAdmin extends JPanel implements ActionListener {
         //initialisation des variables
         RAjouterUnEnseignant = new JButton("Retour au menu");
         PAjouterUnEnseignant.add(RAjouterUnEnseignant);
-        JLabel nom, prenom, email, password, cours_enseigné;
+        JLabel nom, prenom, email, password, cours_enseigne;
         JTextField Tnom, Tprenom, Temail, Tpassword, Tcours;
         nom = new JLabel("Choisir un nom");
         Tnom = new JTextField("Taper votre nom");
