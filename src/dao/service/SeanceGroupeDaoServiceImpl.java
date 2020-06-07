@@ -2,8 +2,10 @@ package dao.service;
 
 import dao.DbService;
 import modele.Seance;
+import modele.Seance_Enseignants;
 import modele.Seance_Groupes;
 
+import java.security.acl.Group;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -135,6 +137,32 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
         }
 
         return idsSeance;
+    }
+
+    /**
+     * Recupere l'ensemble des des enseignant pour une seance.
+     * @param idSeance Identifiant seance.
+     * @return ArrayList de Seance_Enseignant.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de drive.
+     */
+    public ArrayList<Seance_Groupes> getAllBySeance(int idSeance) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance_groupes` WHERE ID_Seance = ?");
+        getCoursById.setInt(1, idSeance);
+        ResultSet res = getCoursById.executeQuery();
+
+        ArrayList<Seance_Groupes> liste = new ArrayList<>();
+
+        while (res.next()) {
+            Seance_Groupes se = new Seance_Groupes();
+            SeanceDaoServiceImpl seance = new SeanceDaoServiceImpl();
+            GroupeDaoServiceImpl grp = new GroupeDaoServiceImpl();
+            se.setSeance(seance.getById(res.getInt("ID_Seance")));
+            se.setGroupe(grp.getById(res.getInt("ID_Groupe")));
+        }
+
+        return liste;
     }
 
     /**

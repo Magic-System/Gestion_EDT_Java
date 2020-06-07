@@ -85,17 +85,18 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
     }
 
     /**
-     * Recupere une seance enseignant de la bdd en fonction de son id seance.
-     * @param id Identifiant de l'objet a recuperer.
+     * PAS UTILE.
+     * @param idSeance Identifiant de l'objet a recuperer.
      * @return Seance enseignant ayant l'id seance recu en parametre.
      * @throws SQLException Erreur de requete.
      * @throws ClassNotFoundException Erreur de driver.
      */
     @Override
-    public Seance_Enseignants getById(int id) throws SQLException, ClassNotFoundException {
+    public Seance_Enseignants getById(int idSeance) throws SQLException, ClassNotFoundException {
+        /*
         Connection co = this.connexion();
-        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance_enseignants` WHERE ID = ?");
-        getCoursById.setInt(1, id);
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance_enseignants` WHERE ID_Seance = ?");
+        getCoursById.setInt(1, idSeance);
         ResultSet res = getCoursById.executeQuery();
 
         Seance_Enseignants se = new Seance_Enseignants();
@@ -108,6 +109,35 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
         }
 
         return se;
+
+         */
+        return null;
+    }
+
+    /**
+     * Recupere l'ensemble des des enseignant pour une seance.
+     * @param idSeance Identifiant seance.
+     * @return ArrayList de Seance_Enseignant.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de drive.
+     */
+    public ArrayList<Seance_Enseignants> getAllBySeance(int idSeance) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance_enseignants` WHERE ID_Seance = ?");
+        getCoursById.setInt(1, idSeance);
+        ResultSet res = getCoursById.executeQuery();
+
+        ArrayList<Seance_Enseignants> liste = new ArrayList<>();
+
+        while (res.next()) {
+            Seance_Enseignants se = new Seance_Enseignants();
+            SeanceDaoServiceImpl seance = new SeanceDaoServiceImpl();
+            EnseignantDaoServiceImpl prof = new EnseignantDaoServiceImpl();
+            se.setSeance(seance.getById(res.getInt("ID_Seance")));
+            se.setProf(prof.getById(res.getInt("ID_Enseignant")));
+        }
+
+        return liste;
     }
 
     /**

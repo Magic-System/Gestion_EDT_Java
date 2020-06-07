@@ -249,6 +249,11 @@ public class RechercheDonnees {
         return recap;
     }
 
+    /**
+     * Recupere la liste des seance en cours de validation dans une liste de string de la forme suivante :
+     * TYPE de COURS le DATE de HEURE_DEBUT a HEURE_FIN.
+     * @return Liste de String.
+     */
     public ArrayList<String> getListeSeanceValidation() {
         ArrayList<String> liste = new ArrayList<>();
 
@@ -267,6 +272,71 @@ public class RechercheDonnees {
         return liste;
     }
 
+    /**
+     * Recupere la liste des Nom des enseignants d'une seance.
+     * @param idSeance id de la Seance.
+     * @return Liste de Nom d'enseignants.
+     */
+    public ArrayList<String> getNomEnseignantSeance(int idSeance) {
+        ArrayList<String > liste = new ArrayList<>();
+
+        SeanceEnseignantsDaoServiceImpl seDao = new SeanceEnseignantsDaoServiceImpl();
+
+        try {
+            ArrayList<Seance_Enseignants> se = seDao.getAllBySeance(idSeance);
+            for (Seance_Enseignants var : se) {
+                liste.add(var.getProf().getUtilisateur().getNom().toUpperCase());
+            }
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return liste;
+    }
+
+    /**
+     * Recupere une liste de nom promo + nom groupe d'une séance.
+     * @param idSeance Id de la séance.
+     * @return Liste de nom des groupe et promo.
+     */
+    public ArrayList<String> getNomGroupeSeance (int idSeance) {
+        ArrayList<String > liste = new ArrayList<>();
+
+        SeanceGroupeDaoServiceImpl sgDao = new SeanceGroupeDaoServiceImpl();
+
+        try {
+            ArrayList<Seance_Groupes> sg = sgDao.getAllBySeance(idSeance);
+            for (Seance_Groupes var : sg) {
+                liste.add(var.getGroupe().getPromotion().getNom() + " " + var.getGroupe().getNom());
+            }
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return liste;
+    }
+
+    /**
+     * Recupere la liste des nom et capacité de salles d'une séance.
+     * @param idSeance Id de la séance.
+     * @return Liste de nom et capacité de salle.
+     */
+    public ArrayList<String> getNomSalleSeance(int idSeance) {
+        ArrayList<String > liste = new ArrayList<>();
+
+        SeanceSalleDaoServiceImpl ssDao = new SeanceSalleDaoServiceImpl();
+
+        try {
+            ArrayList<Seance_Salles> ss = ssDao.getAllBySeance(idSeance);
+            for (Seance_Salles var : ss) {
+                liste.add(var.getSalle().getNom() + " (" + var.getSalle().getCapacite() + ") " + " - " + var.getSalle().getSite().getNom());
+            }
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return liste;
+    }
 
     /**
      * Main de test !!

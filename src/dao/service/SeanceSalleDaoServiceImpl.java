@@ -1,10 +1,7 @@
 package dao.service;
 
 import dao.DbService;
-import modele.Salle;
-import modele.Seance_Groupes;
-import modele.Seance_Salles;
-import modele.Type_Cours;
+import modele.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,6 +9,12 @@ import java.util.List;
 
 public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
 
+    /**
+     * Ajoute l'objet Seance_Salle recu dans la bdd.
+     * @param objet Objet a ajouter dans la bdd.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public void ajouter(Seance_Salles objet) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -22,6 +25,12 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
         addSg.executeUpdate();
     }
 
+    /**
+     * Modifie l'objet Seance_Salle recu dans la bdd.
+     * @param objet Objet a modifier dans la bdd.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public void modifier(Seance_Salles objet) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -32,6 +41,12 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
         majSg.executeUpdate();
     }
 
+    /**
+     * Supprime l'objet Seance_Salle recu de la bdd.
+     * @param objet Objet a supprimer dans la bdd.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public void supprimer(Seance_Salles objet) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -42,6 +57,12 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
         delSg.executeUpdate();
     }
 
+    /**
+     * Recupere la liste de tout les couples seance/salle.
+     * @return ArrayListe de Seance_Salle.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public List<Seance_Salles> getAll() throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
@@ -60,8 +81,16 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
         return liste;
     }
 
+    /**
+     * Pas utilisé
+     * @param id Identifiant de l'objet a recuperer.
+     * @return null.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
     @Override
     public Seance_Salles getById(int id) throws SQLException, ClassNotFoundException {
+        /*
         Connection co = this.connexion();
         PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance_salles` WHERE ID = ?");
         getCoursById.setInt(1, id);
@@ -77,6 +106,34 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
         }
 
         return sSalle;
+         */
+        return null;
+    }
+
+    /**
+     * Recupere l'ensemble des des enseignant pour une seance.
+     * @param idSeance Identifiant seance.
+     * @return ArrayList de Seance_Enseignant.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de drive.
+     */
+    public ArrayList<Seance_Salles> getAllBySeance(int idSeance) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance_salles` WHERE ID_Seance = ?");
+        getCoursById.setInt(1, idSeance);
+        ResultSet res = getCoursById.executeQuery();
+
+        ArrayList<Seance_Salles> liste = new ArrayList<>();
+
+        while (res.next()) {
+            Seance_Salles se = new Seance_Salles();
+            SeanceDaoServiceImpl seance = new SeanceDaoServiceImpl();
+            SalleDaoServiceImpl salle = new SalleDaoServiceImpl();
+            se.setSeance(seance.getById(res.getInt("ID_Seance")));
+            se.setSalle(salle.getById(res.getInt("ID_Salle")));
+        }
+
+        return liste;
     }
 
     /**
