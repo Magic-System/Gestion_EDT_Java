@@ -5,6 +5,9 @@
  */
 package vue;
 
+import controler.MajDonnees;
+import controler.RechercheDonnees;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;
