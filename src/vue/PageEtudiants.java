@@ -16,6 +16,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -25,7 +26,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EtchedBorder;
@@ -60,7 +60,6 @@ class PageEtudiants extends JPanel implements ActionListener{
     private JLabel labelNom2; //Choi nom
     private JTextField textFieldNom2;
     private JButton chercherRecap;
-    private JTable tableRecap;
     
 //Pour panelAnnules :
     private JPanel panelAnnulesNord, panelAnnulesCenter;
@@ -75,7 +74,6 @@ class PageEtudiants extends JPanel implements ActionListener{
     private final String[] tabLabelsEDT = {"\nHoraires","\nLundi","\nMardi","\nMercredi","\nJeudi","\nVendredi","\nSamedi"};
     private final String[] tabCreneauxEDT = {"", "8h30\n\n\n10h", "10h15\n\n\n11h45", "12h\n\n\n13h30", "13h45\n\n\n15h15", "15h30\n\n\n17h", "17h15\n\n\n18h45", "19h\n\n\n20h30"};
     private final String[] tabRecherche = {"Par nom", "Depuis une liste"};
-    private final String[] tabEntetesJTable = {"Matière", "Première séance", "Dernière séance", "Durée", "Nb."};
     
     //Utilisateur connecté
     private Utilisateur user;
@@ -261,8 +259,6 @@ class PageEtudiants extends JPanel implements ActionListener{
     {
         panelRecapCenter = new JPanel();
         panelRecapCenter.setLayout(new BorderLayout());
-        tableRecap = new JTable();
-        tableRecap.setDragEnabled(false);
     }
     
     
@@ -330,28 +326,19 @@ class PageEtudiants extends JPanel implements ActionListener{
      * 
      * @return table
      */
-    public JPanel dessinerTable(String nomEtudiant)
+    public JPanel dessinerTable(Etudiant etudiant)
     {
         JPanel panelCentre = new JPanel();
         panelCentre.setLayout(new BorderLayout());
         
         //On récupère les infos de cours de l'étudiant
-        
+        ArrayList<String> recapCours = donnees.recapitulatifCours(LocalDate.MIN, LocalDate.MAX, etudiant.getNumero());
         
         //En fonction du nombre de matières, on créé des lignes de tableau
-        /*for(int i=0; i<tabCours.length(); i++)
+        for(int i=0; i<recapCours.size(); i++)
         {
-            for (String tabEntetesJTable1 : tabEntetesJTable) {
-                //On récupère les infos de chaque colonne
-                
-                
-                //On ajoute dans la table
-                
-                
-            }
-        }*/
-        
-        panelCentre.add(tableRecap);
+            
+        }
         return panelCentre;
     }
     
@@ -552,12 +539,28 @@ class PageEtudiants extends JPanel implements ActionListener{
             //On récupère le nom de l'étudiant + la semaine à afficher
             String nomEtudSelect = (String)comboListe.getSelectedItem();
             
+            //On initialise l'étudiant dont on veut les infos
+            Etudiant etudiantSelect;
+            
             //Si le text field n'est pas vide 
             if(nomEtudSelect.length() != 0){
-                panelRecapCenter.removeAll();
-                panelRecapCenter.revalidate();
-                panelRecapCenter.repaint();
-                panelRecapCenter.add(dessinerTable(nomEtudSelect));
+                //Test si l'étudiant existe dans la BDD
+                boolean etudiantExiste = false;
+                ArrayList<String> listeEtudiant = donnees.getListeEtudiant();
+
+                for(int k = 0; k<listeEtudiant.size(); k++){
+                    if(nomEtudSelect.equals(listeEtudiant.get(k))){
+                        etudiantSelect = listeEtudiant.get(k);
+                        etudiantExiste = true;
+                    }
+                }
+                //Si l'étudiant existe
+                if(etudiantExiste){
+                    panelRecapCenter.removeAll();
+                    panelRecapCenter.revalidate();
+                    panelRecapCenter.repaint();
+                    panelRecapCenter.add(dessinerTable(etudiantSelect));
+                }
             }
         }
         
