@@ -1,34 +1,33 @@
-package vue;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.math.BigDecimal;
-import javafx.scene.paint.Color;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package vue;
+
+import controler.MajDonnees;
+import controler.RechercheDonnees;
+import modele.*;
+
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+
 /**
  *
- * @author gesli
+ * @author Kozlow
  */
-public class Conteneur_Admin extends JPanel implements ActionListener {
-
+class PageAdmin extends JPanel implements ActionListener{
+    
     private final CardLayout Layout;
     private final JPanel Conteneur;
     // Creation des panels pour l'affichage des options admin;
@@ -39,20 +38,24 @@ public class Conteneur_Admin extends JPanel implements ActionListener {
     private JButton RAffecterUnEnseignant, RAffecterUnGroupe, RAffecterUneSalle, RDeplacerUneSceance, RModifierCours, RAjouterUneSceance, RAjouterUnEnseignant, RAjouterUnGroupe, RValider, RAnnuler, REnlever, RRecapitulatif;
     //Variable Menu
     java.awt.Color fond = new java.awt.Color(221, 240, 255);
-    //Variable AffecterUnEnseignant
-    //Variable AffecterUnGroupe
-    //Variable AffecterUneSalle
-    //Variable DeplacerUneSceance
-    //Variable ModifierCOurs
-    //Variable AjouterUneSceance
-    //Variable AjouterUnEnseignant
-    //Variable AjouterUnGroupe
-    //Variable Annuler
-    //Variable Valider
-    //Variable Enlever
-    //Variable Récapitulatif
-    public Conteneur_Admin() {
+    
+    //Utilisateur connecté
+    private Utilisateur user;
+    
+    //Controler pour récupérer les données
+    private RechercheDonnees donnees = new RechercheDonnees();
+    
+    /**
+     * Constructeur de la page 'Admin'
+     * @param utilisateurCo Correspond à l'utilisateur connecté
+     */
+    public PageAdmin(Utilisateur utilisateurCo) 
+    {
         super();
+        
+        //Initialisation user
+        user = new Utilisateur(utilisateurCo);
+        
         setLayout(new FlowLayout());
         //Creation du layout pour naviguer
         Layout = new CardLayout();
@@ -730,5 +733,4 @@ public class Conteneur_Admin extends JPanel implements ActionListener {
             Layout.show(Conteneur, "Pmenu");
         }
     }
-
 }

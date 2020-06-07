@@ -80,7 +80,7 @@ public class RechercheDonnees {
     }
 
     /**
-     * Pour un etudiant donné (recherche possible avec son nom ou parmi une liste d’enseignants) et pour une semaine
+     * Pour un etudiant donné (recherche possible avec son nom ou parmi une liste d’étudiants) et pour une semaine
      * donnée, consulter tous les cours.
      * @param semaine Numero de la semaine.
      * @param etudiant String contenant nom + prenom de l'etudiant.
