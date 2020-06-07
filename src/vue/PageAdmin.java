@@ -39,12 +39,20 @@ class PageAdmin extends JPanel implements ActionListener{
     //Variable Menu
     java.awt.Color fond = new java.awt.Color(221, 240, 255);
     
+    //Utilisateur connecté
+    private Utilisateur user;
     
     /**
-     * CONSTRUCTEUR
+     * Constructeur de la page 'Admin'
+     * @param utilisateurCo Correspond à l'utilisateur connecté
      */
-    public PageAdmin() {
+    public PageAdmin(Utilisateur utilisateurCo) 
+    {
         super();
+        
+        //Initialisation user
+        user = new Utilisateur(utilisateurCo);
+        
         setLayout(new FlowLayout());
         //Creation du layout pour naviguer
         Layout = new CardLayout();

@@ -76,12 +76,19 @@ class PageEnseignants extends JPanel implements ActionListener{
     private final String[] tabRecherche = {"Par nom", "Depuis une liste"};
     private final String[] tabEntetesJTable = {"Matière", "Première séance", "Dernière séance", "Durée", "Nb."};
     
+    //Utilisateur connecté
+    private Utilisateur user;
+    
     
     /**
-     * CONSTRUCTEUR
+     * Constructeur de la page 'Enseignants'
+     * @param utilisateurCo Correspond à l'utilisateur connecté
      */
-    public PageEnseignants()
+    public PageEnseignants(Utilisateur utilisateurCo)
     {
+        //Initialisation user
+        user = new Utilisateur(utilisateurCo);
+        
         //Initialisation des onglets
         onglets = new JTabbedPane();
         panelEDT = new JPanel();

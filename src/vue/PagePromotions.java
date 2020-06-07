@@ -47,12 +47,18 @@ class PagePromotions extends JPanel implements ActionListener{
     private final String[] tabLabelsEDT = {"\nHoraires","\nLundi","\nMardi","\nMercredi","\nJeudi","\nVendredi","\nSamedi"};
     private final String[] tabCreneauxEDT = {"", "8h30\n\n\n10h", "10h15\n\n\n11h45", "12h\n\n\n13h30", "13h45\n\n\n15h15", "15h30\n\n\n17h", "17h15\n\n\n18h45", "19h\n\n\n20h30"};
     
+    //Utilisateur connecté
+    private Utilisateur user;
     
     /**
-     * CONSTRUCTEUR
+     * Constructeur de la page 'Promotions'
+     * @param utilisateurCo Correspond à l'utilisateur connecté
      */
-    public PagePromotions()
+    public PagePromotions(Utilisateur utilisateurCo)
     {
+        //Initialisation user
+        user = new Utilisateur(utilisateurCo);
+        
         //Initialisation layout
         this.setLayout(new BorderLayout());
         

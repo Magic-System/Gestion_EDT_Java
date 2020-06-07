@@ -38,10 +38,9 @@ public class FenetreEDT extends JFrame implements ActionListener{
 
     /**
      * Constructeur de la fenêtre une fois qu'un user s'est connecté
-     * 
-     * @param utilisateur Correspond à l'utilisateur connecté
+     * @param utilisateurCo Correspond à l'utilisateur connecté
      */
-    public FenetreEDT(Utilisateur utilisateur)
+    public FenetreEDT(Utilisateur utilisateurCo)
     {
         //Initialisation fenetre
         this.setTitle("Projet EDT Java");
@@ -55,17 +54,22 @@ public class FenetreEDT extends JFrame implements ActionListener{
         initMenuListener();
         this.setJMenuBar((Menu) menuBar);
         
+        //Initialisation user
+        user = new Utilisateur(utilisateurCo);
+        
         //Initialisation du layout et du conteneur
         layoutPages = new CardLayout();
         conteneurPages = new JPanel();
         conteneurPages.setLayout(layoutPages);
+        
         //Initialisation des pages
-        pageCours = new PageCours();
-        pageEtudiants = new PageEtudiants();
-        pagePromotions = new PagePromotions();
-        pageEnseignants = new PageEnseignants();
-        pageSalles = new PageSalles();
-        pageAdmin = new PageAdmin();
+        pageCours = new PageCours(user);
+        pageEtudiants = new PageEtudiants(user);
+        pagePromotions = new PagePromotions(user);
+        pageEnseignants = new PageEnseignants(user);
+        pageSalles = new PageSalles(user);
+        pageAdmin = new PageAdmin(user);
+        
         //Ajout des pages au conteneur
         conteneurPages.add(pageCours, "pageCours");
         conteneurPages.add(pageEtudiants, "pageEtudiants");
@@ -74,8 +78,6 @@ public class FenetreEDT extends JFrame implements ActionListener{
         conteneurPages.add(pageSalles, "pageSalles");
         conteneurPages.add(pageAdmin, "pageAdmin");
         
-        //Initialisation user
-        user = new Utilisateur(utilisateur);
         //Test du type d'utilisateur
         testDroitsUser();
         
@@ -106,14 +108,14 @@ public class FenetreEDT extends JFrame implements ActionListener{
      */
     public final void testDroitsUser()
     {
-        //User = Administrateur
-        if(user.getDroit() == 1)
+        //User = Référent pédagogique
+        if(user.getDroit() == 2)
         {
             //L'admin n'a pas d'EDT 
             menuBar.getCours().setVisible(false);
         }
-        //User = Référent pédagogique
-        if(user.getDroit() == 2)
+        //User = Administrateur
+        if(user.getDroit() == 1)
         {
             //Le référent n'a pas le droit de modif les données
             menuBar.getAdmin().setVisible(false);
