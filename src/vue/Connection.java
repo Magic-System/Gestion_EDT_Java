@@ -63,6 +63,8 @@ public class Connection extends JFrame implements ActionListener{
                 this.dispose();
                 //On créé la fenetre d'EDT
                 FenetreEDT fenetre = new FenetreEDT(user);
+                //PageAdmin ad = new PageAdmin(user);
+                
             } 
             else {
                 System.out.println("-> Addresse email ou mot de passe incorrects.");

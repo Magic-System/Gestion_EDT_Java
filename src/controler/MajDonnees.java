@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Daniel
@@ -212,18 +214,21 @@ public class MajDonnees {
      * Valider une séance (changer l’état de cette séance à « validée »).
      * @param seance Objet Seance a valider.
      */
-    public void validerSeance(Seance seance){
-        if (seance.getEtat() != 1) {
-            seance.setEtat(1);
-            try {
-                seanceDao.modifier(seance);
-                System.out.println("Seance validée : " + seance.toString());
-            } catch (SQLException | ClassNotFoundException throwables) {
-                throwables.printStackTrace();
+    public void validerSeance(int ID){
+        try {
+            Seance seance= seanceDao.getById(ID);
+            if (seance.getEtat() != 1) {
+                seance.setEtat(1);
+                
+                    seanceDao.modifier(seance);
+                    System.out.println("Seance validée : " + seance.toString());
+                
+            } else {
+                System.out.println("Seance déja validée.");
             }
-        } else {
-            System.out.println("Seance déja validée.");
-        }
+       } catch (SQLException | ClassNotFoundException throwables) {
+                    throwables.printStackTrace();
+                }
     }
 
     /**

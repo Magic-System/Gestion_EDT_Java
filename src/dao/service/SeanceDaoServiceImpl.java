@@ -22,16 +22,16 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
     @Override
     public void ajouter(Seance objet) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
-        PreparedStatement addSeance = co.prepareStatement("INSERT INTO `seance`(`ID`, `Semaine`, `Date`, `Heure_Debut`, `Heure_Fin`, `Etat`, `ID_Cours`, `ID_Type`) VALUES ([?, ?, ?, ?, ?, ? ,?, ?)");
-        addSeance.setInt(1, objet.getId());
-        addSeance.setInt(2, objet.getSemaine());
-        addSeance.setDate(3, java.sql.Date.valueOf(objet.getJour()));
-        addSeance.setTime(4, java.sql.Time.valueOf(objet.getHeure_debut()));
-        addSeance.setTime(5, java.sql.Time.valueOf(objet.getHeure_fin()));
-        addSeance.setInt(6, objet.getEtat());
-        addSeance.setInt(7, objet.getCours().getId());
-        addSeance.setInt(8, objet.getType().getId());
-
+        PreparedStatement addSeance = co.prepareStatement("INSERT INTO `seance`( `Semaine`, `Date`, `Heure_Debut`, `Heure_Fin`, `Etat`, `ID_Cours`, `ID_Type`) VALUES ( ?, ?, ?, ?, ? ,?, ?)");
+     //   addSeance.setInt(1, objet.getId());
+        addSeance.setInt(1, objet.getSemaine());
+        addSeance.setDate(2, java.sql.Date.valueOf(objet.getJour()));
+        addSeance.setTime(3, java.sql.Time.valueOf(objet.getHeure_debut()));
+        addSeance.setTime(4, java.sql.Time.valueOf(objet.getHeure_fin()));
+        addSeance.setInt(5, objet.getEtat());
+        addSeance.setInt(6, objet.getCours().getId());
+        addSeance.setInt(7, objet.getType().getId());
+     
         addSeance.executeUpdate();
     }
 

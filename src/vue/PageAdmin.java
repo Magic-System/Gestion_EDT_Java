@@ -14,6 +14,15 @@ import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import static java.time.temporal.TemporalQueries.localDate;
+import java.time.temporal.WeekFields;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Locale;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -26,8 +35,8 @@ import javax.swing.ListSelectionModel;
  *
  * @author Kozlow
  */
-class PageAdmin extends JPanel implements ActionListener{
-    
+class PageAdmin extends JPanel implements ActionListener {
+
     private final CardLayout Layout;
     private final JPanel Conteneur;
     // Creation des panels pour l'affichage des options admin;
@@ -38,24 +47,25 @@ class PageAdmin extends JPanel implements ActionListener{
     private JButton RAffecterUnEnseignant, RAffecterUnGroupe, RAffecterUneSalle, RDeplacerUneSceance, RModifierCours, RAjouterUneSceance, RAjouterUnEnseignant, RAjouterUnGroupe, RValider, RAnnuler, REnlever, RRecapitulatif;
     //Variable Menu
     java.awt.Color fond = new java.awt.Color(221, 240, 255);
-    
+
     //Utilisateur connecté
     private Utilisateur user;
-    
+
     //Controler pour récupérer les données
     private RechercheDonnees donnees = new RechercheDonnees();
-    
+    private MajDonnees Maj = new MajDonnees();
+
     /**
      * Constructeur de la page 'Admin'
+     *
      * @param utilisateurCo Correspond à l'utilisateur connecté
      */
-    public PageAdmin(Utilisateur utilisateurCo) 
-    {
+    public PageAdmin(Utilisateur utilisateurCo) {
         super();
-        
+
         //Initialisation user
         user = new Utilisateur(utilisateurCo);
-        
+
         setLayout(new FlowLayout());
         //Creation du layout pour naviguer
         Layout = new CardLayout();
@@ -196,7 +206,7 @@ class PageAdmin extends JPanel implements ActionListener{
         JScrollPane liste_cours = new JScrollPane(list_aje_cours);
         JScrollPane liste_enseignant = new JScrollPane(list_aje_enseignant);
         JButton affecter = new JButton("Affecter cet enseignant");
-         //Si click + selection des cases alors on ajoute.
+        //Si click + selection des cases alors on ajoute.
         affecter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -233,7 +243,7 @@ class PageAdmin extends JPanel implements ActionListener{
         JScrollPane liste_cours = new JScrollPane(list_aje_cours);
         JScrollPane liste_enseignant = new JScrollPane(list_aje_enseignant);
         JButton affecter = new JButton("Affecter un groupe");
-         //Si click + selection des cases alors on ajoute.
+        //Si click + selection des cases alors on ajoute.
         affecter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -277,7 +287,7 @@ class PageAdmin extends JPanel implements ActionListener{
                 }
             }
         });
-        RAffecterUneSalle = new JButton("Retour au menu" );
+        RAffecterUneSalle = new JButton("Retour au menu");
         PAffecterUneSalle.add(RAffecterUneSalle);
         PAffecterUneSalle.add(liste_cours, BorderLayout.EAST);
         PAffecterUneSalle.add(liste_enseignant, BorderLayout.CENTER);
@@ -319,7 +329,7 @@ class PageAdmin extends JPanel implements ActionListener{
                         public void actionPerformed(ActionEvent e) {
                             if (list_creneau.getSelectedValue() != null) {
                                 System.out.println(list_sceance.getSelectedValue());
-                                System.out.println(list_creneau.getSelectedValue());                                
+                                System.out.println(list_creneau.getSelectedValue());
                             }
                         }
                     });
@@ -342,14 +352,14 @@ class PageAdmin extends JPanel implements ActionListener{
         list_cours.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane liste_cours = new JScrollPane(list_cours);
         JButton nom = new JButton("Modifier le nom");
-        JTextField nom_saisit = new JTextField ("Saisir le nouveau nom");
+        JTextField nom_saisit = new JTextField("Saisir le nouveau nom");
         nom_saisit.setVisible(false);
-        JButton nom_valider = new JButton ("Valider le nom");
+        JButton nom_valider = new JButton("Valider le nom");
         nom_valider.setVisible(false);
-        JButton type = new JButton ("Modifier le type");
-        JTextField type_saisit = new JTextField ("Saisir le nouveau type");
+        JButton type = new JButton("Modifier le type");
+        JTextField type_saisit = new JTextField("Saisir le nouveau type");
         type_saisit.setVisible(false);
-        JButton type_valider = new JButton ("Valider le type");
+        JButton type_valider = new JButton("Valider le type");
         type_valider.setVisible(false);
         //SI click : on affiche le nom a changer
         nom.addActionListener(new ActionListener() {
@@ -368,8 +378,7 @@ class PageAdmin extends JPanel implements ActionListener{
             }
         });
         //utiliser le getSelectedValue() pour obtenir le cours choisit.
-        
-        
+
         PModifierCours.add(liste_cours, BorderLayout.EAST);
         PModifierCours.add(nom);
         PModifierCours.add(nom_saisit);
@@ -386,56 +395,72 @@ class PageAdmin extends JPanel implements ActionListener{
     private void AjouterUneSceance() {
         RAjouterUneSceance = new JButton("Retour au menu");
         PAjouterUneSceance.add(RAjouterUneSceance);
-        
+
         //INIT DE TES VARIABLES ET DES LISTES : Need requetes.
-        JLabel date,heureDebut, heureFin;                          
+        JLabel date, heureDebut, heureFin;
         JTextField Tdate, Theuredebut, TheureFin;
-        date = new JLabel ("Choisir la date : ");
-        heureDebut = new JLabel ("Choisir l'heure de début : ");
-        heureFin = new JLabel ("Choisir l'heure de fin : ");
-        Tdate = new JTextField ("ajouter une date (jj/mm/yyyy)");
-        Theuredebut = new JTextField ("ajouter une heure (hh:mm)");
-        TheureFin = new JTextField ("ajouter une heure (hh:mm)");
-        
-        String groupe_string[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
+        date = new JLabel("Choisir la date : ");
+        heureDebut = new JLabel("Choisir l'heure de début :(hh:mm:ss) ");
+        heureFin = new JLabel("Choisir l'heure de fin : (hh:mm:ss) ");
+        Tdate = new JTextField("ajouter une date (dd mm yyyy)");
+        Theuredebut = new JTextField("ajouter une heure (hh:mm)");
+        TheureFin = new JTextField("ajouter une heure (hh:mm)");
+
+        ArrayList<String> groupe_string = new ArrayList();
+        for (Groupe g : donnees.getListeGroupe()) {
+            System.out.println(g.getId());
+            groupe_string.add(g.getNom());
+            
+        }
         JList list_groupe;
-        list_groupe = new JList(groupe_string);
+        list_groupe = new JList(groupe_string.toArray());
         list_groupe.setVisibleRowCount(4);
-        list_groupe.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list_groupe.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane liste_groupe = new JScrollPane(list_groupe);
-        
-        String Enseignantstring[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
+
+        ArrayList<String> Enseignantstring = new ArrayList();
+        for (Enseignant g : donnees.getListeEnseignant()) {
+            Enseignantstring.add(g.getUtilisateur().getNom());
+        }
         JList list_enseignant;
-        list_enseignant = new JList(Enseignantstring);
+        list_enseignant = new JList(Enseignantstring.toArray());
         list_enseignant.setVisibleRowCount(4);
-        list_enseignant.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list_enseignant.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane liste_enseignant = new JScrollPane(list_enseignant);
-        
-        String salle_str[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
+
+        ArrayList<String> salle_str = new ArrayList();
+        for (Salle g : donnees.getListeSalles()) {
+            salle_str.add(g.getNom());
+        }
         JList list_salle;
-        list_salle = new JList(salle_str);
+        list_salle = new JList(salle_str.toArray());
         list_salle.setVisibleRowCount(4);
-        list_salle.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list_salle.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane liste_salle = new JScrollPane(list_salle);
-        
-        String cours[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
+
+        ArrayList<String> cours = new ArrayList();
+        for (Cours c : donnees.getListeCours()) {
+            cours.add(c.getNom());
+        }
         JList list_cours;
-        list_cours = new JList(cours);
+        list_cours = new JList(cours.toArray());
         list_cours.setVisibleRowCount(4);
         list_cours.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane liste_cours = new JScrollPane(list_cours);
-        
-        String type_cours[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
+
+        ArrayList<String> type_cours = new ArrayList();
+        for (Type_Cours t : donnees.getListeTypeCours()) {
+            type_cours.add(t.getNom());
+        }
         JList list_type_cours;
-        list_type_cours = new JList(type_cours);
+        list_type_cours = new JList(type_cours.toArray());
         list_type_cours.setVisibleRowCount(4);
         list_type_cours.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane liste_type_cours = new JScrollPane(list_type_cours);
-        
-       
+
         PAjouterUneSceance.add(date);
         PAjouterUneSceance.add(Tdate);
-        PAjouterUneSceance.add(heureDebut);        
+        PAjouterUneSceance.add(heureDebut);
         PAjouterUneSceance.add(Theuredebut);
         PAjouterUneSceance.add(heureFin);
         PAjouterUneSceance.add(TheureFin);
@@ -444,16 +469,69 @@ class PageAdmin extends JPanel implements ActionListener{
         PAjouterUneSceance.add(liste_salle);
         PAjouterUneSceance.add(liste_cours);
         PAjouterUneSceance.add(liste_type_cours);
-        
-        JButton valider = new JButton ("Valider");
-       //Click (blindage) = Ajout de la nouvelle Seance
+        JButton valider = new JButton("Valider");
+        //Click (blindage) = Ajout de la nouvelle Seance
         valider.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                                System.out.println("cours ajouter");                                
-                            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String datelocale = (String) Tdate.getText();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MM yyyy");
+                LocalDate dt = LocalDate.parse(datelocale, formatter);
+                LocalTime hDebut = LocalTime.parse(Theuredebut.getText());
+                LocalTime hFin = LocalTime.parse(TheureFin.getText());
+                TemporalField woy = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+                int weekNumber = dt.get(woy);
+                String Stype = list_type_cours.getSelectedValue().toString();
+                Type_Cours selectType = null;
+                for (Type_Cours co : donnees.getListeTypeCours()) {
+                    {
+                        if (co.getNom() .equals(Stype)) {
+                            selectType = new Type_Cours(co);
                         }
-                    });
+                    }
+                }
+                String Scours =  list_cours.getSelectedValue().toString();
+                Cours selectCours = null;
+                for (Cours co : donnees.getListeCours()) {
+                    {
+                        if (co.getNom() .equals(Scours) ) {
+                            selectCours = new Cours(co);
+                        }
+                    }
+                }
+                String SGroupe = list_groupe.getSelectedValue().toString();
+                System.out.println(Scours);
+                HashSet <Groupe> selectGroupe = new HashSet ();
+                for (Groupe co : donnees.getListeGroupe()) {
+                    {
+                        if (co.getNom() .equals (SGroupe)) {
+                            selectGroupe.add(new Groupe(co));
+                        }
+                    }
+                }
+                String SProf = list_enseignant.getSelectedValue().toString();
+                HashSet <Enseignant> selectEnseignant = new HashSet ();
+                for (Enseignant co : donnees.getListeEnseignant()) {
+                    {
+                        if (co.getUtilisateur().getNom() .equals(SProf) ) {
+                            selectEnseignant.add(new Enseignant(co));
+                        }
+                    }
+                }
+                String SSalle = list_salle.getSelectedValue().toString();
+                HashSet <Salle> selectSalle = new HashSet ();
+                for (Salle co : donnees.getListeSalles()) {
+                    {
+                        if (co.getNom() .equals(SSalle)) {
+                            selectSalle.add(new Salle(co));
+                        }
+                    }
+                }
+                
+                Maj.creerNouvelleSeance(weekNumber, dt, hDebut, hFin, 2, selectCours, selectType, selectEnseignant, selectGroupe, selectSalle);
+
+            }
+        });
         PAjouterUneSceance.add(valider);
         this.RAjouterUneSceance.addActionListener(this);
     }       //NEED REQUETES
@@ -463,37 +541,40 @@ class PageAdmin extends JPanel implements ActionListener{
         //initialisation des variables
         RAjouterUnEnseignant = new JButton("Retour au menu");
         PAjouterUnEnseignant.add(RAjouterUnEnseignant);
-        JLabel nom, prenom,email,password,cours_enseigné;
+        JLabel nom, prenom, email, password, cours_enseigné;
         JTextField Tnom, Tprenom, Temail, Tpassword, Tcours;
-        nom =new JLabel ("Choisir un nom");
-        Tnom = new JTextField ("Taper votre nom");
+        nom = new JLabel("Choisir un nom");
+        Tnom = new JTextField("Taper votre nom");
         PAjouterUnEnseignant.add(nom);
         PAjouterUnEnseignant.add(Tnom);
-        prenom =new JLabel ("Choisir un prenom");
-        Tprenom = new JTextField ("Taper votre prenom");
-        PAjouterUnEnseignant.add(prenom);PAjouterUnEnseignant.add(Tprenom);
-        email =new JLabel ("Choisir un email");
-        Temail = new JTextField ("Taper votre email");
-        PAjouterUnEnseignant.add(email);PAjouterUnEnseignant.add(Temail);
-        password =new JLabel ("Choisir un password");
-        Tpassword = new JTextField ("Taper votre password");
-        PAjouterUnEnseignant.add(password);PAjouterUnEnseignant.add(Tpassword);
+        prenom = new JLabel("Choisir un prenom");
+        Tprenom = new JTextField("Taper votre prenom");
+        PAjouterUnEnseignant.add(prenom);
+        PAjouterUnEnseignant.add(Tprenom);
+        email = new JLabel("Choisir un email");
+        Temail = new JTextField("Taper votre email");
+        PAjouterUnEnseignant.add(email);
+        PAjouterUnEnseignant.add(Temail);
+        password = new JLabel("Choisir un password");
+        Tpassword = new JTextField("Taper votre password");
+        PAjouterUnEnseignant.add(password);
+        PAjouterUnEnseignant.add(Tpassword);
         String aje_cours[] = {" thermo", " Anthropologie", " English ", "  Traitement du signal ", " Droit du travail ", "Math"};
         JList list_cours;
         list_cours = new JList(aje_cours);
         list_cours.setVisibleRowCount(5);
-        list_cours.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);        
+        list_cours.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane liste_cours = new JScrollPane(list_cours);
         PAjouterUnEnseignant.add(liste_cours);
-        JButton valider = new JButton ("Valider");
+        JButton valider = new JButton("Valider");
         //SI click (need blindage) alors ca ajoute le nouveau enseignant.
         valider.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                                System.out.println("Enseignant ajouté");                                
-                            
-                        }
-                    });
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Enseignant ajouté");
+
+            }
+        });
         PAjouterUnEnseignant.add(valider);
         this.RAjouterUnEnseignant.addActionListener(this);
 
@@ -504,21 +585,23 @@ class PageAdmin extends JPanel implements ActionListener{
         //Initialisation  des variables
         JLabel nom, promo;
         JTextField Tnom, Tpromo;
-        nom =new JLabel ("Choisir un nom");
-        Tnom = new JTextField ("Taper votre nom");
-        PAjouterUnGroupe.add(nom);PAjouterUnGroupe.add(Tnom);
-        promo =new JLabel ("Choisir un promo");
-        Tpromo = new JTextField ("Taper votre promo");
-        PAjouterUnGroupe.add(promo);PAjouterUnGroupe.add(Tpromo);
-        JButton valider = new JButton ("Valider");
+        nom = new JLabel("Choisir un nom");
+        Tnom = new JTextField("Taper votre nom");
+        PAjouterUnGroupe.add(nom);
+        PAjouterUnGroupe.add(Tnom);
+        promo = new JLabel("Choisir un promo");
+        Tpromo = new JTextField("Taper votre promo");
+        PAjouterUnGroupe.add(promo);
+        PAjouterUnGroupe.add(Tpromo);
+        JButton valider = new JButton("Valider");
         // Si click (need blindage) = ajouter un groupe;
         valider.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                                System.out.println("Groupe ajouté");                                
-                            
-                        }
-                    });
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Groupe ajouté");
+
+            }
+        });
         PAjouterUnGroupe.add(valider);
         RAjouterUnGroupe = new JButton("Retour au menu");
         PAjouterUnGroupe.add(RAjouterUnGroupe);
@@ -526,30 +609,34 @@ class PageAdmin extends JPanel implements ActionListener{
     }           //NEED REQUETES
 
     // Valider
-    private void Valider() {                                //NEED REQUETES
-        // Initialisation des variables 
-        String aje_cours[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
+    private void Valider() {                           //     OK
+        // Initialisation des variables
+
+        ArrayList<String> aje_cours = donnees.getListeSeanceValidation();
         JList list_cours;
-        list_cours = new JList(aje_cours);
+        list_cours = new JList(aje_cours.toArray());
+
         list_cours.setVisibleRowCount(5);
         list_cours.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane liste_cours = new JScrollPane(list_cours);
         PValider.add(liste_cours);
-        JButton valider = new JButton ("Valider");
+        JButton valider = new JButton("Valider");
         //Si click + Cours selectionné : on valide le cours
         valider.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            if (list_cours.getSelectedValue() != null) {
-                                System.out.println("Cours ajouté");                                
-                            }
-                        }
-                    });
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (list_cours.getSelectedValue() != null) {
+                    String idseance = (String) list_cours.getSelectedValue();
+                    idseance = idseance.substring(idseance.lastIndexOf("*") + 1);
+                    Maj.validerSeance(Integer.parseInt(idseance));
+                }
+            }
+        });
         PValider.add(valider);
         RValider = new JButton("Retour au menu");
         PValider.add(RValider);
         this.RValider.addActionListener(this);
-    }                   //NEED REQUETES
+    }
 
     // Annuler
     private void Annuler() {                                //NEED REQUETES
@@ -561,17 +648,17 @@ class PageAdmin extends JPanel implements ActionListener{
         list_cours.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane liste_cours = new JScrollPane(list_cours);
         PAnnuler.add(liste_cours);
-        JButton valider = new JButton ("Annuler le cours");
+        JButton valider = new JButton("Annuler le cours");
         //Si clique et un cours selectionné : on annule.
         valider.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            if (list_cours.getSelectedValue() != null) {
-                                System.out.println("Cours annulé");       
-                            }
-                            
-                        }
-                    });
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (list_cours.getSelectedValue() != null) {
+                    System.out.println("Cours annulé");
+                }
+
+            }
+        });
         PAnnuler.add(valider);
         RAnnuler = new JButton("Retour au menu");
         PAnnuler.add(RAnnuler);
@@ -580,7 +667,7 @@ class PageAdmin extends JPanel implements ActionListener{
 
     // Enlever
     private void Enlever() {            //NEED REQUETES
-        REnlever = new JButton("Retour au menu" );
+        REnlever = new JButton("Retour au menu");
         PEnlever.add(REnlever);
         //Initialisation des variables
         String cours[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
@@ -597,7 +684,7 @@ class PageAdmin extends JPanel implements ActionListener{
         JScrollPane liste_cours = new JScrollPane(list_sceance);
         JScrollPane liste_enseignant = new JScrollPane(list_Grp);
         JButton affecter = new JButton("Choisir ce cour");
-        affecter.addActionListener(new ActionListener() {      
+        affecter.addActionListener(new ActionListener() {
             @Override
             //Lorsqu'un cours est selectionné on affiche :
             public void actionPerformed(ActionEvent e) {
@@ -612,11 +699,11 @@ class PageAdmin extends JPanel implements ActionListener{
                         public void actionPerformed(ActionEvent e) {
                             if (list_Grp.getSelectedValue() != null) {
                                 System.out.println(list_sceance.getSelectedValue());
-                                System.out.println(list_Grp.getSelectedValue());                                
+                                System.out.println(list_Grp.getSelectedValue());
                             }
                         }
                     });
-                    JLabel nom_prof = new JLabel ("nom du prof");
+                    JLabel nom_prof = new JLabel("nom du prof");
                     JButton enlever_prof = new JButton("Enlever l'enseignant");
                     PEnlever.add(nom_prof, BorderLayout.SOUTH);
                     PEnlever.add(enlever_prof, BorderLayout.SOUTH);
@@ -626,7 +713,7 @@ class PageAdmin extends JPanel implements ActionListener{
                         public void actionPerformed(ActionEvent e) {
                             if (list_Grp.getSelectedValue() != null) {
                                 System.out.println(list_sceance.getSelectedValue());
-                                System.out.println(list_Grp.getSelectedValue());                                
+                                System.out.println(list_Grp.getSelectedValue());
                             }
                         }
                     });
