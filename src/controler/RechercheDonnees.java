@@ -339,6 +339,52 @@ public class RechercheDonnees {
     }
 
     /**
+     * Recupere une liste de tout les cours existant.
+     * @return ArrayList de Cours.
+     */
+    public ArrayList<Cours> getListeCours() {
+        CoursDaoServiceImpl cDao = new CoursDaoServiceImpl();
+        ArrayList<Cours> liste = null;
+        try {
+            liste = new ArrayList<>(cDao.getAll());
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return liste;
+    }
+
+    /**
+     * Recupere une liste de tout les types de cours existant.
+     * @return ArrayList de Type_Cours.
+     */
+    public ArrayList<Type_Cours> getListeTypeCours() {
+        Type_CoursDaoServiceImpl tcDao = new Type_CoursDaoServiceImpl();
+        ArrayList<Type_Cours> liste = null;
+        try {
+            liste = new ArrayList<>(tcDao.getAll());
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+        return liste;
+    }
+
+    /**
+     * Recupere une liste de tout les Groupes existant.
+     * @return ArrayList de Groupe.
+     */
+    public ArrayList<Groupe> getListeGroupe() {
+        GroupeDaoServiceImpl gDao = new GroupeDaoServiceImpl();
+        ArrayList<Groupe> liste = null;
+        try {
+            liste = new ArrayList<>(gDao.getAll());
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+        return liste;
+    }
+
+    /**
      * Main de test !!
      */
     public static void main(String[] args){
