@@ -129,8 +129,9 @@ public class MajDonnees {
      */
     public void changeCreneau(Seance seance, LocalTime heure_debut, LocalTime heure_fin, LocalDate jour) {
 
-        /** TEST A FAIRE **/
+        /** A FAIRE **/
 
+        /*
         seance.setHeure_debut(heure_debut);
         seance.setHeure_fin(heure_fin);
         seance.setJour(jour);
@@ -139,6 +140,7 @@ public class MajDonnees {
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
+        */
     }
 
     /**
@@ -162,7 +164,7 @@ public class MajDonnees {
                                     int etat, Cours cours, Type_Cours type, HashSet<Enseignant> profs,
                                     HashSet<Groupe> groupes, HashSet<Salle> salles) {
 
-        /** TEST A FAIRE **/
+        /** NORMALEMENT CA MARCHE **/
 
         Seance nouvelleSeance = new Seance(semaine, jour, heure_debut, heure_fin, etat, cours, type);
 
