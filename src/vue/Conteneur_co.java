@@ -19,7 +19,7 @@ import javax.swing.*;
  *
  * @author gesli
  */
-public class Conteneur_co extends JPanel implements ActionListener {
+public class Conteneur_co extends JPanel {
 
     private JLabel accueil;
     private JLabel email;
@@ -44,12 +44,10 @@ public class Conteneur_co extends JPanel implements ActionListener {
         this.prop_adresse_email();
         this.prop_mot_de_passe();
         this.prop_boutton();
-        this.validation.addActionListener(this);
         this.prop_error_mdp();
         this.prop_error_email();
         this.prop_image();
         this.prop_fond ();
-
     }
 
     private void prop_image() {
@@ -119,25 +117,47 @@ public class Conteneur_co extends JPanel implements ActionListener {
         error_mdp.setVisible(false);
         this.add(error_mdp);
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == this.validation) {
-            RechercheDonnees loginBdd = new RechercheDonnees();
-            Utilisateur user = loginBdd.login(adresse_email.getText(), mot_de_passe.getText());
-            if (user != null) {
-                System.out.println("login bon !");
-                
-                //On créé la fenetre d'EDT
-                FenetreEDT fenetre = new FenetreEDT(user);
-                //On ferme la fenetre de connection
-                this.dispose();
-            } 
-            else {
-                error_mdp.setVisible(true);
-                error_email.setVisible(true);
-            }
-        }
+    
+    //GETTERS
+    /**
+     * Getter bouton validation
+     * @return validation
+     */
+    public JButton getValidation()
+    {
+        return validation;
+    }
+    /**
+     * Getter addresse email
+     * @return adresse_email
+     */
+    public JTextField getAdresse_email()
+    {
+        return adresse_email;
+    }
+    /**
+     * Getter mot de passe
+     * @return mot_de_passe
+     */
+    public JPasswordField getMot_de_passe()
+    {
+        return mot_de_passe;
+    }
+    /**
+     * Getter label erreur de mot de passe
+     * @return error_mdp
+     */
+    public JLabel getError_mdp()
+    {
+        return error_mdp;
+    }
+    /**
+     * Getter label erreur de mail
+     * @return error_email
+     */
+    public JLabel getError_email()
+    {
+        return error_email;
     }
 
     void setBackground(Color fond) {
