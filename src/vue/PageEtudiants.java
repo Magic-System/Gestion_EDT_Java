@@ -16,7 +16,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -166,7 +168,7 @@ class PageEtudiants extends JPanel implements ActionListener{
         //Récupérer la liste d'étudiants 
         tabChoixEtudiant =  donnees.getListeEtudiant();
         for(int i=0; i<tabChoixEtudiant.size(); i++){
-            String temp = tabChoixEtudiant.get(i).getUtilisateur().getNom().toUpperCase() + " " + tabChoixEtudiant.get(i).getUtilisateur().getPrenom();
+            String temp = tabChoixEtudiant.get(i).getUtilisateur().getNom().toUpperCase();
             comboListe.addItem(temp);
         }
         
@@ -351,13 +353,26 @@ class PageEtudiants extends JPanel implements ActionListener{
      * @param numSemaine 
      * @return JPanel Retourne un JPanel avec tous les éléments de l'EDT
      */
-    public JPanel dessinerEDT(String nomEtudiant, int numSemaine)
+    public JPanel dessinerEDT(Etudiant etudiant, int numSemaine, boolean annule)
     {
         JPanel panelCentre = new JPanel();
         panelCentre.setLayout(new GridLayout(1, 7));
         
+        //Initialisation des créneaux
+        LocalTime creneau1 = LocalTime.parse("08:30:00.0");
+        LocalTime creneau2 = LocalTime.parse("10:15:00.0");
+        LocalTime creneau3 = LocalTime.parse("12:00:00.0");
+        LocalTime creneau4 = LocalTime.parse("13:45:00.0");
+        LocalTime creneau5 = LocalTime.parse("15:30:00.0");
+        LocalTime creneau6 = LocalTime.parse("17:15:00.0");
+        LocalTime creneau7 = LocalTime.parse("19:00:00.0");
+        
+        //Récupération des séances du user pour la semaine donné, en fonction du type d'utilisateur (étudiant / enseignant)
+        ArrayList<Seance> maSemaine = donnees.getSeanceSemaineEtudiant(numSemaine, etudiant.getUtilisateur().getNom() + " " + etudiant.getUtilisateur().getPrenom());
+        
+        
         //7 colonnes (lundi au samedi + colonne "horaires")
-        for(int i=0; i<7; i++)
+        for(int numJours=0; numJours<7; numJours++)
         {
             //Panel qui contiendra les horaires d'une journée
             JPanel panelJours = new JPanel();
@@ -372,7 +387,7 @@ class PageEtudiants extends JPanel implements ActionListener{
             titre.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder()));
             
             //8 lignes ('Titres' + 7 créneaux)
-            for(int j=0; j<8; j++)
+            for(int numCreneau=0; numCreneau<8; numCreneau++)
             {
                 //Panel qui contiendra un créneau de cours 
                 JPanel panelCreneau = new JPanel();
@@ -382,7 +397,7 @@ class PageEtudiants extends JPanel implements ActionListener{
                 JTextPane creneau = new JTextPane();
                 creneau.setEditable(false);
                 creneau.setPreferredSize(new Dimension(5, 150));
-                creneau.setFont(new Font("Arial", Font.PLAIN, 11));
+                creneau.setFont(new Font("Arial", Font.PLAIN, 10));
                 //Gestion du style des textPane
                 StyledDocument docTitres = titre.getStyledDocument();
                 StyledDocument docCreneaux = creneau.getStyledDocument();
@@ -392,13 +407,13 @@ class PageEtudiants extends JPanel implements ActionListener{
                 StyleConstants.setAlignment(centre, StyleConstants.ALIGN_CENTER);
                 
                 //Premier Jpanel correspondant aux horaires
-                if(i == 0){
+                if(numJours == 0){
                     //Première ligne = "Titre"
-                    if(j == 0){
+                    if(numCreneau == 0){
                         //On aligne au centre
                         docTitres.setParagraphAttributes(0, docCreneaux.getLength(), centre, false);
                         //On défini le titre
-                        titre.setText(tabLabelsEDT[i]);
+                        titre.setText(tabLabelsEDT[numJours]);
                         panelCreneau.add(titre);
                     }
                     //Lignes suivantes = "Horaires"
@@ -406,18 +421,18 @@ class PageEtudiants extends JPanel implements ActionListener{
                         //On aligne à droite
                         docCreneaux.setParagraphAttributes(0, docCreneaux.getLength(), horaires, false);
                         //On défini l'horaire
-                        creneau.setText(tabCreneauxEDT[j]);
+                        creneau.setText(tabCreneauxEDT[numCreneau]);
                         panelCreneau.add(creneau);
                     }
                 }
                 //Les suivants sont les jours de la semaine
                 else{
                     //Première ligne = "Titre"
-                    if(j == 0){
+                    if(numCreneau == 0){
                         //On aligne au centre
                         docTitres.setParagraphAttributes(0, docCreneaux.getLength(), centre, false);
                         //On défini le titre
-                        titre.setText(tabLabelsEDT[i]);
+                        titre.setText(tabLabelsEDT[numJours]);
                         panelCreneau.add(titre);
                     }
                     //Lignes suivantes = "Créneaux"
@@ -425,12 +440,115 @@ class PageEtudiants extends JPanel implements ActionListener{
                         //On aligne au centre
                         docCreneaux.setParagraphAttributes(0, docCreneaux.getLength(), centre, false);
 
-                        //Communiquer avec le controleur pour récup les données nécessaires à l'affichage
-                        creneau.setText("Etudiant : " + nomEtudiant + "\nSemaine :" + numSemaine);
-                        creneau.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.RED));
-                        
-                        
-                        
+                        //On parcours la liste de séance Pour check si la séance donné correspond à la séance [i][j]
+                        for(int k=0; k<maSemaine.size(); k++)
+                        {
+                            //Check si le jours correspond
+                            int joursSeance = maSemaine.get(k).getJour().getDayOfWeek().getValue();
+                            if(joursSeance == numJours)
+                            {
+                                //Numéro du créneau de la séance donné
+                                int numCreneauSeance = 0;
+                                //Récupération de l'heure de début de la séance donné
+                                LocalTime creneauSeance = maSemaine.get(k).getHeure_debut();
+                                
+                                //Test de tous les créneaux
+                                //Créneau 1
+                                if(creneauSeance.equals(creneau1)){
+                                    numCreneauSeance = 1;
+                                }
+                                //Créneau 2
+                                if(creneauSeance.equals(creneau2)){
+                                    numCreneauSeance = 2;
+                                }
+                                //Créneau 3
+                                if(creneauSeance.equals(creneau3)){
+                                    numCreneauSeance = 3;
+                                }
+                                //Créneau 4
+                                if(creneauSeance.equals(creneau4)){
+                                    numCreneauSeance = 4;
+                                }
+                                //Créneau 5
+                                if(creneauSeance.equals(creneau5)){
+                                    numCreneauSeance = 5;
+                                }
+                                //Créneau 6
+                                if(creneauSeance.equals(creneau6)){
+                                    numCreneauSeance = 6;
+                                }
+                                //Créneau 7
+                                if(creneauSeance.equals(creneau7)){
+                                    numCreneauSeance = 7;
+                                }
+                                
+                                //Si la séance k correspond à la case [numCreneau] de l'EDT que l'on rempli
+                                if(numCreneauSeance == numCreneau)
+                                {
+                                    //Alors on récupère le reste des infos nécessaires
+                                    int idSeance = maSemaine.get(k).getId();
+                                    //Récupération de l'état de la séance
+                                    int etatSeance = maSemaine.get(k).getEtat();
+                                    //Récupération du nom de la séance (nom du cours)
+                                    String nomSeance = maSemaine.get(k).getCours().getNom();
+                                    //Récupération de la couleur de la séance
+                                    Color couleurSeance;
+                                    try {
+                                        Field field = Class.forName("java.awt.Color").getField((String)maSemaine.get(k).getCours().getCouleur().toLowerCase());
+                                        couleurSeance = (Color)field.get(null);
+                                    } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+                                        //Couleur par défaut
+                                        couleurSeance = Color.lightGray;
+                                    }
+                                    //Récupération du nom du/des prof qui assurent ce cours
+                                    ArrayList<String> listeProfsSeance = donnees.getNomEnseignantSeance(idSeance);
+                                    //Récupération de la salle de cours
+                                    ArrayList<String > listeSallesSeance = donnees.getNomSalleSeance(idSeance);
+                                    
+                                    //Initialisation de la 'String' d'affichage
+                                    String stringSeance = "";
+                                    //Check si le cours est annulé
+                                    if(etatSeance == 0){
+                                        stringSeance += "ANNULE\n";
+                                    }
+                                    //Ajout nom de la Séance
+                                    stringSeance += nomSeance;
+                                    stringSeance += "\n";
+                                    //Ajout Prof
+                                    for(int l=0; l<listeProfsSeance.size(); l++){
+                                        stringSeance += "Mme|M. ";
+                                        stringSeance += listeProfsSeance.get(l);
+                                        if(listeProfsSeance.size() > 1){
+                                            stringSeance += " - ";
+                                        }
+                                    }
+                                    stringSeance += "\n";
+                                    //Ajout salles 
+                                    for(int l=0; l<listeSallesSeance.size(); l++){
+                                        stringSeance += listeSallesSeance.get(l);
+                                        stringSeance += "\n";
+                                    }
+                                    //Puis on rajoute dans la case en fonction de si on veut les cours annule ou non
+                                    //Si on veut que les cours annulés
+                                    if(annule){
+                                        if(etatSeance == 0){
+                                            creneau.setText(stringSeance);
+                                            creneau.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, couleurSeance));
+                                        }
+                                    }
+                                    //Si on veut afficher tous les cours
+                                    else{
+                                        creneau.setText(stringSeance);
+                                        creneau.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, couleurSeance));
+                                    }
+                                }
+                                //Sinon on met le fond de la case en gris
+                                else
+                                {
+                                    creneau.setBackground(Color.lightGray);
+                                }
+                            }
+                        }
                         panelCreneau.add(creneau);
                     }
                 }
@@ -440,6 +558,7 @@ class PageEtudiants extends JPanel implements ActionListener{
         }
         return panelCentre;
     }
+    
     
     
     //GETTERS Page
@@ -497,6 +616,9 @@ class PageEtudiants extends JPanel implements ActionListener{
                 //On récupère le nom de l'étudiant + la semaine à afficher
                 String nomEtudSelect = (String)textFieldNom.getText();
                 int semaineSelect = (int)comboSemaine.getSelectedItem();
+                
+                //On initialise l'étudiant dont on veut les infos
+                Etudiant etudiantSelect = new Etudiant();
 
                 //Si le text field n'est pas vide 
                 if(nomEtudSelect.length() != 0){
@@ -505,7 +627,8 @@ class PageEtudiants extends JPanel implements ActionListener{
                     ArrayList<Etudiant> listeEtudiant = donnees.getListeEtudiant();
                     
                     for(int k = 0; k<listeEtudiant.size(); k++){
-                        if(nomEtudSelect.equals(listeEtudiant.get(k))){
+                        if(nomEtudSelect.toUpperCase().equals(listeEtudiant.get(k).getUtilisateur().getNom().toUpperCase())){
+                            etudiantSelect = listeEtudiant.get(k);
                             etudiantExiste = true;
                         }
                     }
@@ -514,7 +637,7 @@ class PageEtudiants extends JPanel implements ActionListener{
                         panelEDTCenter.removeAll();
                         panelEDTCenter.revalidate();
                         panelEDTCenter.repaint();
-                        panelEDTCenter.add(dessinerEDT(nomEtudSelect, semaineSelect), BorderLayout.CENTER);
+                        panelEDTCenter.add(dessinerEDT(etudiantSelect, semaineSelect, false), BorderLayout.CENTER);
                     }
                 }
             }
@@ -524,12 +647,27 @@ class PageEtudiants extends JPanel implements ActionListener{
                 String nomEtudSelect = (String)comboListe.getSelectedItem();
                 int semaineSelect = (int)comboSemaine.getSelectedItem();
                 
+                //On initialise l'étudiant dont on veut les infos
+                Etudiant etudiantSelect = new Etudiant();
+                
                 //Si le text field n'est pas vide 
                 if(nomEtudSelect.length() != 0){
-                    panelEDTCenter.removeAll();
-                    panelEDTCenter.revalidate();
-                    panelEDTCenter.repaint();
-                    panelEDTCenter.add(dessinerEDT(nomEtudSelect, semaineSelect), BorderLayout.CENTER);
+                    //Test si l'étudiant existe dans la BDD
+                    boolean etudiantExiste = false;
+                    ArrayList<Etudiant> listeEtudiant = donnees.getListeEtudiant();
+                    
+                    for(int k = 0; k<listeEtudiant.size(); k++){
+                        if(nomEtudSelect.toUpperCase().equals(listeEtudiant.get(k).getUtilisateur().getNom().toUpperCase())){
+                            etudiantSelect = listeEtudiant.get(k);
+                            etudiantExiste = true;
+                        }
+                    }
+                    if(etudiantExiste){
+                        panelEDTCenter.removeAll();
+                        panelEDTCenter.revalidate();
+                        panelEDTCenter.repaint();
+                        panelEDTCenter.add(dessinerEDT(etudiantSelect, semaineSelect, false), BorderLayout.CENTER);
+                    }
                 }
             }
         }
@@ -571,15 +709,29 @@ class PageEtudiants extends JPanel implements ActionListener{
             //on récupère les infos
             String nomEtudSelect = (String)textFieldNom3.getText();
             int semaineSelect = (int)comboSemaine3.getSelectedItem();
+            
+            //On initialise l'étudiant dont on veut les infos
+            Etudiant etudiantSelect = new Etudiant();
 
             //Si le text field n'est pas vide 
             if(nomEtudSelect.length() != 0){
-                panelEDTCenter.removeAll();
-                panelEDTCenter.revalidate();
-                panelEDTCenter.repaint();
-                panelEDTCenter.add(dessinerEDT(nomEtudSelect, semaineSelect), BorderLayout.CENTER);
+                //Test si l'étudiant existe dans la BDD
+                boolean etudiantExiste = false;
+                ArrayList<Etudiant> listeEtudiant = donnees.getListeEtudiant();
+
+                for(int k = 0; k<listeEtudiant.size(); k++){
+                    if(nomEtudSelect.toUpperCase().equals(listeEtudiant.get(k).getUtilisateur().getNom().toUpperCase())){
+                        etudiantSelect = listeEtudiant.get(k);
+                        etudiantExiste = true;
+                    }
+                }
+                if(etudiantExiste){
+                    panelAnnulesCenter.removeAll();
+                    panelAnnulesCenter.revalidate();
+                    panelAnnulesCenter.repaint();
+                    panelAnnulesCenter.add(dessinerEDT(etudiantSelect, semaineSelect, true), BorderLayout.CENTER);
+                }
             }
-            
         }
     }
 }
