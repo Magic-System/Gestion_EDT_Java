@@ -160,11 +160,6 @@ class PageCours extends JPanel implements ActionListener{
             maSemaine = donnees.getSeanceSemaineEtudiant(numSemaine, user.getNom() + " " + user.getPrenom());
         }
         
-        for (Seance s : maSemaine) {
-            System.out.println(s.toString());
-        }
-        
-        
         //7 colonnes (lundi au samedi + colonne "horaires")
         for(int numJours=0; numJours<7; numJours++)
         {
@@ -288,7 +283,7 @@ class PageCours extends JPanel implements ActionListener{
                                     //Récupération de la couleur de la séance
                                     Color couleurSeance;
                                     try {
-                                        Field field = Class.forName("java.awt.Color").getField((String)maSemaine.get(k).getCours().getCouleur());
+                                        Field field = Class.forName("java.awt.Color").getField((String)maSemaine.get(k).getCours().getCouleur().toLowerCase());
                                         couleurSeance = (Color)field.get(null);
                                     } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
                                         //Couleur par défaut
@@ -296,19 +291,10 @@ class PageCours extends JPanel implements ActionListener{
                                     }
                                     //Récupération du nom du/des prof qui assurent ce cours
                                     ArrayList<String> listeProfsSeance = donnees.getNomEnseignantSeance(idSeance);
-                                    for (String s : listeProfsSeance) {
-                                        System.out.println("Profs liés à la séance : " + s.toString());
-                                    }
                                     //Récupération du/des TD participant à la séance
                                     ArrayList<String> listeTDSeance = donnees.getNomGroupeSeance(idSeance);
-                                    for (String s : listeTDSeance) {
-                                        System.out.println("TD liés à la séance : " + s.toString());
-                                    }
                                     //Récupération de la salle de cours
                                     ArrayList<String > listeSallesSeance = donnees.getNomSalleSeance(idSeance);
-                                    for (String s : listeSallesSeance) {
-                                        System.out.println("Salles liés à la séance : " + s.toString());
-                                    }
                                     
                                     //Initialisation de la 'String' d'affichage
                                     String stringSeance = "";
@@ -341,7 +327,6 @@ class PageCours extends JPanel implements ActionListener{
                                         stringSeance += listeSallesSeance.get(l);
                                         stringSeance += "\n";
                                     }
-                                    System.out.println("String Seance : " + stringSeance);
                                     //Puis on rajoute dans la case
                                     creneau.setText(stringSeance);
                                     creneau.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, couleurSeance));
