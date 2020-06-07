@@ -58,13 +58,14 @@ public class Connection extends JFrame implements ActionListener{
             RechercheDonnees loginBdd = new RechercheDonnees();
             Utilisateur user = loginBdd.login(Affichage.getAdresse_email().getText(), Affichage.getMot_de_passe().getText());
             if (user != null) {
-                System.out.println("login bon !");
+                System.out.println("Login bon !");
                 //On ferme la fenetre de connection
                 this.dispose();
                 //On créé la fenetre d'EDT
                 FenetreEDT fenetre = new FenetreEDT(user);
             } 
             else {
+                System.out.println("-> Addresse email ou mot de passe incorrects.");
                 Affichage.getError_mdp().setVisible(true);
                 Affichage.getError_email().setVisible(true);
             }
