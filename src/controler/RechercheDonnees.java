@@ -249,6 +249,24 @@ public class RechercheDonnees {
         return recap;
     }
 
+    public ArrayList<String> getListeSeanceValidation() {
+        ArrayList<String> liste = new ArrayList<>();
+
+        SeanceDaoServiceImpl sDao = new SeanceDaoServiceImpl();
+
+        try {
+            ArrayList<Seance> ls = sDao.getSeanceValidation();
+            for (Seance s : ls) {
+                String seanceNom = s.getType().getNom() + " de " + s.getCours().getNom() + " le " + s.getJour() + " de " + s.getHeure_debut() + " a " + s.getHeure_fin();
+                liste.add(seanceNom);
+            }
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return liste;
+    }
+
 
     /**
      * Main de test !!
@@ -268,10 +286,11 @@ public class RechercheDonnees {
                 System.out.println("7) test liste enseignant");
                 System.out.println("8) test liste salle");
                 System.out.println("9) test recap cours enseignant (pas fini manque la periode de temps)");
+                System.out.println("10) test liste seance a valider");
                 System.out.println("0) quitter");
 
                 choix = in.nextInt();
-            }while (choix < 0 || choix > 9);
+            }while (choix < 0 || choix > 10);
 
             RechercheDonnees rech = new RechercheDonnees();
 
@@ -373,6 +392,13 @@ public class RechercheDonnees {
                     enseignant = in.nextInt();
 
                     for (String s : rech.recapitulatifCours(LocalDate.MIN, LocalDate.MAX, enseignant)){
+                        System.out.println(s);
+                    }
+                    break;
+                }
+                case 10: {
+                    System.out.println("10) test liste seance a valider");
+                    for (String s : rech.getListeSeanceValidation()) {
                         System.out.println(s);
                     }
                     break;
