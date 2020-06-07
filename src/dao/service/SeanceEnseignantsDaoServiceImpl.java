@@ -137,6 +137,7 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
             EnseignantDaoServiceImpl prof = new EnseignantDaoServiceImpl();
             se.setSeance(seance.getById(res.getInt("ID_Seance")));
             se.setProf(prof.getById(res.getInt("ID_Enseignant")));
+            liste.add(se);
         }
 
         co.close();
