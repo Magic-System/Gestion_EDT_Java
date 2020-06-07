@@ -15,7 +15,7 @@ public abstract class DbService<T> {
     /**
      * Url de connexion à la base de donnée.
      */
-    private final String URL_DB = "jdbc:mysql://localhost:3306/planning";
+    private final String URL_DB = "jdbc:mysql://localhost:3306/planning?verifyServerCertificate=false&useSSL=true";
     /**
      * Login de connexion à la base de donnée.
      */
