@@ -6,6 +6,7 @@
 package vue;
 
 import controler.RechercheDonnees;
+import modele.*;
 
 import java.awt.event.ActionEvent;import java.awt.CardLayout;
 import java.awt.event.ActionListener;
@@ -31,11 +32,16 @@ public class FenetreEDT extends JFrame implements ActionListener{
     private PageEnseignants pageEnseignants;
     private PageSalles pageSalles;
     private PageAdmin pageAdmin;
+    
+    //Utilisateur connecté
+    private Utilisateur user;    
 
     /**
-     * Constructeur de la fenêtre
+     * Constructeur de la fenêtre une fois qu'un user s'est connecté
+     * 
+     * @param utilisateur Correspond à l'utilisateur connecté
      */
-    public FenetreEDT()
+    public FenetreEDT(Utilisateur utilisateur)
     {
         //Initialisation fenetre
         this.setTitle("Projet EDT Java");
@@ -68,11 +74,19 @@ public class FenetreEDT extends JFrame implements ActionListener{
         conteneurPages.add(pageSalles, "pageSalles");
         conteneurPages.add(pageAdmin, "pageAdmin");
         
+        //Initialisation user
+        user = new Utilisateur(utilisateur);
+        //Test du type d'utilisateur
+        testDroitsUser();
+        
         //Ajout du conteneur des pages et affichage fenetre
         this.setContentPane(conteneurPages);
         this.setVisible(true);
     }
     
+    /**
+     * Ajout des listener sur le Menu
+     */
     public final void initMenuListener()
     {
         menuBar.getMesCours().addActionListener(this);
@@ -85,6 +99,45 @@ public class FenetreEDT extends JFrame implements ActionListener{
         menuBar.getChercherPromotion().addActionListener(this);
         menuBar.getChercherSalle().addActionListener(this);
         menuBar.getPageAdmin().addActionListener(this);
+    }
+    
+    /**
+     * Test les 'droits' de l'utilisateur pour afficher les menus et pages en fonction
+     */
+    public final void testDroitsUser()
+    {
+        //User = Administrateur
+        if(user.getDroit() == 1)
+        {
+            //L'admin n'a pas d'EDT 
+            menuBar.getCours().setVisible(false);
+        }
+        //User = Référent pédagogique
+        if(user.getDroit() == 2)
+        {
+            //Le référent n'a pas le droit de modif les données
+            menuBar.getAdmin().setVisible(false);
+        }
+        //User = Enseignant
+        if(user.getDroit() == 3)
+        {
+            //Prof ne peut voir que son EDT
+            menuBar.getAdmin().setVisible(false);
+            menuBar.getPromotions().setVisible(false);
+            menuBar.getSalles().setVisible(false);
+            menuBar.getEtudiants().setVisible(false);
+            menuBar.getEnseignants().setVisible(false);
+        }
+        //User = Etudiant
+        if(user.getDroit() == 4)
+        {
+            //Etudiant ne peux voir que son EDT
+            menuBar.getAdmin().setVisible(false);
+            menuBar.getPromotions().setVisible(false);
+            menuBar.getSalles().setVisible(false);
+            menuBar.getEtudiants().setVisible(false);
+            menuBar.getEnseignants().setVisible(false);
+        }
     }
     
     /**

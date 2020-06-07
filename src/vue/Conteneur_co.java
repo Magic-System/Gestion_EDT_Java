@@ -127,7 +127,13 @@ public class Conteneur_co extends JPanel implements ActionListener {
             Utilisateur user = loginBdd.login(adresse_email.getText(), mot_de_passe.getText());
             if (user != null) {
                 System.out.println("login bon !");
-            } else {
+                
+                //On créé la fenetre d'EDT
+                FenetreEDT fenetre = new FenetreEDT(user);
+                //On ferme la fenetre de connection
+                this.dispose();
+            } 
+            else {
                 error_mdp.setVisible(true);
                 error_email.setVisible(true);
             }

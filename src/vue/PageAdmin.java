@@ -7,6 +7,7 @@ package vue;
 
 import controler.MajDonnees;
 import controler.RechercheDonnees;
+import modele.*;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

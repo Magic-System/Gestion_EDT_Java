@@ -24,9 +24,7 @@ public class Vue {
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel"); 
         } catch(ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ignored){}
         
-        Connection fenetre_co = new Connection ();
-        fenetre_co.setVisible(true);
-        
-        FenetreEDT fenetreEDT = new FenetreEDT();
+        Connection fenetreConnection = new Connection ();        
+        fenetreConnection.setVisible(true);
   }       
 }

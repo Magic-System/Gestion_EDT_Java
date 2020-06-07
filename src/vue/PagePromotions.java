@@ -6,6 +6,7 @@
 package vue;
 
 import controler.RechercheDonnees;
+import modele.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

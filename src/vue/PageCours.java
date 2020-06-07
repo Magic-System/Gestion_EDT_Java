@@ -6,6 +6,7 @@
 package vue;
 
 import controler.RechercheDonnees;
+import modele.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,8 +42,6 @@ import javax.swing.text.StyledDocument;
 class PageCours extends JPanel implements ActionListener{
     //Panel EDT
     private JPanel panelEDTNord, panelEDTCenter, panImage;
-    //Layout EDT Centre
-    private GridLayout glEDTCenter;
     //Choix semaine
     private JLabel labelSemaine;
     private JComboBox comboSemaine;

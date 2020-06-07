@@ -17,13 +17,13 @@ public class Connection extends JFrame {
 
     Conteneur_co Affichage;
     Color fond = new Color(255, 255, 255);
-
     
-    
+    /**
+     * CONSTRUCTEUR
+     */
     public Connection() {
         super();
         propConnection();
-
     }
 
     private void propConnection() {
@@ -35,7 +35,7 @@ public class Connection extends JFrame {
         Affichage = new Conteneur_co();
         Affichage.setBackground(fond);
         this.setContentPane(Affichage);
-
+        this.setVisible(true);
     }
 
 }
