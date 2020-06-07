@@ -16,6 +16,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.BorderFactory;
@@ -52,7 +53,7 @@ class PageEtudiants extends JPanel implements ActionListener{
     private JTextField textFieldNom;
     private JComboBox comboSemaine, comboChoix, comboListe;
     private JButton chercherEDT;
-    private String[] tabChoixEtudiant;
+    private ArrayList<String> tabChoixEtudiant;
     
 //Pour panelRecap :
     private JPanel panelRecapNord, panelRecapCenter;
@@ -78,6 +79,9 @@ class PageEtudiants extends JPanel implements ActionListener{
     
     //Utilisateur connecté
     private Utilisateur user;
+    
+    //Controler pour récupérer les données
+    private RechercheDonnees donnees = new RechercheDonnees();
     
     
     /**
@@ -162,10 +166,10 @@ class PageEtudiants extends JPanel implements ActionListener{
         comboListe = new JComboBox();
         comboListe.setPreferredSize(new Dimension(200, 25));
         //Récupérer la liste d'étudiants 
-        // tabChoixEtudiant =  ..............
-        /*for(String choixEtudiant : tabChoixEtudiant){
-            comboListe.addItem(choixEtudiant);
-        }*/
+        tabChoixEtudiant =  donnees.getListeEtudiant();
+        for(int i=0; i<tabChoixEtudiant.size(); i++){
+            comboListe.addItem(tabChoixEtudiant.get(i));
+        }
         
         //Initialisation choix semaine
         labelSemaine = new JLabel("Choisissez une semaine :");

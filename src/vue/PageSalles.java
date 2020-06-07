@@ -16,6 +16,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.BorderFactory;
@@ -42,7 +43,7 @@ class PageSalles extends JPanel implements ActionListener{
     private JComboBox comboBatiment, comboSalle, comboSemaine;
     private JButton rechercher;
     private int semaineAct;
-    private String[] tabChoixSalle;
+    private ArrayList<String> tabChoixSalle;
     private final String[] tabChoixBatiment = {"E1", "E2", "E3", "E4", "E5"};
     private final int[] tabChoixSemaine = {31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29};
     private final String[] tabLabelsEDT = {"\nHoraires","\nLundi","\nMardi","\nMercredi","\nJeudi","\nVendredi","\nSamedi"};
@@ -50,6 +51,9 @@ class PageSalles extends JPanel implements ActionListener{
     
     //Utilisateur connecté
     private Utilisateur user;
+    
+    //Controler pour récupérer les données
+    private RechercheDonnees donnees = new RechercheDonnees();
     
     
     /**
@@ -110,10 +114,10 @@ class PageSalles extends JPanel implements ActionListener{
         comboSalle = new JComboBox();
         comboSalle.setPreferredSize(new Dimension(150, 25));
         //Récupérer la liste des salles 
-        // tabChoixSalle =  ..............
-        /*for(String choixSalle : tabChoixSalle){
-            comboSalle.addItem(choixSalle);
-        }*/
+        tabChoixSalle =  donnees.getListeSalles();
+        for(int i=0; i<tabChoixSalle.size(); i++){
+            comboSalle.addItem(tabChoixSalle.get(i));
+        }
         
         //Initialisation choix semaine
         labelSemaine = new JLabel("Choisissez une semaine :");

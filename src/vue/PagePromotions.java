@@ -50,6 +50,9 @@ class PagePromotions extends JPanel implements ActionListener{
     //Utilisateur connecté
     private Utilisateur user;
     
+    //Controler pour récupérer les données
+    private RechercheDonnees donnees = new RechercheDonnees();
+    
     /**
      * Constructeur de la page 'Promotions'
      * @param utilisateurCo Correspond à l'utilisateur connecté
