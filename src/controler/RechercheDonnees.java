@@ -269,7 +269,7 @@ public class RechercheDonnees {
         SeanceEnseignantsDaoServiceImpl seDao = new SeanceEnseignantsDaoServiceImpl();
 
         try {
-            ArrayList<Seance_Enseignants> se = seDao.getAllBySeance(idSeance);
+            ArrayList<Seance_Enseignants> se = new ArrayList(seDao.getAllBySeance(idSeance));
             for (Seance_Enseignants var : se) {
                 liste.add(var.getProf().getUtilisateur().getNom().toUpperCase());
             }
