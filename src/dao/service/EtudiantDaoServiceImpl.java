@@ -64,6 +64,7 @@ public class EtudiantDaoServiceImpl extends DbService<Etudiant> {
             liste.add(new Etudiant(user.getById(res.getInt("ID_Utilisateur")), res.getInt("Numero"), grp.getById(res.getInt("ID_Groupe"))));
         }
 
+        co.close();
         return liste;
     }
 
@@ -91,6 +92,7 @@ public class EtudiantDaoServiceImpl extends DbService<Etudiant> {
             etudiant.setNumero(res.getInt("Numero"));
         }
 
+        co.close();
         return etudiant;
     }
 }

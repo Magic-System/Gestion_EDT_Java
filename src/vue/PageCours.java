@@ -141,7 +141,7 @@ class PageCours extends JPanel implements ActionListener{
         
         //Initialisation des créneaux
         LocalTime creneau1 = LocalTime.parse("08:30:00.0");
-        LocalTime creneau2 = LocalTime.parse("10:00:00.0");
+        LocalTime creneau2 = LocalTime.parse("10:15:00.0");
         LocalTime creneau3 = LocalTime.parse("12:00:00.0");
         LocalTime creneau4 = LocalTime.parse("13:45:00.0");
         LocalTime creneau5 = LocalTime.parse("15:30:00.0");
@@ -241,12 +241,10 @@ class PageCours extends JPanel implements ActionListener{
                             int joursSeance = maSemaine.get(k).getJour().getDayOfWeek().getValue();
                             if(joursSeance == numJours)
                             {
-                                System.out.println("Le jours correspond");
                                 //Numéro du créneau de la séance donné
                                 int numCreneauSeance = 0;
                                 //Récupération de l'heure de début de la séance donné
                                 LocalTime creneauSeance = maSemaine.get(k).getHeure_debut();
-                                System.out.println(creneauSeance + " et num Jours : "+numJours);
                                 
                                 //Test de tous les créneaux
                                 //Créneau 1
@@ -281,7 +279,6 @@ class PageCours extends JPanel implements ActionListener{
                                 //Si la séance k correspond à la case [numCreneau] de l'EDT que l'on rempli
                                 if(numCreneauSeance == numCreneau)
                                 {
-                                    System.out.println("=== Le Créneau correspond");
                                     //Alors on récupère le reste des infos nécessaires
                                     int idSeance = maSemaine.get(k).getId();
                                     //Récupération de l'état de la séance
@@ -330,14 +327,12 @@ class PageCours extends JPanel implements ActionListener{
                                     }
                                     //Si user == étudiant, ajout du/des profs qui donnent le cours
                                     if(user.getDroit() == 4){
-                                        System.out.println("User == Etudiant");
                                         for(int l=0; l<listeProfsSeance.size(); l++){
                                             stringSeance += "Mme|M. ";
                                             stringSeance += listeProfsSeance.get(l);
                                             if(listeProfsSeance.size() > 1){
                                                 stringSeance += " - ";
                                             }
-                                            System.out.println("Prof rajouté");
                                         }
                                     }
                                     stringSeance += "\n";
@@ -346,7 +341,7 @@ class PageCours extends JPanel implements ActionListener{
                                         stringSeance += listeSallesSeance.get(l);
                                         stringSeance += "\n";
                                     }
-                                    System.out.println("================>>>>>String Seance : " + stringSeance);
+                                    System.out.println("String Seance : " + stringSeance);
                                     //Puis on rajoute dans la case
                                     creneau.setText(stringSeance);
                                     creneau.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, couleurSeance));

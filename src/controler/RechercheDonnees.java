@@ -149,16 +149,11 @@ public class RechercheDonnees {
      * Recupere une liste contenant nom et prenom de tout les etudiants.
      * @return Liste de nom prenom de tout les etudiants.
      */
-    public ArrayList<String> getListeEtudiant() {
+    public ArrayList<Etudiant> getListeEtudiant() {
         EtudiantDaoServiceImpl userDao = new EtudiantDaoServiceImpl();
-        ArrayList<String> liste = new ArrayList<>();
+        ArrayList<Etudiant> liste = null;
         try {
-            ArrayList<Etudiant> users = userDao.getAll();
-            for (Etudiant e : users) {
-                String temp;
-                temp = e.getUtilisateur().getNom().toUpperCase() + " " + e.getUtilisateur().getPrenom();
-                liste.add(temp);
-            }
+            liste = new ArrayList<>(userDao.getAll());
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
@@ -274,7 +269,7 @@ public class RechercheDonnees {
         SeanceEnseignantsDaoServiceImpl seDao = new SeanceEnseignantsDaoServiceImpl();
 
         try {
-            ArrayList<Seance_Enseignants> se = seDao.getAllBySeance(idSeance);
+            ArrayList<Seance_Enseignants> se = new ArrayList(seDao.getAllBySeance(idSeance));
             for (Seance_Enseignants var : se) {
                 liste.add(var.getProf().getUtilisateur().getNom().toUpperCase());
             }
@@ -474,8 +469,8 @@ public class RechercheDonnees {
                 }
                 case 6: {
                     System.out.println("6) test liste etudiant");
-                    for (String s : rech.getListeEtudiant()) {
-                        System.out.println(s);
+                    for (Etudiant e : rech.getListeEtudiant()) {
+                        System.out.println(e.getUtilisateur().getNom().toUpperCase() + " " + e.getUtilisateur().getPrenom());
                     }
                     break;
                 }

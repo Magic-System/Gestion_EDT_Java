@@ -53,7 +53,7 @@ class PageEtudiants extends JPanel implements ActionListener{
     private JTextField textFieldNom;
     private JComboBox comboSemaine, comboChoix, comboListe;
     private JButton chercherEDT;
-    private ArrayList<String> tabChoixEtudiant;
+    private ArrayList<Etudiant> tabChoixEtudiant;
     
 //Pour panelRecap :
     private JPanel panelRecapNord, panelRecapCenter;
@@ -166,7 +166,8 @@ class PageEtudiants extends JPanel implements ActionListener{
         //Récupérer la liste d'étudiants 
         tabChoixEtudiant =  donnees.getListeEtudiant();
         for(int i=0; i<tabChoixEtudiant.size(); i++){
-            comboListe.addItem(tabChoixEtudiant.get(i));
+            String temp = tabChoixEtudiant.get(i).getUtilisateur().getNom().toUpperCase() + " " + tabChoixEtudiant.get(i).getUtilisateur().getPrenom();
+            comboListe.addItem(temp);
         }
         
         //Initialisation choix semaine
@@ -501,7 +502,7 @@ class PageEtudiants extends JPanel implements ActionListener{
                 if(nomEtudSelect.length() != 0){
                     //Test si l'étudiant existe dans la BDD
                     boolean etudiantExiste = false;
-                    ArrayList<String> listeEtudiant = donnees.getListeEtudiant();
+                    ArrayList<Etudiant> listeEtudiant = donnees.getListeEtudiant();
                     
                     for(int k = 0; k<listeEtudiant.size(); k++){
                         if(nomEtudSelect.equals(listeEtudiant.get(k))){
@@ -540,16 +541,16 @@ class PageEtudiants extends JPanel implements ActionListener{
             String nomEtudSelect = (String)comboListe.getSelectedItem();
             
             //On initialise l'étudiant dont on veut les infos
-            Etudiant etudiantSelect;
+            Etudiant etudiantSelect = new Etudiant();
             
             //Si le text field n'est pas vide 
             if(nomEtudSelect.length() != 0){
                 //Test si l'étudiant existe dans la BDD
                 boolean etudiantExiste = false;
-                ArrayList<String> listeEtudiant = donnees.getListeEtudiant();
+                ArrayList<Etudiant> listeEtudiant = donnees.getListeEtudiant();
 
                 for(int k = 0; k<listeEtudiant.size(); k++){
-                    if(nomEtudSelect.equals(listeEtudiant.get(k))){
+                    if(nomEtudSelect.toUpperCase().equals(listeEtudiant.get(k).getUtilisateur().getNom().toUpperCase())){
                         etudiantSelect = listeEtudiant.get(k);
                         etudiantExiste = true;
                     }

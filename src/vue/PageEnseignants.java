@@ -479,10 +479,10 @@ class PageEnseignants extends JPanel implements ActionListener{
                 if(nomProfSelect.length() != 0){
                     //Test si l'étudiant existe dans la BDD
                     boolean etudiantExiste = false;
-                    ArrayList<String> listeEtudiant = donnees.getListeEtudiant();
+                    ArrayList<Etudiant> listeEtudiant = donnees.getListeEtudiant();
                     
                     for(int k = 0; k<listeEtudiant.size(); k++){
-                        if(nomProfSelect.equals(listeEtudiant.get(k))){
+                        if(nomProfSelect.toUpperCase().equals(listeEtudiant.get(k).getUtilisateur().getNom().toUpperCase())){
                             etudiantExiste = true;
                         }
                     }

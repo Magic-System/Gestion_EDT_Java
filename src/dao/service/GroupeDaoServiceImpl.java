@@ -52,9 +52,15 @@ public class GroupeDaoServiceImpl extends DbService<Groupe> {
         ArrayList<Groupe> liste = new ArrayList<Groupe>();
 
         while (res.next()) {
-            liste.add(new Groupe());
+            Groupe grp = new Groupe();
+            grp.setId(res.getInt("ID"));
+            grp.setNom(res.getString("Nom"));
+            PromotionDaoServiceImpl promo = new PromotionDaoServiceImpl();
+            grp.setPromotion(promo.getById(res.getInt("ID_Promotion")));
+            liste.add(grp);
         }
 
+        co.close();
         return liste;
     }
 
@@ -74,6 +80,7 @@ public class GroupeDaoServiceImpl extends DbService<Groupe> {
             grp.setPromotion(promo.getById(res.getInt("ID_Promotion")));
         }
 
+        co.close();
         return grp;
     }
 }

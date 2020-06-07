@@ -61,6 +61,7 @@ public class SiteDaoServiceImpl extends DbService<Site> {
             liste.add(new Site(res.getInt("ID"), res.getString("Nom")));
         }
 
+        co.close();
         return liste;
     }
 
@@ -86,6 +87,7 @@ public class SiteDaoServiceImpl extends DbService<Site> {
             site.setNom(res.getString("Nom"));
         }
 
+        co.close();
         return site;
     }
 }

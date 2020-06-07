@@ -61,6 +61,7 @@ public class Type_CoursDaoServiceImpl extends DbService<Type_Cours> {
             liste.add(new Type_Cours(res.getInt("ID"), res.getString("Nom")));
         }
 
+        co.close();
         return liste;
     }
 
@@ -86,6 +87,7 @@ public class Type_CoursDaoServiceImpl extends DbService<Type_Cours> {
             type.setNom(res.getString("Nom"));
         }
 
+        co.close();
         return type;
     }
 }

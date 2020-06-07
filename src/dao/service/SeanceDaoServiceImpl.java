@@ -22,17 +22,18 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
     @Override
     public void ajouter(Seance objet) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
-        PreparedStatement addSeance = co.prepareStatement("INSERT INTO `seance`(`ID`, `Semaine`, `Date`, `Heure_Debut`, `Heure_Fin`, `Etat`, `ID_Cours`, `ID_Type`) VALUES ([?, ?, ?, ?, ?, ? ,?, ?)");
-        addSeance.setInt(1, objet.getId());
-        addSeance.setInt(2, objet.getSemaine());
-        addSeance.setDate(3, java.sql.Date.valueOf(objet.getJour()));
-        addSeance.setTime(4, java.sql.Time.valueOf(objet.getHeure_debut()));
-        addSeance.setTime(5, java.sql.Time.valueOf(objet.getHeure_fin()));
-        addSeance.setInt(6, objet.getEtat());
-        addSeance.setInt(7, objet.getCours().getId());
-        addSeance.setInt(8, objet.getType().getId());
-
+        PreparedStatement addSeance = co.prepareStatement("INSERT INTO `seance`( `Semaine`, `Date`, `Heure_Debut`, `Heure_Fin`, `Etat`, `ID_Cours`, `ID_Type`) VALUES ( ?, ?, ?, ?, ? ,?, ?)");
+     //   addSeance.setInt(1, objet.getId());
+        addSeance.setInt(1, objet.getSemaine());
+        addSeance.setDate(2, java.sql.Date.valueOf(objet.getJour()));
+        addSeance.setTime(3, java.sql.Time.valueOf(objet.getHeure_debut()));
+        addSeance.setTime(4, java.sql.Time.valueOf(objet.getHeure_fin()));
+        addSeance.setInt(5, objet.getEtat());
+        addSeance.setInt(6, objet.getCours().getId());
+        addSeance.setInt(7, objet.getType().getId());
+     
         addSeance.executeUpdate();
+        co.close();
     }
 
     /**
@@ -55,6 +56,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
         majSeance.setInt(8, objet.getId());
 
         majSeance.executeUpdate();
+        co.close();
     }
 
     /**
@@ -70,6 +72,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
         delSeance.setInt(1, objet.getId());
 
         delSeance.executeUpdate();
+        co.close();
     }
 
     /**
@@ -101,6 +104,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
             liste.add(seance);
         }
 
+        co.close();
         return liste;
     }
 
@@ -114,7 +118,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
     @Override
     public Seance getById(int id) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
-        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance` WHERE ID = ? AND Etat = 1");
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance` WHERE ID = ?");
         getCoursById.setInt(1, id);
         ResultSet res = getCoursById.executeQuery();
 
@@ -134,6 +138,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
             seance.setType(type.getById(res.getInt("ID_Type")));
         }
 
+        co.close();
         return seance;
     }
 
@@ -164,6 +169,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
             id = res.getInt("ID");
         }
 
+        co.close();
         return id;
     }
 
@@ -188,13 +194,16 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
 
         while (res.next()) {
             if (res.getInt("Libre") == 0) {
+                co.close();
                 return true;
             }
             else {
+                co.close();
                 return false;
             }
         }
 
+        co.close();
         return false;
     }
 
@@ -211,6 +220,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
         for (int id : ids) {
             liste.add(this.getById(id));
         }
+
 
         return liste;
     }
@@ -246,6 +256,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
             seance.setType(type.getById(res.getInt("ID_Type")));
         }
 
+        co.close();
         return seance;
     }
 
@@ -299,6 +310,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
             liste.add(seance);
         }
 
+        co.close();
         return liste;
     }
 
@@ -338,6 +350,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
             liste.add(seance);
         }
 
+        co.close();
         return liste;
     }
 
@@ -376,6 +389,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
             liste.add(seance);
         }
 
+        co.close();
         return liste;
     }
 
@@ -411,6 +425,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
             liste.add(seance);
         }
 
+        co.close();
         return liste;
     }
 
@@ -436,6 +451,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
             liste.add(res.getString("cNom") + " | " + res.getString("pNom") + "/" + res.getString("gNom"));
         }
 
+        co.close();
         return liste;
     }
 
@@ -467,6 +483,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
             stats = res.getString("Premier") + " | " + res.getString("dernier") + " | " + res.getInt("Nb");
         }
 
+        co.close();
         return stats;
     }
 
@@ -496,6 +513,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
             seance.setType(type.getById(res.getInt("ID_Type")));
             liste.add(seance);
         }
+        co.close();
 
         return liste;
     }

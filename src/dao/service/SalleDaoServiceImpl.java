@@ -61,6 +61,7 @@ public class SalleDaoServiceImpl extends DbService<Salle> {
             liste.add(new Salle(res.getInt("ID"), res.getString("Nom"), res.getInt("Capacite"), site.getById(res.getInt("ID_Site"))));
         }
 
+        co.close();
         return liste;
     }
 
@@ -88,6 +89,7 @@ public class SalleDaoServiceImpl extends DbService<Salle> {
             salle.setSite(site.getById(res.getInt("ID_Site")));
         }
 
+        co.close();
         return salle;
     }
 }

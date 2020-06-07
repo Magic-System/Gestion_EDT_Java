@@ -58,6 +58,7 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
         delSe.setInt(2, objet.getProf().getUtilisateur().getId());
 
         delSe.executeUpdate();
+        co.close();
     }
 
     /**
@@ -81,6 +82,7 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
             liste.add(new Seance_Enseignants(seance.getById(res.getInt("ID_Seance")), prof.getById(res.getInt("ID_Groupe"))));
         }
 
+        co.close();
         return liste;
     }
 
@@ -135,8 +137,9 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
             EnseignantDaoServiceImpl prof = new EnseignantDaoServiceImpl();
             se.setSeance(seance.getById(res.getInt("ID_Seance")));
             se.setProf(prof.getById(res.getInt("ID_Enseignant")));
+            liste.add(se);
         }
-
+        co.close();
         return liste;
     }
 
@@ -161,13 +164,16 @@ public class SeanceEnseignantsDaoServiceImpl  extends DbService<Seance_Enseignan
 
         while (res.next()) {
             if (res.getInt("Libre") == 0) {
+                co.close();
                 return true;
             }
             else {
+                co.close();
                 return false;
             }
         }
 
+        co.close();
         return false;
     }
 }
