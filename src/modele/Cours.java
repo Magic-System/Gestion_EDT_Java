@@ -14,6 +14,7 @@ public class Cours {
      * Nom du cours.
      */
     private String nom;
+    private String couleur;
 
     /**
      * Constructeur par défaut. Initialise l'identifiant a 0 et le nom à "nom".
@@ -21,16 +22,19 @@ public class Cours {
     public Cours() {
         this.id = 0;
         this.nom = "nom";
+        this.couleur = "grey";
     }
 
     /**
      * Constructeur avec tout les parametres.
      * @param id Identifiant du cours.
      * @param nom Nom du cours.
+     * @param couleur Couleur du cours.
      */
-    public Cours(int id, String nom) {
+    public Cours(int id, String nom, String couleur) {
         this.id = id;
         this.nom = nom;
+        this.couleur = couleur;
     }
 
     /**
@@ -40,6 +44,7 @@ public class Cours {
     public Cours(Cours cours) {
         this.id = cours.id;
         this.nom = cours.nom;
+        this.couleur = cours.couleur;
     }
 
     /**
@@ -72,6 +77,21 @@ public class Cours {
      */
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    /**
+     * Getter de la couleur du cours.
+     * @return Couleur du cours sous forme d'un String.
+     */
+    public String getCouleur() {
+        return couleur;
+    }
+    /**
+     * Setter de la couleur du cours.
+     * @param couleur Nouvelle couleur du cours.
+     */
+    public void setCouleur(String couleur) {
+        this.couleur = couleur;
     }
 
     /**

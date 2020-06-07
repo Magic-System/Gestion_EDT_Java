@@ -57,7 +57,7 @@ public class CoursDaoServiceImpl extends DbService<Cours>{
         ArrayList<Cours> liste = new ArrayList<Cours>();
 
         while (res.next()) {
-            liste.add(new Cours(res.getInt("ID"), res.getString("Nom")));
+            liste.add(new Cours(res.getInt("ID"), res.getString("Nom"), res.getString("Couleur")));
         }
 
         return liste;
@@ -82,6 +82,7 @@ public class CoursDaoServiceImpl extends DbService<Cours>{
         while (res.next()) {
             c.setId(res.getInt("ID"));
             c.setNom(res.getString("Nom"));
+            c.setCouleur(res.getString("Couleur"));
         }
 
         return c;
