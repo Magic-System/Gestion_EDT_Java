@@ -168,7 +168,7 @@ class PageEtudiants extends JPanel implements ActionListener{
         //Récupérer la liste d'étudiants 
         tabChoixEtudiant =  donnees.getListeEtudiant();
         for(int i=0; i<tabChoixEtudiant.size(); i++){
-            String temp = tabChoixEtudiant.get(i).getUtilisateur().getNom().toUpperCase();// + " " + tabChoixEtudiant.get(i).getUtilisateur().getPrenom();
+            String temp = tabChoixEtudiant.get(i).getUtilisateur().getNom().toUpperCase();
             comboListe.addItem(temp);
         }
         
@@ -502,8 +502,6 @@ class PageEtudiants extends JPanel implements ActionListener{
                                     }
                                     //Récupération du nom du/des prof qui assurent ce cours
                                     ArrayList<String> listeProfsSeance = donnees.getNomEnseignantSeance(idSeance);
-                                    //Récupération du/des TD participant à la séance
-                                    ArrayList<String> listeTDSeance = donnees.getNomGroupeSeance(idSeance);
                                     //Récupération de la salle de cours
                                     ArrayList<String > listeSallesSeance = donnees.getNomSalleSeance(idSeance);
                                     
