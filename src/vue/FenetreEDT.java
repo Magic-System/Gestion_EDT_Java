@@ -109,13 +109,13 @@ public class FenetreEDT extends JFrame implements ActionListener{
     public final void testDroitsUser()
     {
         //User = Référent pédagogique
-        if(user.getDroit() == 2)
+        if(user.getDroit() == 1)
         {
             //L'admin n'a pas d'EDT 
             menuBar.getCours().setVisible(false);
         }
         //User = Administrateur
-        if(user.getDroit() == 1)
+        if(user.getDroit() == 2)
         {
             //Le référent n'a pas le droit de modif les données
             menuBar.getAdmin().setVisible(false);

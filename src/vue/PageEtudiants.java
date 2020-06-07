@@ -512,10 +512,22 @@ class PageEtudiants extends JPanel implements ActionListener{
 
                 //Si le text field n'est pas vide 
                 if(nomEtudSelect.length() != 0){
-                    panelEDTCenter.removeAll();
-                    panelEDTCenter.revalidate();
-                    panelEDTCenter.repaint();
-                    panelEDTCenter.add(dessinerEDT(nomEtudSelect, semaineSelect), BorderLayout.CENTER);
+                    //Test si l'étudiant existe dans la BDD
+                    boolean etudiantExiste = false;
+                    ArrayList<String> listeEtudiant = donnees.getListeEtudiant();
+                    
+                    for(int k = 0; k<listeEtudiant.size(); k++){
+                        if(nomEtudSelect.equals(listeEtudiant.get(k))){
+                            etudiantExiste = true;
+                        }
+                    }
+                    //Si l'étudiant existe
+                    if(etudiantExiste){
+                        panelEDTCenter.removeAll();
+                        panelEDTCenter.revalidate();
+                        panelEDTCenter.repaint();
+                        panelEDTCenter.add(dessinerEDT(nomEtudSelect, semaineSelect), BorderLayout.CENTER);
+                    }
                 }
             }
             //Si c'est une recherche depuis la liste :

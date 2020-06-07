@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.imageio.ImageIO;
@@ -162,7 +163,7 @@ class PageCours extends JPanel implements ActionListener{
                 JTextPane creneau = new JTextPane();
                 creneau.setEditable(false);
                 creneau.setPreferredSize(new Dimension(5, 150));
-                creneau.setFont(new Font("Arial", Font.PLAIN, 11));
+                creneau.setFont(new Font("Arial", Font.PLAIN, 10));
                 //Gestion du style des textPane
                 StyledDocument docTitres = titre.getStyledDocument();
                 StyledDocument docCreneaux = creneau.getStyledDocument();
@@ -206,6 +207,26 @@ class PageCours extends JPanel implements ActionListener{
                         docCreneaux.setParagraphAttributes(0, docCreneaux.getLength(), centre, false);
 
                         //Communiquer avec le controleur pour récup les données nécessaires à l'affichage
+                       /* ArrayList<Seance> maSemaine;
+                        //Si c'est un prof
+                        if(user.getDroit() == 3)
+                        {
+                            maSemaine = donnees.getSeanceSemaineEnseignant(numSemaine, user.getNom() + " " + user.getPrenom());
+                        }
+                        //Sinon c'est un étudiant
+                        else
+                        {
+                            maSemaine = donnees.getSeanceSemaineEtudiant(numSemaine, user.getNom() + " " + user.getPrenom());
+                        }
+                        
+                        //On parcours la liste de séance
+                        for(int k=0; k<maSemaine.size(); k++)
+                        {
+                            //On regarde si la séance donné correspond à la séance [i][j]
+                            
+                        }
+                        */
+                        
                         creneau.setText("Test : [" + i + "][" + j + "]\nSemaine :" + numSemaine);
                         creneau.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.RED));
                         

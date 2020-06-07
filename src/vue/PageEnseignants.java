@@ -463,16 +463,28 @@ class PageEnseignants extends JPanel implements ActionListener{
             //Si c'est une recherche par nom :
             if(comboChoix.getSelectedIndex() == 0)
             {
-                //On récupère le nom de l'étudiant + la semaine à afficher
+                //On récupère le nom du Prof + la semaine à afficher
                 String nomProfSelect = (String)textFieldNom.getText();
                 int semaineSelect = (int)comboSemaine.getSelectedItem();
 
                 //Si le text field n'est pas vide 
                 if(nomProfSelect.length() != 0){
-                    panelEDTCenter.removeAll();
-                    panelEDTCenter.revalidate();
-                    panelEDTCenter.repaint();
-                    panelEDTCenter.add(dessinerEDT(nomProfSelect, semaineSelect), BorderLayout.CENTER);
+                    //Test si l'étudiant existe dans la BDD
+                    boolean etudiantExiste = false;
+                    ArrayList<String> listeEtudiant = donnees.getListeEtudiant();
+                    
+                    for(int k = 0; k<listeEtudiant.size(); k++){
+                        if(nomProfSelect.equals(listeEtudiant.get(k))){
+                            etudiantExiste = true;
+                        }
+                    }
+                    //Si le prof existe
+                    if(etudiantExiste){
+                        panelEDTCenter.removeAll();
+                        panelEDTCenter.revalidate();
+                        panelEDTCenter.repaint();
+                        panelEDTCenter.add(dessinerEDT(nomProfSelect, semaineSelect), BorderLayout.CENTER);
+                    }
                 }
             }
             //Si c'est une recherche depuis la liste :
