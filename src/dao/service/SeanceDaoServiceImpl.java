@@ -168,6 +168,37 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
     }
 
     /**
+     * Regarde si la seance recu en parametre est possible en terme de créneau.
+     * @param seance Seance a tester.
+     * @return True si le créneau pour cette seance est libre, False si non.
+     * @throws SQLException Probleme de requete.
+     * @throws ClassNotFoundException Probleme de driver.
+     */
+    public boolean isFree(Seance seance) throws SQLException, ClassNotFoundException {
+        Connection co = this.connexion();
+        PreparedStatement sql = co.prepareStatement("SELECT COUNT(seance.ID) AS Libre " +
+                "FROM `seance` WHERE `Semaine` = ? " +
+                "AND `Date` = ? AND `Heure_Debut` = ? AND `Heure_Fin` = ? AND `Etat` = ? ");
+        sql.setInt(1, seance.getSemaine());
+        sql.setDate(2, Date.valueOf(seance.getJour()));
+        sql.setTime(3, Time.valueOf(seance.getHeure_debut()));
+        sql.setTime(4, Time.valueOf(seance.getHeure_fin()));
+        sql.setInt(5, seance.getEtat());
+        ResultSet res = sql.executeQuery();
+
+        while (res.next()) {
+            if (res.getInt("Libre") == 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Recupere des seance de la bdd a partir d'une liste d'id seance.
      * @param ids Liste des ids des seances a récuperer.
      * @return ArrayList de seance.

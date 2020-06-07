@@ -163,20 +163,25 @@ public class MajDonnees {
                                     HashSet<Groupe> groupes, HashSet<Salle> salles) {
 
         /** TEST A FAIRE **/
+
         Seance nouvelleSeance = new Seance(semaine, jour, heure_debut, heure_fin, etat, cours, type);
 
         try {
-            seanceDao.ajouter(nouvelleSeance);
-            nouvelleSeance.setId(seanceDao.getId(nouvelleSeance));
+            if (seanceDao.isFree(nouvelleSeance)) {
+                seanceDao.ajouter(nouvelleSeance);
+                nouvelleSeance.setId(seanceDao.getId(nouvelleSeance));
 
-            for (Enseignant enseignant : profs) {
-                seDao.ajouter(new Seance_Enseignants(nouvelleSeance, enseignant));
-            }
-            for (Groupe grp : groupes){
-                sgDao.ajouter(new Seance_Groupes(nouvelleSeance, grp));
-            }
-            for (Salle s : salles) {
-                ssDao.ajouter(new Seance_Salles(nouvelleSeance, s));
+                for (Enseignant enseignant : profs) {
+                    seDao.ajouter(new Seance_Enseignants(nouvelleSeance, enseignant));
+                }
+                for (Groupe grp : groupes){
+                    sgDao.ajouter(new Seance_Groupes(nouvelleSeance, grp));
+                }
+                for (Salle s : salles) {
+                    ssDao.ajouter(new Seance_Salles(nouvelleSeance, s));
+                }
+            } else {
+                System.out.println("Créneau pas libre.");
             }
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
