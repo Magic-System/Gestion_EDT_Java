@@ -84,7 +84,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
     @Override
     public List<Seance> getAll() throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
-        PreparedStatement getAll = co.prepareStatement("SELECT * FROM `seance` WHERE 1");
+        PreparedStatement getAll = co.prepareStatement("SELECT * FROM `seance` WHERE 1 AND ETAT != 0");
         ResultSet res = getAll.executeQuery();
 
         ArrayList<Seance> liste = new ArrayList<Seance>();

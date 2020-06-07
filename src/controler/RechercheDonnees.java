@@ -370,6 +370,19 @@ public class RechercheDonnees {
         return liste;
     }
 
+    public ArrayList<Seance> getListeSeance() {
+        SeanceDaoServiceImpl sDao = new SeanceDaoServiceImpl();
+        ArrayList<Seance> liste = null;
+
+        try {
+            liste = new ArrayList<>(sDao.getAll());
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return liste;
+    }
+
     /**
      * Main de test !!
      */
