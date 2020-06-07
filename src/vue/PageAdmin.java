@@ -35,6 +35,10 @@ import javax.swing.ListSelectionModel;
  *
  * @author Kozlow
  */
+/**
+ * Création de la class admin
+ * @author gesli
+ */
 class PageAdmin extends JPanel implements ActionListener {
 
     private final CardLayout Layout;
@@ -139,7 +143,9 @@ class PageAdmin extends JPanel implements ActionListener {
         this.prop_conteneur();
         this.add(Conteneur);
     }
-
+    /**
+     * propriété du conteneur
+     */
     private void prop_conteneur() {
         this.menu();
         this.GAjouterUnEnseignant.addActionListener(this);
@@ -157,6 +163,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }
 
     // Menu
+    /**
+     * Menu
+     */
     private void menu() {
         //Bouton pour naviguer
         GAffecterUnEnseignant = new JButton("Acceder : Affecter un enseignant.");
@@ -188,18 +197,26 @@ class PageAdmin extends JPanel implements ActionListener {
     }
 
     // Affecter un Enseignant
+    /**
+     * Affecter un enseigner
+     */
     private void AffecterUnEnseignant() {
         //Init
         RAffecterUnEnseignant = new JButton("Retour au menu");
         PAffecterUnEnseignant.add(RAffecterUnEnseignant);
-        String aje_cours[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
+        ArrayList<String> aje_cours = new ArrayList();
+        for (String g : donnees.getListeSeanceValidation())
+        {aje_cours.add("a");}
         JList list_aje_cours;
-        String aje_enseignant[] = {"Palasi", "Mohkber", "Begriche", "Mellang", "Maupile", "Le Cor", "Djoudi", "Prinzhorn"};
+        ArrayList<String> aje_enseignant = new ArrayList();
+        for (Enseignant g : donnees.getListeEnseignant()) {
+            aje_enseignant.add(g.getUtilisateur().getNom());
+        }
         JList list_aje_enseignant;
         this.setLayout(new BorderLayout());
-        list_aje_cours = new JList(aje_cours);
+        list_aje_cours = new JList(aje_cours.toArray());
         list_aje_cours.setVisibleRowCount(5);
-        list_aje_enseignant = new JList(aje_enseignant);
+        list_aje_enseignant = new JList(aje_enseignant.toArray());
         list_aje_enseignant.setVisibleRowCount(5);
         list_aje_cours.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list_aje_enseignant.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -225,6 +242,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }    //NEED REQUETES
 
     // Affecter un Groupe
+    /**
+     * Affectation d'un groupe
+     */
     private void AffecterUnGroupe() {
         //Initialisation
         RAffecterUnGroupe = new JButton("Retour au menu");
@@ -261,6 +281,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }        //NEED REQUETES
 
     // Affecter Une salle
+    /**
+     * Affectation d'une salle
+     */
     private void AffecterUneSalle() {
         //Initialisation
         String aje_cours[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
@@ -296,6 +319,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }        //NEED REQUETES
 
     // Deplacer Une sceance
+    /**
+     * Deplacement d'une seance
+     */
     private void DeplacerUneSceance() {
         //Initialisation
         RDeplacerUneSceance = new JButton("Retour au menu");
@@ -343,6 +369,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }      //NEED REQUETES
 
     // Modfier Cours
+    /**
+     * Modification d'un cours
+     */
     private void ModifierCours() {
         //Initalisation des variables
         String aje_cours[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
@@ -392,6 +421,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }           //NEED REQUETES
 
     // Ajouter une Sceance
+    /**
+     * Ajout d'un seance
+     */
     private void AjouterUneSceance() {
         RAjouterUneSceance = new JButton("Retour au menu");
         PAjouterUneSceance.add(RAjouterUneSceance);
@@ -537,6 +569,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }       //NEED REQUETES
 
     // Ajouter Un enseignant
+    /**
+     * Ajout d'un enseignant 
+     */
     private void AjouterUnEnseignant() {                   //NEED REQUETES
         //initialisation des variables
         RAjouterUnEnseignant = new JButton("Retour au menu");
@@ -581,6 +616,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }
 
     // Ajouter Un Groupe
+    /**
+     * Ajout d'un groupe
+     */
     private void AjouterUnGroupe() {                    //Need Requete
         //Initialisation  des variables
         JLabel nom, promo;
@@ -609,6 +647,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }           //NEED REQUETES
 
     // Valider
+    /**
+     * Validation 
+     */
     private void Valider() {                           //     OK
         // Initialisation des variables
 
@@ -639,6 +680,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }
 
     // Annuler
+    /**
+     * annulation d'un cours
+     */
     private void Annuler() {                                //NEED REQUETES
         //Initialisation des variables.
         String aje_cours[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
@@ -666,6 +710,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }
 
     // Enlever
+    /**
+     * Enlever un prof
+     */
     private void Enlever() {            //NEED REQUETES
         REnlever = new JButton("Retour au menu");
         PEnlever.add(REnlever);
@@ -727,6 +774,9 @@ class PageAdmin extends JPanel implements ActionListener {
     }                   //NEED REQUETES
 
     // Recapitulatif 
+    /**
+     * Récapitulatif
+     */
     private void Recapitulatif() {
         RRecapitulatif = new JButton("Retour au menu");
         PRecapitulatif.add(RRecapitulatif);
@@ -734,6 +784,10 @@ class PageAdmin extends JPanel implements ActionListener {
     }
 
     // Click
+    /**
+     * Navigation grace a ActionEvent
+     * @param e 
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.GAjouterUnEnseignant) {
