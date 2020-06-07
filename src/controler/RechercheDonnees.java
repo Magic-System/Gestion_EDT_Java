@@ -262,7 +262,7 @@ public class RechercheDonnees {
         try {
             ArrayList<Seance> ls = sDao.getSeanceValidation();
             for (Seance s : ls) {
-                String seanceNom = s.getType().getNom() + " de " + s.getCours().getNom() + " le " + s.getJour() + " de " + s.getHeure_debut() + " a " + s.getHeure_fin();
+                String seanceNom = s.getType().getNom() + " de " + s.getCours().getNom() + " le " + s.getJour() + " de " + s.getHeure_debut() + " a " + s.getHeure_fin() + "*" + s.getId();
                 liste.add(seanceNom);
             }
         } catch (SQLException | ClassNotFoundException throwables) {

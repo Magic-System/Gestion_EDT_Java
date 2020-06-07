@@ -114,7 +114,7 @@ public class SeanceDaoServiceImpl extends DbService<Seance> {
     @Override
     public Seance getById(int id) throws SQLException, ClassNotFoundException {
         Connection co = this.connexion();
-        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance` WHERE ID = ? AND Etat = 1");
+        PreparedStatement getCoursById = co.prepareStatement("SELECT * FROM `seance` WHERE ID = ?");
         getCoursById.setInt(1, id);
         ResultSet res = getCoursById.executeQuery();
 
