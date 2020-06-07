@@ -114,10 +114,11 @@ public class RechercheDonnees {
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
 
         try {
+            System.out.println(enseignant);
             int index = enseignant.lastIndexOf(" ");
             String nom = enseignant.substring(0, index);
             String prenom = enseignant.substring(index+1);
-            maSemaine = new ArrayList<>(seanceDao.getSeanceBySemaineAndEtudiant(semaine, nom, prenom));
+            maSemaine = new ArrayList<>(seanceDao.getSeanceBySemaineAndEnseignant(semaine, nom, prenom));
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
@@ -308,7 +309,7 @@ public class RechercheDonnees {
                     System.out.println("Semaine :");
                     semaine = in.nextInt();
                     System.out.println("Etudiant :");
-                    etudiant = in.next();
+                    etudiant = in.nextLine();
                     ArrayList<Seance> coursSemaine = rech.getSeanceSemaineEtudiant(semaine, etudiant);
                     for (Seance s : coursSemaine) {
                         System.out.println(s.toString());
@@ -322,8 +323,10 @@ public class RechercheDonnees {
                     System.out.println("Semaine :");
                     semaine = in.nextInt();
                     System.out.println("Enseignant :");
-                    enseignant = in.next();
-                    ArrayList<Seance> coursSemaine = rech.getSeanceSemaineEnseignant(semaine, enseignant);
+                    in.nextLine();
+                    enseignant = in.nextLine();
+                    ArrayList<Seance> coursSemaine = new ArrayList<>(rech.getSeanceSemaineEnseignant(semaine, enseignant));
+                    System.out.println(coursSemaine.size());
                     for (Seance s : coursSemaine) {
                         System.out.println(s.toString());
                     }
@@ -336,7 +339,7 @@ public class RechercheDonnees {
                     System.out.println("Semaine :");
                     semaine = in.nextInt();
                     System.out.println("Salle :");
-                    salle = in.next();
+                    salle = in.nextLine();
                     ArrayList<Seance> coursSemaine = rech.getSeanceSemaineSalle(semaine, salle);
                     for (Seance s : coursSemaine) {
                         System.out.println(s.toString());

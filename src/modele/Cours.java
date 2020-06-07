@@ -103,6 +103,8 @@ public class Cours {
         return "Cours{" +
                 "id=" + id +
                 ", nom='" + nom + '\'' +
+                ", couleur='" + couleur + '\'' +
                 '}';
     }
 }
+
