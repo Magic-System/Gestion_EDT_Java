@@ -43,7 +43,7 @@ public class FenetreEDT extends JFrame implements ActionListener{
     public FenetreEDT(Utilisateur utilisateurCo)
     {
         //Initialisation fenetre
-        this.setTitle("Projet EDT Java");
+        this.setTitle("Projet EDT Java - Mon emploi du temps - " + user.getNom() + " " + user.getPrenom());
         this.setSize(1100,700);
         //this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         this.setLocationRelativeTo(null);
@@ -113,6 +113,9 @@ public class FenetreEDT extends JFrame implements ActionListener{
         {
             //L'admin n'a pas d'EDT 
             menuBar.getCours().setVisible(false);
+            //On affiche directement la page Admin
+            layoutPages.show(conteneurPages, "pageAdmin");
+            this.setTitle("Projet EDT Java - Page Administration - " + user.getNom() + " " + user.getPrenom());
         }
         //User = Administrateur
         if(user.getDroit() == 2)
@@ -155,36 +158,49 @@ public class FenetreEDT extends JFrame implements ActionListener{
         //MENU
         if(source == menuBar.getMesCours()){
             layoutPages.show(conteneurPages, "pageCours");
+            this.setTitle("Projet EDT Java - Mon emploi du temps - " + user.getNom() + " " + user.getPrenom());
         }
         if(source == menuBar.getEmploiDuTempsE()){
             layoutPages.show(conteneurPages, "pageEtudiants");
             pageEtudiants.getOnglets().setSelectedIndex(0);
+            this.setTitle("Projet EDT Java - Page Etudiants - " + user.getNom() + " " + user.getPrenom());
         }
         if(source == menuBar.getRecapCoursE()){
             layoutPages.show(conteneurPages, "pageEtudiants");
             pageEtudiants.getOnglets().setSelectedIndex(1);
+            this.setTitle("Projet EDT Java - Page Etudiants - " + user.getNom() + " " + user.getPrenom());
         }
         if(source == menuBar.getCoursAnnulesE()){
             layoutPages.show(conteneurPages, "pageEtudiants");
             pageEtudiants.getOnglets().setSelectedIndex(2);
+            this.setTitle("Projet EDT Java - Page Etudiants - " + user.getNom() + " " + user.getPrenom());
         }
         if(source == menuBar.getEmploiDuTempsP()){
             layoutPages.show(conteneurPages, "pageEnseignants");
+            pageEnseignants.getOnglets().setSelectedIndex(0);
+            this.setTitle("Projet EDT Java - Page Enseignants - " + user.getNom() + " " + user.getPrenom());
         }
         if(source == menuBar.getRecapCoursP()){
             layoutPages.show(conteneurPages, "pageEnseignants");
+            pageEnseignants.getOnglets().setSelectedIndex(1);
+            this.setTitle("Projet EDT Java - Page Enseignants - " + user.getNom() + " " + user.getPrenom());
         }
         if(source == menuBar.getCoursAnnulesP()){
             layoutPages.show(conteneurPages, "pageEnseignants");
+            pageEnseignants.getOnglets().setSelectedIndex(2);
+            this.setTitle("Projet EDT Java - Page Enseignants - " + user.getNom() + " " + user.getPrenom());
         }
         if(source == menuBar.getChercherPromotion()){
             layoutPages.show(conteneurPages, "pagePromotions");
+            this.setTitle("Projet EDT Java - Page Promotions - " + user.getNom() + " " + user.getPrenom());
         }
         if(source == menuBar.getChercherSalle()){
             layoutPages.show(conteneurPages, "pageSalles");
+            this.setTitle("Projet EDT Java - Page Salles - " + user.getNom() + " " + user.getPrenom());
         }
         if(source == menuBar.getPageAdmin()){
             layoutPages.show(conteneurPages, "pageAdmin");
+            this.setTitle("Projet EDT Java - Page Administration - " + user.getNom() + " " + user.getPrenom());
         }
     }
     

@@ -419,7 +419,14 @@ class PageEnseignants extends JPanel implements ActionListener{
         return panelCentre;
     }
     
-    
+    //GETTERS Page
+    /**
+     * Getter onglets
+     * @return onglets
+     */
+    public JTabbedPane getOnglets(){
+        return onglets;
+    }
     
     /**
      * 
