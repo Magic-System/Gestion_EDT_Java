@@ -17,7 +17,7 @@ public class Vue {
   public static void main(String[] args){
        Connection fenetre_co = new Connection ();
        fenetre_co.setVisible(true);
-       //Admin fenetre_admin = new Admin();
-       //fenetre_admin.setVisible(true);
+       Admin fenetre_admin = new Admin();
+       fenetre_admin.setVisible(true);
   }       
 }
