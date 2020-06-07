@@ -165,6 +165,7 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
             GroupeDaoServiceImpl grp = new GroupeDaoServiceImpl();
             se.setSeance(seance.getById(res.getInt("ID_Seance")));
             se.setGroupe(grp.getById(res.getInt("ID_Groupe")));
+            liste.add(se);
         }
 
         co.close();

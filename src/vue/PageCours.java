@@ -19,6 +19,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -137,8 +139,34 @@ class PageCours extends JPanel implements ActionListener{
         JPanel panelCentre = new JPanel();
         panelCentre.setLayout(new GridLayout(1, 7));
         
+        //Initialisation des créneaux
+        LocalTime creneau1 = LocalTime.parse("08:30:00.0");
+        LocalTime creneau2 = LocalTime.parse("10:15:00.0");
+        LocalTime creneau3 = LocalTime.parse("12:00:00.0");
+        LocalTime creneau4 = LocalTime.parse("13:45:00.0");
+        LocalTime creneau5 = LocalTime.parse("15:30:00.0");
+        LocalTime creneau6 = LocalTime.parse("17:15:00.0");
+        LocalTime creneau7 = LocalTime.parse("19:00:00.0");
+        
+        //Récupération des séances du user pour la semaine donné, en fonction du type d'utilisateur (étudiant / enseignant)
+        ArrayList<Seance> maSemaine;
+        
+        //Si c'est un prof
+        if(user.getDroit() == 3){
+            maSemaine = donnees.getSeanceSemaineEnseignant(numSemaine, user.getNom() + " " + user.getPrenom());
+        }
+        //Sinon c'est un étudiant
+        else{
+            maSemaine = donnees.getSeanceSemaineEtudiant(numSemaine, user.getNom() + " " + user.getPrenom());
+        }
+        
+        for (Seance s : maSemaine) {
+            System.out.println(s.toString());
+        }
+        
+        
         //7 colonnes (lundi au samedi + colonne "horaires")
-        for(int i=0; i<7; i++)
+        for(int numJours=0; numJours<7; numJours++)
         {
             //Panel qui contiendra les horaires d'une journée
             JPanel panelJours = new JPanel();
@@ -153,7 +181,7 @@ class PageCours extends JPanel implements ActionListener{
             titre.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder()));
             
             //8 lignes ('Titres' + 7 créneaux)
-            for(int j=0; j<8; j++)
+            for(int numCreneau=0; numCreneau<8; numCreneau++)
             {
                 //Panel qui contiendra un créneau de cours 
                 JPanel panelCreneau = new JPanel();
@@ -173,13 +201,13 @@ class PageCours extends JPanel implements ActionListener{
                 StyleConstants.setAlignment(centre, StyleConstants.ALIGN_CENTER);
                 
                 //Premier Jpanel correspondant aux horaires
-                if(i == 0){
+                if(numJours == 0){
                     //Première ligne = "Titre"
-                    if(j == 0){
+                    if(numCreneau == 0){
                         //On aligne au centre
                         docTitres.setParagraphAttributes(0, docCreneaux.getLength(), centre, false);
                         //On défini le titre
-                        titre.setText(tabLabelsEDT[i]);
+                        titre.setText(tabLabelsEDT[numJours]);
                         panelCreneau.add(titre);
                     }
                     //Lignes suivantes = "Horaires"
@@ -187,18 +215,18 @@ class PageCours extends JPanel implements ActionListener{
                         //On aligne à droite
                         docCreneaux.setParagraphAttributes(0, docCreneaux.getLength(), horaires, false);
                         //On défini l'horaire
-                        creneau.setText(tabCreneauxEDT[j]);
+                        creneau.setText(tabCreneauxEDT[numCreneau]);
                         panelCreneau.add(creneau);
                     }
                 }
                 //Les suivants sont les jours de la semaine
                 else{
                     //Première ligne = "Titre"
-                    if(j == 0){
+                    if(numCreneau == 0){
                         //On aligne au centre
                         docTitres.setParagraphAttributes(0, docCreneaux.getLength(), centre, false);
                         //On défini le titre
-                        titre.setText(tabLabelsEDT[i]);
+                        titre.setText(tabLabelsEDT[numJours]);
                         panelCreneau.add(titre);
                     }
                     //Lignes suivantes = "Créneaux"
@@ -206,32 +234,125 @@ class PageCours extends JPanel implements ActionListener{
                         //On aligne au centre
                         docCreneaux.setParagraphAttributes(0, docCreneaux.getLength(), centre, false);
 
-                        //Communiquer avec le controleur pour récup les données nécessaires à l'affichage
-                       /* ArrayList<Seance> maSemaine;
-                        //Si c'est un prof
-                        if(user.getDroit() == 3)
-                        {
-                            maSemaine = donnees.getSeanceSemaineEnseignant(numSemaine, user.getNom() + " " + user.getPrenom());
-                        }
-                        //Sinon c'est un étudiant
-                        else
-                        {
-                            maSemaine = donnees.getSeanceSemaineEtudiant(numSemaine, user.getNom() + " " + user.getPrenom());
-                        }
-                        
-                        //On parcours la liste de séance
+                        //On parcours la liste de séance Pour check si la séance donné correspond à la séance [i][j]
                         for(int k=0; k<maSemaine.size(); k++)
                         {
-                            //On regarde si la séance donné correspond à la séance [i][j]
-                            
+                            //Check si le jours correspond
+                            int joursSeance = maSemaine.get(k).getJour().getDayOfWeek().getValue();
+                            if(joursSeance == numJours)
+                            {
+                                //Numéro du créneau de la séance donné
+                                int numCreneauSeance = 0;
+                                //Récupération de l'heure de début de la séance donné
+                                LocalTime creneauSeance = maSemaine.get(k).getHeure_debut();
+                                
+                                //Test de tous les créneaux
+                                //Créneau 1
+                                if(creneauSeance.equals(creneau1)){
+                                    numCreneauSeance = 1;
+                                }
+                                //Créneau 2
+                                if(creneauSeance.equals(creneau2)){
+                                    numCreneauSeance = 2;
+                                }
+                                //Créneau 3
+                                if(creneauSeance.equals(creneau3)){
+                                    numCreneauSeance = 3;
+                                }
+                                //Créneau 4
+                                if(creneauSeance.equals(creneau4)){
+                                    numCreneauSeance = 4;
+                                }
+                                //Créneau 5
+                                if(creneauSeance.equals(creneau5)){
+                                    numCreneauSeance = 5;
+                                }
+                                //Créneau 6
+                                if(creneauSeance.equals(creneau6)){
+                                    numCreneauSeance = 6;
+                                }
+                                //Créneau 7
+                                if(creneauSeance.equals(creneau7)){
+                                    numCreneauSeance = 7;
+                                }
+                                
+                                //Si la séance k correspond à la case [numCreneau] de l'EDT que l'on rempli
+                                if(numCreneauSeance == numCreneau)
+                                {
+                                    //Alors on récupère le reste des infos nécessaires
+                                    int idSeance = maSemaine.get(k).getId();
+                                    //Récupération de l'état de la séance
+                                    int etatSeance = maSemaine.get(k).getEtat();
+                                    //Récupération du nom de la séance (nom du cours)
+                                    String nomSeance = maSemaine.get(k).getCours().getNom();
+                                    //Récupération de la couleur de la séance
+                                    Color couleurSeance;
+                                    try {
+                                        Field field = Class.forName("java.awt.Color").getField((String)maSemaine.get(k).getCours().getCouleur());
+                                        couleurSeance = (Color)field.get(null);
+                                    } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+                                        //Couleur par défaut
+                                        couleurSeance = Color.lightGray;
+                                    }
+                                    //Récupération du nom du/des prof qui assurent ce cours
+                                    ArrayList<String> listeProfsSeance = donnees.getNomEnseignantSeance(idSeance);
+                                    for (String s : listeProfsSeance) {
+                                        System.out.println("Profs liés à la séance : " + s.toString());
+                                    }
+                                    //Récupération du/des TD participant à la séance
+                                    ArrayList<String> listeTDSeance = donnees.getNomGroupeSeance(idSeance);
+                                    for (String s : listeTDSeance) {
+                                        System.out.println("TD liés à la séance : " + s.toString());
+                                    }
+                                    //Récupération de la salle de cours
+                                    ArrayList<String > listeSallesSeance = donnees.getNomSalleSeance(idSeance);
+                                    for (String s : listeSallesSeance) {
+                                        System.out.println("Salles liés à la séance : " + s.toString());
+                                    }
+                                    
+                                    //Initialisation de la 'String' d'affichage
+                                    String stringSeance = "";
+                                    //Check si le cours est annulé
+                                    if(etatSeance == 0){
+                                        stringSeance += "ANNULE\n";
+                                    }
+                                    //Ajout nom de la Séance
+                                    stringSeance += nomSeance;
+                                    stringSeance += "\n";
+                                    //Si user == prof, ajout du/des TD qui participent
+                                    if(user.getDroit() == 3){
+                                        for(int l=0; l<listeTDSeance.size(); l++){
+                                            stringSeance += listeTDSeance.get(l);
+                                        }
+                                    }
+                                    //Si user == étudiant, ajout du/des profs qui donnent le cours
+                                    if(user.getDroit() == 4){
+                                        for(int l=0; l<listeProfsSeance.size(); l++){
+                                            stringSeance += "Mme|M. ";
+                                            stringSeance += listeProfsSeance.get(l);
+                                            if(listeProfsSeance.size() > 1){
+                                                stringSeance += " - ";
+                                            }
+                                        }
+                                    }
+                                    stringSeance += "\n";
+                                    //Ajout salles 
+                                    for(int l=0; l<listeSallesSeance.size(); l++){
+                                        stringSeance += listeSallesSeance.get(l);
+                                        stringSeance += "\n";
+                                    }
+                                    System.out.println("String Seance : " + stringSeance);
+                                    //Puis on rajoute dans la case
+                                    creneau.setText(stringSeance);
+                                    creneau.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, couleurSeance));
+                                }
+                                //Sinon on met le fond de la case en gris
+                                else
+                                {
+                                    creneau.setBackground(Color.lightGray);
+                                }
+                            }
                         }
-                        */
-                        
-                        creneau.setText("Test : [" + i + "][" + j + "]\nSemaine :" + numSemaine);
-                        creneau.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.RED));
-                        
-                        
-                        
                         panelCreneau.add(creneau);
                     }
                 }

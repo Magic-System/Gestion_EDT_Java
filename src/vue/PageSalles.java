@@ -43,7 +43,7 @@ class PageSalles extends JPanel implements ActionListener{
     private JComboBox comboBatiment, comboSalle, comboSemaine;
     private JButton rechercher;
     private int semaineAct;
-    private ArrayList<String> tabChoixSalle;
+    private ArrayList<Salle> tabChoixSalle;
     private final String[] tabChoixBatiment = {"E1", "E2", "E3", "E4", "E5"};
     private final int[] tabChoixSemaine = {31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29};
     private final String[] tabLabelsEDT = {"\nHoraires","\nLundi","\nMardi","\nMercredi","\nJeudi","\nVendredi","\nSamedi"};
@@ -116,7 +116,8 @@ class PageSalles extends JPanel implements ActionListener{
         //Récupérer la liste des salles 
         tabChoixSalle =  donnees.getListeSalles();
         for(int i=0; i<tabChoixSalle.size(); i++){
-            comboSalle.addItem(tabChoixSalle.get(i));
+            String temp = tabChoixSalle.get(i).getNom() + " - " + tabChoixSalle.get(i).getSite().getNom();
+            comboSalle.addItem(temp);
         }
         
         //Initialisation choix semaine

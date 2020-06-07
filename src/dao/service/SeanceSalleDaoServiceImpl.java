@@ -135,6 +135,7 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
             SalleDaoServiceImpl salle = new SalleDaoServiceImpl();
             se.setSeance(seance.getById(res.getInt("ID_Seance")));
             se.setSalle(salle.getById(res.getInt("ID_Salle")));
+            liste.add(se);
         }
         co.close();
 
