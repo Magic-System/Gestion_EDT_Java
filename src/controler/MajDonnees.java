@@ -212,7 +212,7 @@ public class MajDonnees {
 
     /**
      * Valider une séance (changer l’état de cette séance à « validée »).
-     * @param seance Objet Seance a valider.
+     * @param ID iD de la Seance a valider.
      */
     public void validerSeance(int ID){
         try {

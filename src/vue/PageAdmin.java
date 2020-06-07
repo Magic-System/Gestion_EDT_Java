@@ -205,8 +205,8 @@ class PageAdmin extends JPanel implements ActionListener {
         RAffecterUnEnseignant = new JButton("Retour au menu");
         PAffecterUnEnseignant.add(RAffecterUnEnseignant);
         ArrayList<String> aje_cours = new ArrayList();
-        for (String g : donnees.getListeSeanceValidation())
-        {aje_cours.add("a");}
+        for (Seance s : donnees.getListeSeance())
+        {aje_cours.add(s.getType().getNom() + " de " + s.getCours().getNom() + " le " + s.getJour() + " de " + s.getHeure_debut() + " a " + s.getHeure_fin());}
         JList list_aje_cours;
         ArrayList<String> aje_enseignant = new ArrayList();
         for (Enseignant g : donnees.getListeEnseignant()) {
@@ -228,8 +228,11 @@ class PageAdmin extends JPanel implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if ((list_aje_cours.getSelectedValue() != null) && (list_aje_enseignant.getSelectedValue() != null)) {
-                    System.out.println(list_aje_cours.getSelectedValue());
-                    System.out.println(list_aje_enseignant.getSelectedValue());
+                    int is = aje_cours.indexOf(list_aje_cours.getSelectedValue().toString());
+                    int ie = aje_enseignant.indexOf(list_aje_enseignant.getSelectedValue().toString());
+                    Enseignant prof = donnees.getListeEnseignant().get(ie);
+                    Seance se =donnees.getListeSeance().get(is);
+                    Maj.addEnseignantToSeance(se, prof);
                 }
             }
         });
@@ -249,14 +252,19 @@ class PageAdmin extends JPanel implements ActionListener {
         //Initialisation
         RAffecterUnGroupe = new JButton("Retour au menu");
         PAffecterUnGroupe.add(RAffecterUnGroupe);
-        String aje_cours[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
+        ArrayList<String> aje_cours = new ArrayList();
+        for (Seance s : donnees.getListeSeance())
+        {aje_cours.add(s.getType().getNom() + " de " + s.getCours().getNom() + " le " + s.getJour() + " de " + s.getHeure_debut() + " a " + s.getHeure_fin());}
         JList list_aje_cours;
-        String aje_enseignant[] = {" ING3 TD04 ", " ING3 TD04 ", " ING3 TD04 ", " ING3 TD04 ", " ING3 TD04 ", " ING3 TD04 ", " ING3 TD04 ", " ING3 TD04 "};
+        ArrayList<String> aje_enseignant = new ArrayList();
+        for (Groupe g : donnees.getListeGroupe()) {
+            aje_enseignant.add(g.getNom());
+        }
         JList list_aje_enseignant;
         this.setLayout(new BorderLayout());
-        list_aje_cours = new JList(aje_cours);
+        list_aje_cours = new JList(aje_cours.toArray());
         list_aje_cours.setVisibleRowCount(5);
-        list_aje_enseignant = new JList(aje_enseignant);
+        list_aje_enseignant = new JList(aje_enseignant.toArray());
         list_aje_enseignant.setVisibleRowCount(5);
         list_aje_cours.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list_aje_enseignant.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -268,8 +276,11 @@ class PageAdmin extends JPanel implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if ((list_aje_cours.getSelectedValue() != null) && (list_aje_enseignant.getSelectedValue() != null)) {
-                    System.out.println(list_aje_cours.getSelectedValue());
-                    System.out.println(list_aje_enseignant.getSelectedValue());
+                    int is = aje_cours.indexOf(list_aje_cours.getSelectedValue().toString());
+                    int ie = aje_enseignant.indexOf(list_aje_enseignant.getSelectedValue().toString());
+                    Groupe groupe = donnees.getListeGroupe().get(ie);
+                    Seance se =donnees.getListeSeance().get(is);
+                    Maj.addGroupeToSeance(se, groupe);
                 }
             }
         });
@@ -286,14 +297,19 @@ class PageAdmin extends JPanel implements ActionListener {
      */
     private void AffecterUneSalle() {
         //Initialisation
-        String aje_cours[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
+        ArrayList<String> aje_cours = new ArrayList();
+        for (Seance s : donnees.getListeSeance())
+        {aje_cours.add(s.getType().getNom() + " de " + s.getCours().getNom() + " le " + s.getJour() + " de " + s.getHeure_debut() + " a " + s.getHeure_fin());}
         JList list_aje_cours;
-        String aje_salle[] = {" E2 304 ", " E2 415 ", " E2 407 ", " E2 312 ", " E2 347 ", " E4 G02 ", " E4 G04 ", " E4 G05 "};
+        ArrayList<String> aje_salle = new ArrayList();
+        for (Salle g : donnees.getListeSalles()) {
+            aje_salle.add(g.getNom());
+        }
         JList list_aje_salle;
         this.setLayout(new BorderLayout());
-        list_aje_cours = new JList(aje_cours);
+        list_aje_cours = new JList(aje_cours.toArray());
         list_aje_cours.setVisibleRowCount(5);
-        list_aje_salle = new JList(aje_salle);
+        list_aje_salle = new JList(aje_salle.toArray());
         list_aje_salle.setVisibleRowCount(5);
         list_aje_cours.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list_aje_salle.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -305,8 +321,11 @@ class PageAdmin extends JPanel implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if ((list_aje_cours.getSelectedValue() != null) && (list_aje_salle.getSelectedValue() != null)) {
-                    System.out.println(list_aje_cours.getSelectedValue());
-                    System.out.println(list_aje_salle.getSelectedValue());
+                    int is = aje_cours.indexOf(list_aje_cours.getSelectedValue().toString());
+                    int ie = aje_salle.indexOf(list_aje_salle.getSelectedValue().toString());
+                    Salle salle = donnees.getListeSalles().get(ie);
+                    Seance se =donnees.getListeSeance().get(is);
+                    Maj.addSalleToSeance(se, salle);
                 }
             }
         });
@@ -440,7 +459,7 @@ class PageAdmin extends JPanel implements ActionListener {
 
         ArrayList<String> groupe_string = new ArrayList();
         for (Groupe g : donnees.getListeGroupe()) {
-            System.out.println(g.getId());
+          //  System.out.println(g.getId());
             groupe_string.add(g.getNom());
             
         }
@@ -654,7 +673,9 @@ class PageAdmin extends JPanel implements ActionListener {
         // Initialisation des variables
 
         ArrayList<String> aje_cours = donnees.getListeSeanceValidation();
+        
         JList list_cours;
+        
         list_cours = new JList(aje_cours.toArray());
 
         list_cours.setVisibleRowCount(5);
@@ -685,9 +706,11 @@ class PageAdmin extends JPanel implements ActionListener {
      */
     private void Annuler() {                                //NEED REQUETES
         //Initialisation des variables.
-        String aje_cours[] = {"Jeudi 12 : thermo", "Mardi 10 : Anthropologie", " Mardi 03 : English ", " Mardi 03 : Traitement du signal ", " Mercredi 04 : Droit du travail "};
-        JList list_cours;
-        list_cours = new JList(aje_cours);
+        ArrayList<String> aje_cours = new ArrayList();
+        for (Seance s : donnees.getListeSeance()) {
+            aje_cours.add(s.getType().getNom() + " de " + s.getCours().getNom() + " le " + s.getJour() + " de " + s.getHeure_debut() + " a " + s.getHeure_fin());
+        }JList list_cours;
+        list_cours = new JList(aje_cours.toArray());
         list_cours.setVisibleRowCount(5);
         list_cours.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane liste_cours = new JScrollPane(list_cours);
@@ -698,8 +721,10 @@ class PageAdmin extends JPanel implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (list_cours.getSelectedValue() != null) {
-                    System.out.println("Cours annulé");
-                }
+                int ie = aje_cours.indexOf(list_cours.getSelectedValue().toString());
+                Seance se = donnees.getListeSeance().get(ie);
+                Maj.annulerSeance(se);
+                    }
 
             }
         });
