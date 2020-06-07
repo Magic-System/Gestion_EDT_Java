@@ -53,7 +53,7 @@ class PageEnseignants extends JPanel implements ActionListener{
     private JTextField textFieldNom;
     private JComboBox comboSemaine, comboChoix, comboListe;
     private JButton chercherEDT;
-    private ArrayList<String> tabChoixEnseignant;
+    private ArrayList<Enseignant> tabChoixEnseignant;
     
 //Pour panelRecap :
     private JPanel panelRecapNord, panelRecapCenter;
@@ -168,7 +168,8 @@ class PageEnseignants extends JPanel implements ActionListener{
         //Récupérer la liste d'étudiants 
         tabChoixEnseignant =  donnees.getListeEnseignant();
         for(int i=0; i<tabChoixEnseignant.size(); i++){
-            comboListe.addItem(tabChoixEnseignant.get(i));
+            String temp = tabChoixEnseignant.get(i).getUtilisateur().getNom().toUpperCase() + " " + tabChoixEnseignant.get(i).getUtilisateur().getPrenom();
+            comboListe.addItem(temp);
         }
         
         //Initialisation choix semaine

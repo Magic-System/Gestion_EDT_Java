@@ -168,43 +168,34 @@ public class RechercheDonnees {
 
     /**
      * Recupere une liste contenant nom et prenom de tout les enseignants.
-     * @return Liste de nom prenom de tout les enseignants.
+     * @return users ArrayList de Enseignant.
      */
-    public ArrayList<String> getListeEnseignant() {
+    public ArrayList<Enseignant> getListeEnseignant() {
         EnseignantDaoServiceImpl userDao = new EnseignantDaoServiceImpl();
-        ArrayList<String> liste = new ArrayList<>();
+        ArrayList<Enseignant> users = null;
         try {
-            ArrayList<Enseignant> users = userDao.getAll();
-            for (Enseignant e : users) {
-                String temp;
-                temp = e.getUtilisateur().getNom().toUpperCase() + " " + e.getUtilisateur().getPrenom();
-                liste.add(temp);
-            }
+            users = userDao.getAll();
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
 
-        return liste;
+        return users;
     }
 
     /**
      * Recupere une liste contenant le nom de toutes les salles.
-     * @return Liste de String de nom de salle.
+     * @return salles ArrayList de Salle.
      */
-    public ArrayList<String> getListeSalles() {
+    public ArrayList<Salle> getListeSalles() {
         SalleDaoServiceImpl salleDao = new SalleDaoServiceImpl();
-        ArrayList<String> liste = new ArrayList<>();
-
+        ArrayList<Salle> salles = null;
         try {
-            ArrayList<Salle> salles = salleDao.getAll();
-            for (Salle s : salles) {
-                liste.add(s.getNom());
-            }
+            salles = salleDao.getAll();
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();
         }
 
-        return liste;
+        return salles;
     }
 
     /**
@@ -262,7 +253,7 @@ public class RechercheDonnees {
         try {
             ArrayList<Seance> ls = sDao.getSeanceValidation();
             for (Seance s : ls) {
-                String seanceNom = s.getType().getNom() + " de " + s.getCours().getNom() + " le " + s.getJour() + " de " + s.getHeure_debut() + " a " + s.getHeure_fin();
+                String seanceNom = s.getType().getNom() + " de " + s.getCours().getNom() + " le " + s.getJour() + " de " + s.getHeure_debut() + " a " + s.getHeure_fin() + "*" + s.getId();
                 liste.add(seanceNom);
             }
         } catch (SQLException | ClassNotFoundException throwables) {
@@ -335,6 +326,52 @@ public class RechercheDonnees {
             throwables.printStackTrace();
         }
 
+        return liste;
+    }
+
+    /**
+     * Recupere une liste de tout les cours existant.
+     * @return ArrayList de Cours.
+     */
+    public ArrayList<Cours> getListeCours() {
+        CoursDaoServiceImpl cDao = new CoursDaoServiceImpl();
+        ArrayList<Cours> liste = null;
+        try {
+            liste = new ArrayList<>(cDao.getAll());
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return liste;
+    }
+
+    /**
+     * Recupere une liste de tout les types de cours existant.
+     * @return ArrayList de Type_Cours.
+     */
+    public ArrayList<Type_Cours> getListeTypeCours() {
+        Type_CoursDaoServiceImpl tcDao = new Type_CoursDaoServiceImpl();
+        ArrayList<Type_Cours> liste = null;
+        try {
+            liste = new ArrayList<>(tcDao.getAll());
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+        return liste;
+    }
+
+    /**
+     * Recupere une liste de tout les Groupes existant.
+     * @return ArrayList de Groupe.
+     */
+    public ArrayList<Groupe> getListeGroupe() {
+        GroupeDaoServiceImpl gDao = new GroupeDaoServiceImpl();
+        ArrayList<Groupe> liste = null;
+        try {
+            liste = new ArrayList<>(gDao.getAll());
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
         return liste;
     }
 
@@ -444,15 +481,15 @@ public class RechercheDonnees {
                 }
                 case 7: {
                     System.out.println("7) test liste enseignant");
-                    for (String s : rech.getListeEnseignant()) {
-                        System.out.println(s);
+                    for (Enseignant e : rech.getListeEnseignant()) {
+                        System.out.println(e.getUtilisateur().getNom().toUpperCase() + " " + e.getUtilisateur().getPrenom());
                     }
                     break;
                 }
                 case 8: {
                     System.out.println("8) test liste salle");
-                    for (String s : rech.getListeSalles()) {
-                        System.out.println(s);
+                    for (Salle s : rech.getListeSalles()) {
+                        System.out.println(s.getNom() + " (" + s.getCapacite() + ")" + "-" + s.getSite().getNom());
                     }
                     break;
                 }
