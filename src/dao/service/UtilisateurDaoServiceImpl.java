@@ -78,6 +78,7 @@ public class UtilisateurDaoServiceImpl extends DbService<Utilisateur> {
             user.setDroit(res.getInt("droit"));
         }
 
+        co.close();
         return user;
     }
 
@@ -100,6 +101,7 @@ public class UtilisateurDaoServiceImpl extends DbService<Utilisateur> {
             user.setDroit(res.getInt("droit"));
         }
 
+        co.close();
         return user;
     }
 }

@@ -60,6 +60,7 @@ public class GroupeDaoServiceImpl extends DbService<Groupe> {
             liste.add(grp);
         }
 
+        co.close();
         return liste;
     }
 
@@ -79,6 +80,7 @@ public class GroupeDaoServiceImpl extends DbService<Groupe> {
             grp.setPromotion(promo.getById(res.getInt("ID_Promotion")));
         }
 
+        co.close();
         return grp;
     }
 }

@@ -23,6 +23,7 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
         addSg.setInt(2, objet.getSalle().getId());
 
         addSg.executeUpdate();
+        co.close();
     }
 
     /**
@@ -39,6 +40,7 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
         majSg.setInt(2, objet.getSeance().getId());
 
         majSg.executeUpdate();
+        co.close();
     }
 
     /**
@@ -55,6 +57,7 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
         delSg.setInt(2, objet.getSalle().getId());
 
         delSg.executeUpdate();
+        co.close();
     }
 
     /**
@@ -77,6 +80,7 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
 
             liste.add(new Seance_Salles(seance.getById(res.getInt("ID_Seance")), salle.getById(res.getInt("ID_Salle"))));
         }
+        co.close();
 
         return liste;
     }
@@ -132,6 +136,7 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
             se.setSeance(seance.getById(res.getInt("ID_Seance")));
             se.setSalle(salle.getById(res.getInt("ID_Salle")));
         }
+        co.close();
 
         return liste;
     }
@@ -157,12 +162,15 @@ public class SeanceSalleDaoServiceImpl extends DbService<Seance_Salles> {
 
         while (res.next()) {
             if (res.getInt("Libre") == 0) {
+                co.close();
                 return true;
             }
             else {
+                co.close();
                 return false;
             }
         }
+        co.close();
         return false;
     }
 }

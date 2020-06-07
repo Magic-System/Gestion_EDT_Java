@@ -60,6 +60,7 @@ public class PromotionDaoServiceImpl extends DbService<Promotion> {
             liste.add(new Promotion(res.getInt("id"), res.getString("nom")));
         }
 
+        co.close();
         return liste;
     }
 
@@ -84,6 +85,7 @@ public class PromotionDaoServiceImpl extends DbService<Promotion> {
             promo.setNom(res.getString("nom"));
         }
 
+        co.close();
         return promo;
     }
 }

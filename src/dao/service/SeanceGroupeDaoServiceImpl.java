@@ -30,6 +30,7 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
         addSg.setInt(2, objet.getGroupe().getId());
 
         addSg.executeUpdate();
+        co.close();
     }
 
     /**
@@ -46,6 +47,7 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
         majSg.setInt(2, objet.getSeance().getId());
 
         majSg.executeUpdate();
+        co.close();
     }
 
     /**
@@ -62,6 +64,7 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
         delSg.setInt(2, objet.getGroupe().getId());
 
         delSg.executeUpdate();
+        co.close();
     }
 
     /**
@@ -85,6 +88,7 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
             liste.add(new Seance_Groupes(seance.getById(res.getInt("ID_Seance")), grp.getById(res.getInt("ID_Groupe"))));
         }
 
+        co.close();
         return liste;
     }
 
@@ -136,6 +140,7 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
             idsSeance.add(res.getInt("ID_Seance"));
         }
 
+        co.close();
         return idsSeance;
     }
 
@@ -162,6 +167,7 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
             se.setGroupe(grp.getById(res.getInt("ID_Groupe")));
         }
 
+        co.close();
         return liste;
     }
 
@@ -186,12 +192,15 @@ public class SeanceGroupeDaoServiceImpl extends DbService<Seance_Groupes> {
 
         while (res.next()) {
             if (res.getInt("Libre") == 0) {
+                co.close();
                 return true;
             }
             else {
+                co.close();
                 return false;
             }
         }
+        co.close();
         return false;
     }
 }

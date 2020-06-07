@@ -67,6 +67,7 @@ public class EnseignantDaoServiceImpl extends DbService<Enseignant> {
             liste.add(getById(id));
         }
 
+        co.close();
         return liste;
     }
 
@@ -98,6 +99,7 @@ public class EnseignantDaoServiceImpl extends DbService<Enseignant> {
             prof.setUtilisateur(user.getById(id));
         }
 
+        co.close();
         return prof;
     }
 }

@@ -59,6 +59,7 @@ public class CoursDaoServiceImpl extends DbService<Cours>{
         while (res.next()) {
             liste.add(new Cours(res.getInt("ID"), res.getString("Nom"), res.getString("Couleur")));
         }
+        co.close();
 
         return liste;
     }
@@ -84,6 +85,7 @@ public class CoursDaoServiceImpl extends DbService<Cours>{
             c.setNom(res.getString("Nom"));
             c.setCouleur(res.getString("Couleur"));
         }
+        co.close();
 
         return c;
     }
