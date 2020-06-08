@@ -41,18 +41,14 @@ import javax.swing.text.StyledDocument;
 class PageSalles extends JPanel implements ActionListener{
     
     private JPanel panelSallesNord, panelSallesCenter;
-    private JLabel labelBatiment, labelSalle, labelSemaine;
-    private JComboBox comboBatiment, comboSalle, comboSemaine;
+    private JLabel labelSalle, labelSemaine;
+    private JComboBox comboSalle, comboSemaine;
     private JButton rechercher;
     private int semaineAct;
     private ArrayList<Salle> tabChoixSalle;
-    private final String[] tabChoixBatiment = {"E1", "E2", "E3", "E4", "E5"};
     private final int[] tabChoixSemaine = {31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29};
     private final String[] tabLabelsEDT = {"\nHoraires","\nLundi","\nMardi","\nMercredi","\nJeudi","\nVendredi","\nSamedi"};
     private final String[] tabCreneauxEDT = {"", "8h30\n\n\n10h", "10h15\n\n\n11h45", "12h\n\n\n13h30", "13h45\n\n\n15h15", "15h30\n\n\n17h", "17h15\n\n\n18h45", "19h\n\n\n20h30"};
-    
-    //Utilisateur connecté
-    private Utilisateur user;
     
     //Controler pour récupérer les données
     private RechercheDonnees donnees = new RechercheDonnees();
@@ -63,10 +59,7 @@ class PageSalles extends JPanel implements ActionListener{
      * @param utilisateurCo Correspond à l'utilisateur connecté
      */
     public PageSalles(Utilisateur utilisateurCo)
-    {
-        //Initialisation user
-        user = new Utilisateur(utilisateurCo);
-        
+    {        
         //Initialisation layout
         this.setLayout(new BorderLayout());
         
@@ -103,14 +96,6 @@ class PageSalles extends JPanel implements ActionListener{
         panelSallesNord.setLayout(new FlowLayout(FlowLayout.LEFT));
         panelSallesNord.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
         
-        //Initialisation choix Batiment
-        labelBatiment = new JLabel("Choix du batiment :");
-        comboBatiment = new JComboBox();
-        comboBatiment.setPreferredSize(new Dimension(150, 25));
-        for(String choixBat : tabChoixBatiment){
-            comboBatiment.addItem(choixBat);
-        }
-        
         //Initialisation choix Salle
         labelSalle = new JLabel("Choix de la salle :");
         comboSalle = new JComboBox();
@@ -142,8 +127,6 @@ class PageSalles extends JPanel implements ActionListener{
         comboSemaine.setSelectedItem(semaineAct);
         
         //Ajouts au panel
-        //panelSallesNord.add(labelBatiment);
-        //panelSallesNord.add(comboBatiment);
         panelSallesNord.add(labelSalle);
         panelSallesNord.add(comboSalle);
         panelSallesNord.add(labelSemaine);
