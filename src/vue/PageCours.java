@@ -313,8 +313,8 @@ class PageCours extends JPanel implements ActionListener{
                                     }
                                     //Si user == étudiant, ajout du/des profs qui donnent le cours
                                     if(user.getDroit() == 4){
+                                        stringSeance += "Mme|M. ";
                                         for(int l=0; l<listeProfsSeance.size(); l++){
-                                            stringSeance += "Mme|M. ";
                                             stringSeance += listeProfsSeance.get(l);
                                             if(listeProfsSeance.size() > 1){
                                                 stringSeance += " - ";

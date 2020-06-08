@@ -281,24 +281,4 @@ public class MajDonnees {
             throwables.printStackTrace();
         }
     }
-
-    /**
-     * Main de test !!!
-     */
-    public static void main(String[] args){
-        SeanceEnseignantsDaoServiceImpl test = new SeanceEnseignantsDaoServiceImpl();
-        SeanceDaoServiceImpl sDao = new SeanceDaoServiceImpl();
-        EnseignantDaoServiceImpl esDao = new EnseignantDaoServiceImpl();
-
-        try {
-            Enseignant e = esDao.getById(7);
-            Seance s = sDao.getById(5);
-
-            System.out.println(test.isFree(new Seance_Enseignants(s, e)));
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
-        }
-
-    }
-
 }

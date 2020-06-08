@@ -58,7 +58,7 @@ public class Connection extends JFrame implements ActionListener{
             RechercheDonnees loginBdd = new RechercheDonnees();
             Utilisateur user = loginBdd.login(Affichage.getAdresse_email().getText(), Affichage.getMot_de_passe().getText());
             if (user != null) {
-                System.out.println("Login successfull !");
+                System.out.println("Connexion réussie !");
                 //On ferme la fenetre de connection
                 this.dispose();
                 //On créé la fenetre d'EDT

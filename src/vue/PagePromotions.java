@@ -310,8 +310,8 @@ class PagePromotions extends JPanel implements ActionListener{
                                     stringSeance += nomSeance;
                                     stringSeance += "\n";
                                     //Ajout Prof(s)
+                                    stringSeance += "Mme|M. ";
                                     for(int l=0; l<listeProfsSeance.size(); l++){
-                                        stringSeance += "Mme|M. ";
                                         stringSeance += listeProfsSeance.get(l);
                                         if(listeProfsSeance.size() > 1){
                                             stringSeance += " - ";
