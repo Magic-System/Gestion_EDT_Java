@@ -29,8 +29,6 @@ public class RechercheDonnees {
         Utilisateur user;
 
         try {
-            System.out.println(email);
-            System.out.println(password);
             user = userDao.getByLogin(email, password);
             return user;
         } catch (SQLException | ClassNotFoundException throwables) {
@@ -46,7 +44,7 @@ public class RechercheDonnees {
      * @param groupe Id du groupe des cours a recuperer.
      * @return ArrayList de Seance.
      */
-    public ArrayList<Seance> getSeanceSemaineGroupe(final int semaine,final  int groupe) {
+    public ArrayList<Seance> getSeanceSemaineGroupe(final int semaine, final  int groupe) {
         SeanceGroupeDaoServiceImpl sgDao = new SeanceGroupeDaoServiceImpl();
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
         ArrayList<Seance> maSemaine = null;
@@ -114,7 +112,6 @@ public class RechercheDonnees {
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
 
         try {
-            System.out.println(enseignant);
             int index = enseignant.lastIndexOf(" ");
             String nom = enseignant.substring(0, index);
             String prenom = enseignant.substring(index+1);
