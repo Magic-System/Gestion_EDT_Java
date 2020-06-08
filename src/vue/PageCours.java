@@ -54,10 +54,10 @@ class PageCours extends JPanel implements ActionListener{
     private final String[] tabCreneauxEDT = {"", "8h30\n\n\n10h", "10h15\n\n\n11h45", "12h\n\n\n13h30", "13h45\n\n\n15h15", "15h30\n\n\n17h", "17h15\n\n\n18h45", "19h\n\n\n20h30"};
     
     //Utilisateur connecté
-    private Utilisateur user;
+    private final Utilisateur user;
     
     //Controler pour récupérer les données
-    private RechercheDonnees donnees = new RechercheDonnees();
+    private final RechercheDonnees donnees = new RechercheDonnees();
     
     /**
      * Constructeur de la page Cours
@@ -356,11 +356,76 @@ class PageCours extends JPanel implements ActionListener{
      */
     public JPanel listeEDT(int numSemaine)
     {
-        JPanel panelCenter = new JPanel();
+        JPanel panelCentre = new JPanel();
+        panelCentre.setLayout(new GridLayout(7, 1));
+        
+        //Initialisation des créneaux
+        LocalTime creneau1 = LocalTime.parse("08:30:00.0");
+        LocalTime creneau2 = LocalTime.parse("10:15:00.0");
+        LocalTime creneau3 = LocalTime.parse("12:00:00.0");
+        LocalTime creneau4 = LocalTime.parse("13:45:00.0");
+        LocalTime creneau5 = LocalTime.parse("15:30:00.0");
+        LocalTime creneau6 = LocalTime.parse("17:15:00.0");
+        LocalTime creneau7 = LocalTime.parse("19:00:00.0");
+        
+        //Récupération des séances du user pour la semaine donné, en fonction du type d'utilisateur (étudiant / enseignant)
+        ArrayList<Seance> maSemaine;
+        
+        //Si c'est un prof
+        if(user.getDroit() == 3){
+            maSemaine = donnees.getSeanceSemaineEnseignant(numSemaine, user.getNom() + " " + user.getPrenom());
+        }
+        //Sinon c'est un étudiant
+        else{
+            maSemaine = donnees.getSeanceSemaineEtudiant(numSemaine, user.getNom() + " " + user.getPrenom());
+        }
+        
+        //6 lignes (lundi au samedi)
+        for(int numJours=0; numJours<6; numJours++)
+        {
+            //Panel qui contiendra les horaires d'une journée
+            JPanel panelJours = new JPanel();
+            GridLayout gl = new GridLayout(8, 1);
+            gl.setVgap(15);
+            panelJours.setLayout(gl);
+            //TextPane qui contiendra les titres des jours ('Horaires', 'Lundi', 'Mardi' etc.)
+            JLabel titre = new JLabel();
+            titre.setPreferredSize(new Dimension(1, 150));
+            titre.setFont(new Font("Arial", Font.BOLD, 16));
+            titre.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createRaisedBevelBorder(), BorderFactory.createLoweredBevelBorder()));
+            
+            //8 lignes ('Titres' + 7 créneaux)
+            for(int numCreneau=0; numCreneau<8; numCreneau++)
+            {
+                //Panel qui contiendra un créneau de cours 
+                JPanel panelCreneau = new JPanel();
+                panelCreneau.setLayout(new BorderLayout());
+                panelCreneau.setBorder(BorderFactory.createLineBorder(Color.gray));
+                //JLabel qui contiendra les infos du créneau de cours
+                JLabel creneau = new JLabel();
+                creneau.setPreferredSize(new Dimension(5, 150));
+                creneau.setFont(new Font("Arial", Font.PLAIN, 10));
+
+                //Première ligne = "Titre"
+                if(numCreneau == 0){
+                    //On défini le titre
+                    titre.setText(tabLabelsEDT[numJours]);
+                    panelCreneau.add(titre);
+                }
+                
+                
+                
+                
+                
+            }          
+            
+        
+        }
         
         
         
-        return panelCenter;
+        
+        return panelCentre;
     }
     
     
