@@ -54,10 +54,10 @@ class PageCours extends JPanel implements ActionListener{
     private final String[] tabCreneauxEDT = {"", "8h30\n\n\n10h", "10h15\n\n\n11h45", "12h\n\n\n13h30", "13h45\n\n\n15h15", "15h30\n\n\n17h", "17h15\n\n\n18h45", "19h\n\n\n20h30"};
     
     //Utilisateur connecté
-    private Utilisateur user;
+    private final Utilisateur user;
     
     //Controler pour récupérer les données
-    private RechercheDonnees donnees = new RechercheDonnees();
+    private final RechercheDonnees donnees = new RechercheDonnees();
     
     /**
      * Constructeur de la page Cours
