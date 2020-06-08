@@ -48,7 +48,8 @@ public class RechercheDonnees {
         SeanceDaoServiceImpl seanceDao = new SeanceDaoServiceImpl();
         ArrayList<Seance> maSemaine = null;
         try {
-            HashSet<Integer> seancesGroupe = sgDao.getSeanceIdByGroupe(groupe);
+            HashSet<Integer> seancesGroupe = new HashSet(sgDao.getSeanceIdByGroupe(groupe));
+            System.out.println(seancesGroupe);
             maSemaine = new ArrayList<>(seanceDao.getSeanceSemaineParGroupe(seancesGroupe, semaine));
         } catch (SQLException | ClassNotFoundException throwables) {
             throwables.printStackTrace();

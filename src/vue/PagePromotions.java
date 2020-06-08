@@ -113,8 +113,8 @@ class PagePromotions extends JPanel implements ActionListener{
         chercher.addActionListener(this);
         
         //Ajouts au panelPromoNord
-        panelPromoNord.add(labelPromo);
-        panelPromoNord.add(comboPromo);
+        //panelPromoNord.add(labelPromo);
+        //panelPromoNord.add(comboPromo);
         panelPromoNord.add(labelTD);
         panelPromoNord.add(comboTD);
         panelPromoNord.add(labelSemaine);
@@ -231,6 +231,7 @@ class PagePromotions extends JPanel implements ActionListener{
                         for(int k=0; k<maSemaine.size(); k++)
                         {
                             //Check si le jours correspond
+                            System.out.println(maSemaine);
                             int joursSeance = maSemaine.get(k).getJour().getDayOfWeek().getValue();
                             if(joursSeance == numJours)
                             {

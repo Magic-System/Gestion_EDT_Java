@@ -342,12 +342,8 @@ class PageEnseignants extends JPanel implements ActionListener{
         Color couleurCours = Color.black;
         ArrayList<Cours> listeCours = donnees.getListeCours();
         
-        LocalDate maintenant = LocalDate.now();
-        LocalDate debut = maintenant.minusWeeks(6);
-        LocalDate fin = maintenant.plusWeeks(6);
-        
         //On récupère les infos de cours de l'enseignant
-        ArrayList<String> recapCours = donnees.recapitulatifCours(debut, fin, enseignant.getUtilisateur().getId());
+        ArrayList<String> recapCours = donnees.recapitulatifCours(LocalDate.MIN, LocalDate.MAX, enseignant.getUtilisateur().getId());
         
         //En fonction du nombre de matières, on créé des lignes (gridLayout)
         panelConteneur.setLayout(new GridLayout(recapCours.size(), 1));
@@ -361,18 +357,20 @@ class PageEnseignants extends JPanel implements ActionListener{
         {
             //Pour récupération de la couleur
             //Récupération du nom du cours
-            int x1 = recapCours.get(i).lastIndexOf(" | ");
+            int x1 = recapCours.get(i).indexOf(" | ");
             String nomCours = recapCours.get(i).substring(0, x1);
             for(int j=0; j<listeCours.size(); j++){
                 if(nomCours.equals(listeCours.get(j).getNom())){
+                    System.out.println(nomCours + " " + listeCours.get(j).getNom());
                     //Récupération de la couleur de la séance
                     try {
-                        Field field = Class.forName("java.awt.Color").getField((String)listeCours.get(i).getCouleur().toLowerCase());
+                        Field field = Class.forName("java.awt.Color").getField((String)listeCours.get(j).getCouleur().toLowerCase());
                         couleurCours = (Color)field.get(null);
                     } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
                         //Couleur par défaut
                         couleurCours = Color.black;
                     }
+                    System.out.println(listeCours.get(i).getCouleur().toLowerCase());
                 }
             }
             JLabel labelCours = new JLabel(recapCours.get(i));
@@ -394,13 +392,13 @@ class PageEnseignants extends JPanel implements ActionListener{
         {
             //Pour récupération de la couleur
             //Récupération du nom du cours
-            int x1 = recapCours.get(i).lastIndexOf(" | ");
+            int x1 = recapCours.get(i).indexOf(" | ");
             String nomCours = recapCours.get(i).substring(0, x1);
             for(int j=0; j<listeCours.size(); j++){
                 if(nomCours.equals(listeCours.get(j).getNom())){
                     //Récupération de la couleur de la séance
                     try {
-                        Field field = Class.forName("java.awt.Color").getField((String)listeCours.get(i).getCouleur().toLowerCase());
+                        Field field = Class.forName("java.awt.Color").getField((String)listeCours.get(j).getCouleur().toLowerCase());
                         couleurCours = (Color)field.get(null);
                     } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
                         //Couleur par défaut
@@ -751,9 +749,13 @@ class PageEnseignants extends JPanel implements ActionListener{
         
     //RECAP COURS
         if(source == chercherRecap)
-        {            
+        {        
+            panelRecapCenter.removeAll();
+            panelRecapCenter.revalidate();
+            panelRecapCenter.repaint();
+            
             //On récupère le nom de l'étudiant + la semaine à afficher
-            String nomProfSelect = (String)comboListe.getSelectedItem();
+            String nomProfSelect = (String)textFieldNom2.getText();
             
             //On initialise l'enseignant dont on veut les infos
             Enseignant enseignantSelect = new Enseignant();
@@ -768,13 +770,11 @@ class PageEnseignants extends JPanel implements ActionListener{
                     if(nomProfSelect.toUpperCase().equals(listeEnseignant.get(k).getUtilisateur().getNom().toUpperCase())){
                         enseignantSelect = listeEnseignant.get(k);
                         enseignantExiste = true;
+                        
                     }
                 }
                 //Si l'enseignant existe
                 if(enseignantExiste){
-                    panelRecapCenter.removeAll();
-                    panelRecapCenter.revalidate();
-                    panelRecapCenter.repaint();
                     panelRecapCenter.add(dessinerTable(enseignantSelect));
                 }
             }

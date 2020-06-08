@@ -131,7 +131,6 @@ public class FenetreEDT extends JFrame implements ActionListener{
             menuBar.getPromotions().setVisible(false);
             menuBar.getSalles().setVisible(false);
             menuBar.getEtudiants().setVisible(false);
-            menuBar.getEnseignants().setVisible(false);
         }
         //User = Etudiant
         if(user.getDroit() == 4)
