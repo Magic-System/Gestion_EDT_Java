@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Scanner;
 
 /**
  * @author Daniel
@@ -208,7 +207,6 @@ public class RechercheDonnees {
         try {
             liste = sDao.getComboCoursAndGroupeByEnseignant(idEnseignant);
             for (String s : liste) {
-                //System.out.println(s);
                 int x1 = s.lastIndexOf(" | ");
                 String cours = s.substring(0, x1);
                 int x2 = s.lastIndexOf("/");

@@ -17,6 +17,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,6 +32,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -322,6 +324,106 @@ class PageEnseignants extends JPanel implements ActionListener{
     {
         panelAnnulesCenter = new JPanel();
         panelAnnulesCenter.setLayout(new BorderLayout());
+    }
+    
+    
+    /**
+     * 
+     * Créé le JPanel contenant la liste de cours d'un étudiant donné et le retourne
+     * 
+     * @return panelCentre
+     */
+    public JPanel dessinerTable(Enseignant enseignant)
+    {
+        JPanel panelCentre = new JPanel();
+        JPanel panelConteneur = new JPanel();
+        JPanel panelConteneurSup = new JPanel();
+        panelCentre.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Color couleurCours = Color.black;
+        ArrayList<Cours> listeCours = donnees.getListeCours();
+        
+        LocalDate maintenant = LocalDate.now();
+        LocalDate debut = maintenant.minusWeeks(6);
+        LocalDate fin = maintenant.plusWeeks(6);
+        
+        //On récupère les infos de cours de l'enseignant
+        ArrayList<String> recapCours = donnees.recapitulatifCours(debut, fin, enseignant.getUtilisateur().getId());
+        
+        //En fonction du nombre de matières, on créé des lignes (gridLayout)
+        panelConteneur.setLayout(new GridLayout(recapCours.size(), 1));
+        panelConteneur.setBorder(BorderFactory.createEmptyBorder());
+        panelConteneurSup.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panelConteneurSup.setBorder(BorderFactory.createLineBorder(Color.white));
+        
+        //On ajoute dans chaque grille du layout un cours
+        //VERSION 1 - CLASSIQUE
+        for(int i=0; i<recapCours.size(); i++)
+        {
+            //Pour récupération de la couleur
+            //Récupération du nom du cours
+            int x1 = recapCours.get(i).lastIndexOf(" | ");
+            String nomCours = recapCours.get(i).substring(0, x1);
+            for(int j=0; j<listeCours.size(); j++){
+                if(nomCours.equals(listeCours.get(j).getNom())){
+                    //Récupération de la couleur de la séance
+                    try {
+                        Field field = Class.forName("java.awt.Color").getField((String)listeCours.get(i).getCouleur().toLowerCase());
+                        couleurCours = (Color)field.get(null);
+                    } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+                        //Couleur par défaut
+                        couleurCours = Color.black;
+                    }
+                }
+            }
+            JLabel labelCours = new JLabel(recapCours.get(i));
+            //Si c'est la première ligne, on met en gras
+            if(i==0){
+                labelCours.setFont(new Font("Arial", Font.BOLD, 14));
+                labelCours.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, couleurCours));
+                //cours.setBorder(BorderFactory.createLineBorder(couleurCours));
+            }
+            else{
+                labelCours.setFont(new Font("Arial", Font.PLAIN, 12));
+                labelCours.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, couleurCours));
+            }
+            panelConteneur.add(labelCours);
+        }
+        
+        //VERSION 2 - BORDER AVEC TITRE
+        /*for(int i=1; i<recapCours.size(); i++)
+        {
+            //Pour récupération de la couleur
+            //Récupération du nom du cours
+            int x1 = recapCours.get(i).lastIndexOf(" | ");
+            String nomCours = recapCours.get(i).substring(0, x1);
+            for(int j=0; j<listeCours.size(); j++){
+                if(nomCours.equals(listeCours.get(j).getNom())){
+                    //Récupération de la couleur de la séance
+                    try {
+                        Field field = Class.forName("java.awt.Color").getField((String)listeCours.get(i).getCouleur().toLowerCase());
+                        couleurCours = (Color)field.get(null);
+                    } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+                        //Couleur par défaut
+                        couleurCours = Color.black;
+                    }
+                }
+            }
+            JLabel labelCours = new JLabel(recapCours.get(i));
+            labelCours.setFont(new Font("Arial", Font.PLAIN, 12));
+            //Première ligne : avec le titre
+            if(i==1){
+                labelCours.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, couleurCours), recapCours.get(0), TitledBorder.CENTER, TitledBorder.TOP, new Font("Arial", Font.BOLD, 14)));
+            }
+            else{
+                labelCours.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, couleurCours));
+            }
+            
+                
+            panelConteneur.add(labelCours);
+        }*/
+        panelConteneurSup.add(panelConteneur);
+        panelCentre.add(panelConteneurSup);
+        return panelCentre;
     }
     
     
@@ -650,8 +752,32 @@ class PageEnseignants extends JPanel implements ActionListener{
     //RECAP COURS
         if(source == chercherRecap)
         {            
-            //on récupère les infos
+            //On récupère le nom de l'étudiant + la semaine à afficher
+            String nomProfSelect = (String)comboListe.getSelectedItem();
             
+            //On initialise l'enseignant dont on veut les infos
+            Enseignant enseignantSelect = new Enseignant();
+            
+            //Si le text field n'est pas vide 
+            if(nomProfSelect.length() != 0){
+                //Test si l'étudiant existe dans la BDD
+                boolean enseignantExiste = false;
+                ArrayList<Enseignant> listeEnseignant = donnees.getListeEnseignant();
+
+                for(int k = 0; k<listeEnseignant.size(); k++){
+                    if(nomProfSelect.toUpperCase().equals(listeEnseignant.get(k).getUtilisateur().getNom().toUpperCase())){
+                        enseignantSelect = listeEnseignant.get(k);
+                        enseignantExiste = true;
+                    }
+                }
+                //Si l'enseignant existe
+                if(enseignantExiste){
+                    panelRecapCenter.removeAll();
+                    panelRecapCenter.revalidate();
+                    panelRecapCenter.repaint();
+                    panelRecapCenter.add(dessinerTable(enseignantSelect));
+                }
+            }
         }
         
     //COURS ANNULES

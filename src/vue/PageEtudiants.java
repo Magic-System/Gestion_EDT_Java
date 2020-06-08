@@ -325,23 +325,100 @@ class PageEtudiants extends JPanel implements ActionListener{
     
     /**
      * 
-     * Créé la table contenant la liste de cours d'un étudiant donné et retourne le panel contenant
+     * Créé le JPanel contenant la liste de cours d'un étudiant donné et le retourne
      * 
-     * @return table
+     * @return panelCentre
      */
     public JPanel dessinerTable(Etudiant etudiant)
     {
         JPanel panelCentre = new JPanel();
-        panelCentre.setLayout(new BorderLayout());
+        JPanel panelConteneur = new JPanel();
+        JPanel panelConteneurSup = new JPanel();
+        panelCentre.setLayout(new FlowLayout(FlowLayout.CENTER));
+        Color couleurCours = Color.black;
+        ArrayList<Cours> listeCours = donnees.getListeCours();
         
-        //On récupère les infos de cours de l'étudiant
-        ArrayList<String> recapCours = donnees.recapitulatifCours(LocalDate.MIN, LocalDate.MAX, etudiant.getNumero());
+        LocalDate maintenant = LocalDate.now();
+        LocalDate debut = maintenant.minusWeeks(6);
+        LocalDate fin = maintenant.plusWeeks(6);
         
-        //En fonction du nombre de matières, on créé des lignes de tableau
+        //On récupère les infos de cours de l'enseignant
+        ArrayList<String> recapCours = donnees.recapitulatifCours(debut, fin, etudiant.getUtilisateur().getId());
+        
+        //En fonction du nombre de matières, on créé des lignes (gridLayout)
+        panelConteneur.setLayout(new GridLayout(recapCours.size(), 1));
+        panelConteneur.setBorder(BorderFactory.createEmptyBorder());
+        panelConteneurSup.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panelConteneurSup.setBorder(BorderFactory.createLineBorder(Color.white));
+        
+        //On ajoute dans chaque grille du layout un cours
+        //VERSION 1 - CLASSIQUE
         for(int i=0; i<recapCours.size(); i++)
         {
-            
+            //Pour récupération de la couleur
+            //Récupération du nom du cours
+            int x1 = recapCours.get(i).lastIndexOf(" | ");
+            String nomCours = recapCours.get(i).substring(0, x1);
+            for(int j=0; j<listeCours.size(); j++){
+                if(nomCours.equals(listeCours.get(j).getNom())){
+                    //Récupération de la couleur de la séance
+                    try {
+                        Field field = Class.forName("java.awt.Color").getField((String)listeCours.get(i).getCouleur().toLowerCase());
+                        couleurCours = (Color)field.get(null);
+                    } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+                        //Couleur par défaut
+                        couleurCours = Color.black;
+                    }
+                }
+            }
+            JLabel labelCours = new JLabel(recapCours.get(i));
+            //Si c'est la première ligne, on met en gras
+            if(i==0){
+                labelCours.setFont(new Font("Arial", Font.BOLD, 14));
+                labelCours.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, couleurCours));
+                //cours.setBorder(BorderFactory.createLineBorder(couleurCours));
+            }
+            else{
+                labelCours.setFont(new Font("Arial", Font.PLAIN, 12));
+                labelCours.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, couleurCours));
+            }
+            panelConteneur.add(labelCours);
         }
+        
+        //VERSION 2 - BORDER AVEC TITRE
+        /*for(int i=1; i<recapCours.size(); i++)
+        {
+            //Pour récupération de la couleur
+            //Récupération du nom du cours
+            int x1 = recapCours.get(i).lastIndexOf(" | ");
+            String nomCours = recapCours.get(i).substring(0, x1);
+            for(int j=0; j<listeCours.size(); j++){
+                if(nomCours.equals(listeCours.get(j).getNom())){
+                    //Récupération de la couleur de la séance
+                    try {
+                        Field field = Class.forName("java.awt.Color").getField((String)listeCours.get(i).getCouleur().toLowerCase());
+                        couleurCours = (Color)field.get(null);
+                    } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
+                        //Couleur par défaut
+                        couleurCours = Color.black;
+                    }
+                }
+            }
+            JLabel labelCours = new JLabel(recapCours.get(i));
+            labelCours.setFont(new Font("Arial", Font.PLAIN, 12));
+            //Première ligne : avec le titre
+            if(i==1){
+                labelCours.setBorder(BorderFactory.createTitledBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, couleurCours), recapCours.get(0), TitledBorder.CENTER, TitledBorder.TOP, new Font("Arial", Font.BOLD, 14)));
+            }
+            else{
+                labelCours.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, couleurCours));
+            }
+            
+                
+            panelConteneur.add(labelCours);
+        }*/
+        panelConteneurSup.add(panelConteneur);
+        panelCentre.add(panelConteneurSup);
         return panelCentre;
     }
     
