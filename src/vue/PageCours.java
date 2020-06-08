@@ -350,6 +350,22 @@ class PageCours extends JPanel implements ActionListener{
     
     
     /**
+     * Retourne un panel avec l'EDT dessiné sous forme de liste
+     * 
+     * @return panelCenter
+     */
+    public JPanel listeEDT(int numSemaine)
+    {
+        JPanel panelCenter = new JPanel();
+        
+        
+        
+        return panelCenter;
+    }
+    
+    
+    
+    /**
      * 
      * Gérer les actions sur la liste et les boutons 
      * 
