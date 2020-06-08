@@ -120,7 +120,7 @@ class PageCours extends JPanel implements ActionListener{
         //Pour ajouter image de récap des semaines
         panImage = new JPanel();
         try {
-            BufferedImage imageSemaines = ImageIO.read(new File("semaines.png"));
+            BufferedImage imageSemaines = ImageIO.read(new File("img/semaines.png"));
             panImage.add(new JLabel(new ImageIcon(imageSemaines)));
             panelEDTCenter.add(panImage, BorderLayout.NORTH);
         } catch (IOException ex) {
